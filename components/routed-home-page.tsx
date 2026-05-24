@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ExternalLink } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
@@ -26,15 +25,13 @@ export function RoutedHomePage({
   blogPosts,
   initialLanguage,
 }: RoutedHomePageProps) {
-  const router = useRouter();
+  const [currentTab, setCurrentTab] = useState<TabValue>(activeTab);
   const { language, setLanguage } = useLanguage();
   const activeLanguage = initialLanguage ?? language;
   const t = translations[activeLanguage];
-  const localePrefix = initialLanguage
-    ? `/${initialLanguage.toLowerCase()}`
-    : "";
+  const localePrefix = `/${activeLanguage.toLowerCase()}`;
   const tabs = [
-    { value: "about", label: t.nav.about, href: localePrefix || "/" },
+    { value: "about", label: t.nav.about, href: localePrefix },
     {
       value: "experience",
       label: t.nav.experience,
@@ -43,6 +40,10 @@ export function RoutedHomePage({
     { value: "blog", label: t.nav.blog, href: `${localePrefix}/blog` },
     { value: "contact", label: t.nav.contact, href: `${localePrefix}/contact` },
   ] as const;
+
+  useEffect(() => {
+    setCurrentTab(activeTab);
+  }, [activeTab]);
 
   useEffect(() => {
     if (initialLanguage && initialLanguage !== language) {
@@ -54,7 +55,8 @@ export function RoutedHomePage({
     const tab = tabs.find((tab) => tab.value === value);
 
     if (tab) {
-      router.push(tab.href);
+      setCurrentTab(tab.value);
+      window.history.pushState(null, "", tab.href);
     }
   };
 
@@ -62,8 +64,8 @@ export function RoutedHomePage({
     <main className="min-h-screen bg-background text-foreground">
       <div className="fixed inset-0 bg-gradient-to-br from-background via-background to-accent/20 pointer-events-none" />
 
-      <div className="relative mx-auto max-w-2xl px-6 py-16">
-        <header className="mb-10 animate-in fade-in slide-in-from-top-4 duration-700">
+      <div className="relative mx-auto max-w-2xl px-6 py-16 page-enter">
+        <header className="mb-10">
           <div className="flex items-center justify-end mb-4">
             <LanguageToggle />
           </div>
@@ -76,41 +78,33 @@ export function RoutedHomePage({
           <div className="mt-4 h-px bg-gradient-to-r from-border via-muted-foreground/30 to-transparent" />
         </header>
 
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
+        <div>
           <Tabs
-            value={activeTab}
+            value={currentTab}
             onValueChange={handleTabChange}
             className="w-full"
           >
             <TabsList className="mb-8 w-full justify-start gap-2 bg-transparent p-0 border-b border-border">
-              {tabs.map((tab, i) => (
+              {tabs.map((tab) => (
                 <TabsTrigger
                   key={tab.value}
                   value={tab.value}
-                  className="relative rounded-none border-b-2 border-transparent px-4 py-3 text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground data-[state=active]:shadow-none bg-transparent"
-                  style={{ animationDelay: `${i * 100}ms` }}
+                  className="relative rounded-none border-b-2 border-transparent px-4 py-3 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground data-[state=active]:shadow-none bg-transparent"
                 >
                   {tab.label}
                 </TabsTrigger>
               ))}
             </TabsList>
 
-            <TabsContent
-              value="about"
-              className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500"
-            >
+            <TabsContent value="about" className="space-y-8 tab-enter">
               <section className="group">
                 <h2 className="mb-4 text-lg font-semibold flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-foreground group-hover:scale-150 transition-transform duration-300" />
                   {t.home.backgroundTitle}
                 </h2>
                 <div className="space-y-4 text-sm leading-relaxed text-muted-foreground pl-4 border-l-2 border-border hover:border-muted-foreground/50 transition-colors duration-300">
-                  {t.home.background.map((paragraph, i) => (
-                    <p
-                      key={paragraph}
-                      className="animate-in fade-in duration-500 whitespace-pre-line"
-                      style={{ animationDelay: `${(i + 1) * 100}ms` }}
-                    >
+                  {t.home.background.map((paragraph) => (
+                    <p key={paragraph} className="whitespace-pre-line">
                       {paragraph}
                     </p>
                   ))}
@@ -123,11 +117,10 @@ export function RoutedHomePage({
                   {t.home.languagesTitle}
                 </h2>
                 <div className="flex flex-wrap gap-3">
-                  {tools.map((tool, i) => (
+                  {tools.map((tool) => (
                     <span
                       key={tool}
-                      className="rounded-lg bg-muted/50 border border-border px-4 py-2 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground hover:scale-105 transition-all duration-300 cursor-default animate-in fade-in zoom-in-95"
-                      style={{ animationDelay: `${i * 100 + 300}ms` }}
+                      className="rounded-lg bg-muted/50 border border-border px-4 py-2 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground hover:scale-105 transition-all duration-200 cursor-default"
                     >
                       {tool}
                     </span>
@@ -141,11 +134,10 @@ export function RoutedHomePage({
                   {t.home.interestedTitle}
                 </h2>
                 <div className="flex flex-wrap gap-3">
-                  {interests.map((interest, i) => (
+                  {interests.map((interest) => (
                     <span
                       key={interest}
-                      className="rounded-lg bg-muted/50 border border-border px-4 py-2 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground hover:scale-105 transition-all duration-300 cursor-default animate-in fade-in zoom-in-95"
-                      style={{ animationDelay: `${i * 100 + 500}ms` }}
+                      className="rounded-lg bg-muted/50 border border-border px-4 py-2 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground hover:scale-105 transition-all duration-200 cursor-default"
                     >
                       {interest}
                     </span>
@@ -154,21 +146,17 @@ export function RoutedHomePage({
               </section>
             </TabsContent>
 
-            <TabsContent
-              value="experience"
-              className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500"
-            >
+            <TabsContent value="experience" className="space-y-8 tab-enter">
               <section>
                 <h2 className="mb-5 text-lg font-semibold flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
                   {t.home.projectsTitle}
                 </h2>
                 <div className="space-y-4">
-                  {t.projects.map((project, i) => (
+                  {t.projects.map((project) => (
                     <div
                       key={project.name}
-                      className="group rounded-xl border border-border bg-card/50 p-5 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 transition-all duration-300 animate-in fade-in slide-in-from-bottom-2"
-                      style={{ animationDelay: `${i * 100}ms` }}
+                      className="group rounded-xl border border-border bg-card/50 p-5 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 transition-all duration-200"
                     >
                       <div className="flex items-start justify-between">
                         <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
@@ -206,7 +194,7 @@ export function RoutedHomePage({
                   <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
                   {t.home.educationTitle}
                 </h2>
-                <div className="group rounded-xl border border-border bg-card/50 p-5 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 delay-100">
+                <div className="group rounded-xl border border-border bg-card/50 p-5 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 transition-all duration-200">
                   <h3 className="font-semibold text-foreground">
                     {t.home.university}
                   </h3>
@@ -221,21 +209,17 @@ export function RoutedHomePage({
               </section>
             </TabsContent>
 
-            <TabsContent
-              value="blog"
-              className="animate-in fade-in slide-in-from-right-4 duration-500"
-            >
+            <TabsContent value="blog" className="tab-enter">
               <h2 className="mb-5 text-lg font-semibold flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
                 {t.home.blogPostsTitle}
               </h2>
               <div className="space-y-4">
-                {blogPosts.map((post, i) => (
+                {blogPosts.map((post) => (
                   <Link
                     key={post.slug}
-                    href={`${localePrefix || `/${language.toLowerCase()}`}/blog/${post.slug}`}
-                    className="block group rounded-xl border border-border bg-card/50 p-5 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 transition-all duration-300 cursor-pointer animate-in fade-in slide-in-from-bottom-2"
-                    style={{ animationDelay: `${i * 100}ms` }}
+                    href={`${localePrefix}/blog/${post.slug}`}
+                    className="block group rounded-xl border border-border bg-card/50 p-5 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 transition-all duration-200 cursor-pointer"
                   >
                     <div className="flex items-start justify-between">
                       <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
@@ -266,25 +250,21 @@ export function RoutedHomePage({
               </p>
             </TabsContent>
 
-            <TabsContent
-              value="contact"
-              className="animate-in fade-in slide-in-from-right-4 duration-500"
-            >
+            <TabsContent value="contact" className="tab-enter">
               <h2 className="mb-5 text-lg font-semibold flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
                 {t.home.contactTitle}
               </h2>
               <div className="grid gap-3">
-                {t.contacts.map((contact, i) => (
+                {t.contacts.map((contact) => (
                   <Link
                     key={contact.label}
                     href={contact.href}
                     target={contact.external ? "_blank" : undefined}
                     rel={contact.external ? "noopener noreferrer" : undefined}
-                    className="group flex items-center gap-4 rounded-xl border border-border bg-card/50 p-4 transition-all duration-300 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 hover:translate-x-1 animate-in fade-in slide-in-from-left-4"
-                    style={{ animationDelay: `${i * 75}ms` }}
+                    className="group flex items-center gap-4 rounded-xl border border-border bg-card/50 p-4 transition-all duration-200 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 hover:translate-x-1"
                   >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border/60 bg-muted/50 p-2 group-hover:bg-muted group-hover:scale-110 transition-all duration-300">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border/60 bg-muted/50 p-2 group-hover:bg-muted group-hover:scale-105 transition-all duration-200">
                       <img
                         src={contact.icon}
                         alt=""
@@ -308,7 +288,7 @@ export function RoutedHomePage({
           </Tabs>
         </div>
 
-        <footer className="mt-20 text-center animate-in fade-in duration-700 delay-500">
+        <footer className="mt-20 text-center">
           <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mb-6" />
           <p className="text-xs italic text-muted-foreground/70 hover:text-muted-foreground transition-colors duration-300">
             {t.home.footer}

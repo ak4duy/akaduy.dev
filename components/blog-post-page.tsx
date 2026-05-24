@@ -39,8 +39,8 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
     <main className="min-h-screen bg-background text-foreground">
       <div className="fixed inset-0 bg-gradient-to-br from-background via-background to-accent/20 pointer-events-none" />
 
-      <article className="relative mx-auto max-w-3xl px-6 py-16">
-        <header className="mb-10 animate-in fade-in slide-in-from-top-4 duration-700">
+      <article className="relative mx-auto max-w-3xl px-6 py-16 page-enter">
+        <header className="mb-10">
           <div className="mb-6 flex items-center justify-between">
             <Link
               href={`${localePrefix}/blog`}
@@ -71,11 +71,11 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
           <div className="mt-4 h-px bg-gradient-to-r from-border via-muted-foreground/30 to-transparent" />
         </header>
 
-        <div className="rounded-2xl border border-border/80 bg-card/95 p-6 shadow-2xl shadow-black/20 ring-1 ring-foreground/5 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 sm:p-8">
+        <div className="rounded-2xl border border-border/80 bg-card/95 p-6 shadow-2xl shadow-black/20 ring-1 ring-foreground/5 tab-enter sm:p-8">
           <MarkdownContent content={post.content} />
         </div>
 
-        <footer className="mt-20 text-center animate-in fade-in duration-700 delay-500">
+        <footer className="mt-20 text-center">
           <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mb-6" />
           <p className="text-xs italic text-muted-foreground/70 hover:text-muted-foreground transition-colors duration-300">
             {t.home.footer}
