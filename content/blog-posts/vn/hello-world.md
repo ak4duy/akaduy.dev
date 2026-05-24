@@ -1,6 +1,7 @@
 ---
 title: "Một khởi đầu mới"
 date: "24-05-2026"
+excerpt: "Đôi lời giới thiệu về trang web này và những điều mình muốn viết ở đây."
 tags:
   - Hành trình
 ---

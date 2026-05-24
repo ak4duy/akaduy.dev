@@ -1,6 +1,7 @@
 ---
 title: "Hello, World!"
 date: "24-05-2026"
+excerpt: "A short intro about this website and what I want to write here."
 tags:
   - Journey
 ---
