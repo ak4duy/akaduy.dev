@@ -28,7 +28,7 @@ export type Translation = {
   projects: Array<{
     name: string;
     href: string;
-    description: string;
+    description: string[];
     tags: string[];
   }>;
 
@@ -68,27 +68,33 @@ export const translations: Record<Language, Translation> = {
       blogPostsTitle: "Posts",
       morePosts: "More posts coming soon...",
       contactTitle: "Get in Touch",
-      footer: "born to use java, forced to use rust",
+      footer: "code, ideas, and the journey in between.",
     },
     projects: [
       {
         name: "Kopuz",
         href: "https://github.com/Kopuz-org/kopuz/pulls?q=is%3Apr+is%3Aclosed+author%3Aak4duy",
-        description:
-          "Open-source music player built with Rust and Dioxus.\nCurrently contributing features and fixing bugs.",
+        description: [
+          "Open-source music player built with Rust and Dioxus.",
+          "Currently contributing features and fixing bugs.",
+        ],
         tags: ["Rust", "Dioxus"],
       },
       {
         name: "1 in 10000 chance of Foxy jumpscare per second",
         href: "https://github.com/ak4duy/1_10000_jumpscare",
-        description:
-          "An add-on that makes your study thrilling.\nEvery second, there is a 1 in 10000 chance that Foxy will randomly jumpscare you.",
+        description: [
+          "An add-on that makes your study thrilling.",
+          "Every second, there is a 1 in 10000 chance that Foxy will randomly jumpscare you.",
+        ],
         tags: ["Python", "PyQt", "Anki Add-on"],
       },
       {
         name: "DeskForge",
         href: "https://github.com/ak4duy/DeskForge",
-        description: "A simple TUI launcher editor for Linux no one asked for.",
+        description: [
+          "A simple TUI launcher editor for Linux no one asked for.",
+        ],
         tags: ["Rust", "Ratatui"],
       },
     ],
@@ -150,28 +156,33 @@ export const translations: Record<Language, Translation> = {
       blogPostsTitle: "Bài viết",
       morePosts: "Sẽ có thêm bài viết sau...",
       contactTitle: "Liên hệ",
-      footer: "tuong tuong mot cau gi do ve cuoc song",
+      footer: "code, ideas, and the journey in between.",
     },
     projects: [
       {
         name: "Kopuz",
         href: "https://github.com/Kopuz-org/kopuz/pulls?q=is%3Apr+is%3Aclosed+author%3Aak4duy",
-        description:
-          "Trình phát nhạc mã nguồn mở xây bằng Rust và Dioxus.\nHiện đang đóng góp tính năng và sửa lỗi.",
+        description: [
+          "Trình phát nhạc mã nguồn mở xây bằng Rust và Dioxus.",
+          "Hiện đang đóng góp tính năng và sửa lỗi.",
+        ],
         tags: ["Rust", "Dioxus"],
       },
       {
         name: "1 in 10000 chance of Foxy jumpscare per second",
         href: "https://github.com/ak4duy/1_10000_jumpscare",
-        description:
-          "Một add-on vui vẻ cho Anki.\nMỗi giây sẽ có 1/10000 cơ hội Foxy jumpscare ngẫu nhiên.",
+        description: [
+          "Một add-on vui vẻ cho Anki.",
+          "Mỗi giây sẽ có 1/10000 cơ hội Foxy jumpscare ngẫu nhiên.",
+        ],
         tags: ["Python", "PyQt", "Anki Add-on"],
       },
       {
         name: "DeskForge",
         href: "https://github.com/ak4duy/DeskForge",
-        description:
+        description: [
           "Một TUI chỉnh launcher đơn giản cho Linux mà chẳng ai xài.",
+        ],
         tags: ["Rust", "Ratatui"],
       },
     ],

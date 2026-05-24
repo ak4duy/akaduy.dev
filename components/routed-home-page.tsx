@@ -171,9 +171,11 @@ export function RoutedHomePage({
                           <ExternalLink className="h-4 w-4" />
                         </Link>
                       </div>
-                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                        {project.description}
-                      </p>
+                      <div className="mt-2 space-y-1 text-sm text-muted-foreground leading-relaxed">
+                        {project.description.map((line) => (
+                          <p key={line}>{line}</p>
+                        ))}
+                      </div>
                       <div className="mt-4 flex flex-wrap gap-2">
                         {project.tags.map((tag) => (
                           <span
