@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ExternalLink } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
+import { SiteFooter } from "@/components/site-footer";
 import { useLanguage } from "@/components/language-provider";
 import { BlogPost } from "@/lib/blog-posts";
 import { Language, translations } from "@/lib/i18n";
@@ -290,12 +291,7 @@ export function RoutedHomePage({
           </Tabs>
         </div>
 
-        <footer className="mt-20 text-center">
-          <div className="h-px bg-linear-to-r from-transparent via-border to-transparent mb-6" />
-          <p className="text-xs italic text-muted-foreground/70 hover:text-muted-foreground transition-colors duration-300">
-            {t.home.footer}
-          </p>
-        </footer>
+        <SiteFooter tagline={t.home.footer} />
       </div>
     </main>
   );

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
+import { SiteFooter } from "@/components/site-footer";
 import { useLanguage } from "@/components/language-provider";
 import { MarkdownContent } from "@/components/markdown-content";
 import { BlogPost } from "@/lib/blog-posts";
@@ -75,12 +76,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
           <MarkdownContent content={post.content} />
         </div>
 
-        <footer className="mt-20 text-center">
-          <div className="h-px bg-linear-to-r from-transparent via-border to-transparent mb-6" />
-          <p className="text-xs italic text-muted-foreground/70 hover:text-muted-foreground transition-colors duration-300">
-            {t.home.footer}
-          </p>
-        </footer>
+        <SiteFooter tagline={t.home.footer} />
       </article>
     </main>
   );
