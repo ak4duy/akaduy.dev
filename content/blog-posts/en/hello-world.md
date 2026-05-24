@@ -1,16 +1,18 @@
 ---
 title: "Hello, World!"
-date: "2026-05-24"
+date: "24-05-2026"
 tags:
   - Journey
 ---
 
-Opening greeting,
+Greeting everyone,
 
-Maybe this is the first blog post I have ever written, and also a new beginning for this website (24/5/2026).
+Maybe this is the first Blog post I've ever written in my entire life, and also the beginning of a new chapter for this website (24/05/2026).
 
-This will be where I share about myself, my learning journey, programming work, projects I am working on, things I learn, and thoughts and experiences from life.
+This will be a place where I share about myself, my learning journey, programming work, projects I'm building, things I learn along the way, and thoughts and experiences from life.
 
-If one day you happen to visit here, I hope you find something useful, or at least see someone trying to become better every day.
+If you happen to stop by one day, I hope you'll find something useful here, or at least see someone trying to get a little better every day.
+
+By the way, tags on this blog will probably be added somewhat randomly, and there won't be any filtering.
 
 Welcome :)
