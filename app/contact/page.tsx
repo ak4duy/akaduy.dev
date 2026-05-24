@@ -1,6 +1,5 @@
-import { RoutedHomePage } from "@/components/routed-home-page";
-import { getBlogPosts } from "@/lib/blog-posts";
+import { LocaleRedirect } from "@/components/locale-redirect";
 
 export default function Page() {
-  return <RoutedHomePage activeTab="contact" blogPosts={getBlogPosts("EN")} />;
+  return <LocaleRedirect href="/en/contact" />;
 }
