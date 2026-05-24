@@ -62,20 +62,20 @@ export function RoutedHomePage({
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <div className="fixed inset-0 bg-gradient-to-br from-background via-background to-accent/20 pointer-events-none" />
+      <div className="fixed inset-0 bg-linear-to-br from-background via-background to-accent/20 pointer-events-none" />
 
       <div className="relative mx-auto max-w-2xl px-6 py-16 page-enter">
         <header className="mb-10">
           <div className="flex items-center justify-end mb-4">
             <LanguageToggle />
           </div>
-          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold tracking-tight bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
             ak4duy
           </h1>
           <p className="mt-3 text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
             {t.home.intro}
           </p>
-          <div className="mt-4 h-px bg-gradient-to-r from-border via-muted-foreground/30 to-transparent" />
+          <div className="mt-4 h-px bg-linear-to-r from-border via-muted-foreground/30 to-transparent" />
         </header>
 
         <div>
@@ -289,7 +289,7 @@ export function RoutedHomePage({
         </div>
 
         <footer className="mt-20 text-center">
-          <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mb-6" />
+          <div className="h-px bg-linear-to-r from-transparent via-border to-transparent mb-6" />
           <p className="text-xs italic text-muted-foreground/70 hover:text-muted-foreground transition-colors duration-300">
             {t.home.footer}
           </p>
