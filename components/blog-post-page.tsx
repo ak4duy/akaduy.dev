@@ -5,17 +5,18 @@ import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { useLanguage } from "@/components/language-provider";
+import { MarkdownContent } from "@/components/markdown-content";
+import { BlogPost } from "@/lib/blog-posts";
 import { Language, translations } from "@/lib/i18n";
 
 type BlogPostPageProps = {
   initialLanguage: Language;
-  slug: string;
+  post: BlogPost;
 };
 
-export function BlogPostPage({ initialLanguage, slug }: BlogPostPageProps) {
+export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
   const { language, setLanguage } = useLanguage();
   const t = translations[initialLanguage];
-  const post = t.homeBlogPosts.find((post) => post.slug === slug);
   const localePrefix = `/${initialLanguage.toLowerCase()}`;
 
   useEffect(() => {
@@ -71,9 +72,7 @@ export function BlogPostPage({ initialLanguage, slug }: BlogPostPageProps) {
         </header>
 
         <div className="rounded-xl border border-border bg-card/50 p-5 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
-          <p className="whitespace-pre-line text-sm leading-7 text-muted-foreground">
-            {post.body}
-          </p>
+          <MarkdownContent content={post.content} />
         </div>
 
         <footer className="mt-20 text-center animate-in fade-in duration-700 delay-500">

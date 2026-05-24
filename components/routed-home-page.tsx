@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Github, Mail, MessageCircle, Key, ExternalLink } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { useLanguage } from "@/components/language-provider";
+import { BlogPost } from "@/lib/blog-posts";
 import { Language, translations } from "@/lib/i18n";
 
 const tools = ["Java", "Rust", "Python", "Linux"];
@@ -22,11 +23,13 @@ export type TabValue = "about" | "experience" | "blog" | "contact";
 
 type RoutedHomePageProps = {
   activeTab: TabValue;
+  blogPosts: BlogPost[];
   initialLanguage?: Language;
 };
 
 export function RoutedHomePage({
   activeTab,
+  blogPosts,
   initialLanguage,
 }: RoutedHomePageProps) {
   const router = useRouter();
@@ -233,7 +236,7 @@ export function RoutedHomePage({
                 {t.home.blogPostsTitle}
               </h2>
               <div className="space-y-4">
-                {t.homeBlogPosts.map((post, i) => (
+                {blogPosts.map((post, i) => (
                   <Link
                     key={post.slug}
                     href={`${localePrefix || `/${language.toLowerCase()}`}/blog/${post.slug}`}

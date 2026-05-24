@@ -31,14 +31,7 @@ export type Translation = {
     description: string;
     tags: string[];
   }>;
-  homeBlogPosts: Array<{
-    title: string;
-    date: string;
-    slug: string;
-    excerpt: string;
-    body: string;
-    tags: string[];
-  }>;
+
   contacts: Array<{
     href: string;
     label: string;
@@ -72,7 +65,7 @@ export const translations: Record<Language, Translation> = {
       universityDescription:
         "Currently studying and learning things properly (maybe xd).",
       ongoing: "Ongoing",
-      blogPostsTitle: "Blog Posts",
+      blogPostsTitle: "Posts",
       morePosts: "More posts coming soon...",
       contactTitle: "Get in Touch",
       footer: "born to use java, forced to use rust",
@@ -99,22 +92,7 @@ export const translations: Record<Language, Translation> = {
         tags: ["Rust", "Ratatui"],
       },
     ],
-    homeBlogPosts: [
-      {
-        title: "Hello, World!",
-        date: "24-5-2026",
-        slug: "hello-world",
-        excerpt: "A short intro about this website.",
-        body: `Opening greeting,
 
-Maybe this is the first blog post I have ever written, and also a new beginning for this website (24/5/2026).
-This will be where I share about myself, my learning journey, programming work, projects I am working on, things I learn, and thoughts and experiences from life.
-If one day you happen to visit here, I hope you find something useful, or at least see someone trying to become better every day.
-
-Welcome :)`,
-        tags: ["Journey"],
-      },
-    ],
     contacts: [
       {
         href: "https://github.com/ak4duy",
@@ -197,22 +175,7 @@ Welcome :)`,
         tags: ["Rust", "Ratatui"],
       },
     ],
-    homeBlogPosts: [
-      {
-        title: "Một khởi đầu mới",
-        date: "24-5-2026",
-        slug: "hello-world",
-        excerpt: "Đôi lời giới thiệu về trang web này.",
-        body: `Lời chào mở đầu,
 
-Có lẽ đây là Blog đầu tiên mà mình ghi trong đời, và cũng là sự mở đầu mới cho cái website này (24/5/2026).
-Đây sẽ là nơi mình chia sẻ về bản thân, hành trình học tập, công việc lập trình, những dự án mình đang làm, những điều mình học được, cũng như những suy nghĩ và trải nghiệm trong cuộc sống.
-Nếu một ngày nào đó tình vô tình ghé qua đây, hy vọng bạn sẽ tìm được điều gì đó hữu ích, hoặc ít nhất là thấy được một người đang cố gắng trở nên tốt hơn mỗi ngày.
-
-Welcome :)`,
-        tags: ["Hành trình"],
-      },
-    ],
     contacts: [
       {
         href: "https://github.com/ak4duy",
