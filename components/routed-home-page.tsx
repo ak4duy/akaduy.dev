@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Github, Mail, MessageCircle, Key, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { useLanguage } from "@/components/language-provider";
 import { BlogPost } from "@/lib/blog-posts";
@@ -12,12 +12,6 @@ import { Language, translations } from "@/lib/i18n";
 
 const tools = ["Java", "Rust", "Python", "Linux"];
 const interests = ["TypeScript", "JavaScript", "Kotlin", "Go"];
-const contactIcons = {
-  github: Github,
-  discord: MessageCircle,
-  mail: Mail,
-  key: Key,
-};
 
 export type TabValue = "about" | "experience" | "blog" | "contact";
 
@@ -281,33 +275,34 @@ export function RoutedHomePage({
                 {t.home.contactTitle}
               </h2>
               <div className="grid gap-3">
-                {t.contacts.map((contact, i) => {
-                  const Icon = contactIcons[contact.icon];
-
-                  return (
-                    <Link
-                      key={contact.label}
-                      href={contact.href}
-                      target={contact.external ? "_blank" : undefined}
-                      rel={contact.external ? "noopener noreferrer" : undefined}
-                      className="group flex items-center gap-4 rounded-xl border border-border bg-card/50 p-4 transition-all duration-300 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 hover:translate-x-1 animate-in fade-in slide-in-from-left-4"
-                      style={{ animationDelay: `${i * 75}ms` }}
-                    >
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted/50 group-hover:bg-muted group-hover:scale-110 transition-all duration-300">
-                        <Icon className="h-5 w-5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-foreground">
-                          {contact.label}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {contact.value}
-                        </p>
-                      </div>
-                      <ExternalLink className="h-4 w-4 text-muted-foreground/50 group-hover:text-muted-foreground transition-all duration-300 opacity-0 group-hover:opacity-100" />
-                    </Link>
-                  );
-                })}
+                {t.contacts.map((contact, i) => (
+                  <Link
+                    key={contact.label}
+                    href={contact.href}
+                    target={contact.external ? "_blank" : undefined}
+                    rel={contact.external ? "noopener noreferrer" : undefined}
+                    className="group flex items-center gap-4 rounded-xl border border-border bg-card/50 p-4 transition-all duration-300 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 hover:translate-x-1 animate-in fade-in slide-in-from-left-4"
+                    style={{ animationDelay: `${i * 75}ms` }}
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border/60 bg-muted/50 p-2 group-hover:bg-muted group-hover:scale-110 transition-all duration-300">
+                      <img
+                        src={contact.icon}
+                        alt=""
+                        aria-hidden="true"
+                        className="h-full w-full object-contain opacity-70 transition-opacity duration-300 group-hover:opacity-100"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium text-foreground">
+                        {contact.label}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {contact.value}
+                      </p>
+                    </div>
+                    <ExternalLink className="h-4 w-4 text-muted-foreground/50 group-hover:text-muted-foreground transition-all duration-300 opacity-0 group-hover:opacity-100" />
+                  </Link>
+                ))}
               </div>
             </TabsContent>
           </Tabs>

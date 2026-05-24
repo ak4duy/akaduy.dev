@@ -37,7 +37,7 @@ export type Translation = {
     label: string;
     value: string;
     external: boolean;
-    icon: "github" | "discord" | "mail" | "key";
+    icon: string;
   }>;
 };
 
@@ -96,28 +96,28 @@ export const translations: Record<Language, Translation> = {
     contacts: [
       {
         href: "https://github.com/ak4duy",
-        icon: "github",
+        icon: "/contact-icons/github.svg",
         label: "GitHub",
         value: "@ak4duy",
         external: true,
       },
       {
         href: "https://discord.com/users/799965541283528714",
-        icon: "discord",
+        icon: "/contact-icons/discord.svg",
         label: "Discord",
         value: "ak4duy",
         external: true,
       },
       {
         href: "mailto:akaduy@protonmail.me",
-        icon: "mail",
+        icon: "/contact-icons/mail.svg",
         label: "Email",
         value: "akaduy@protonmail.me",
         external: false,
       },
       {
         href: "https://github.com/ak4duy.gpg",
-        icon: "key",
+        icon: "/contact-icons/pgp.svg",
         label: "PGP Key",
         value: "For encrypted communication",
         external: true,
@@ -179,28 +179,28 @@ export const translations: Record<Language, Translation> = {
     contacts: [
       {
         href: "https://github.com/ak4duy",
-        icon: "github",
+        icon: "/contact-icons/github.svg",
         label: "GitHub",
         value: "@ak4duy",
         external: true,
       },
       {
         href: "https://discord.com/users/799965541283528714",
-        icon: "discord",
+        icon: "/contact-icons/discord.svg",
         label: "Discord",
         value: "ak4duy",
         external: true,
       },
       {
         href: "mailto:akaduy@protonmail.me",
-        icon: "mail",
+        icon: "/contact-icons/mail.svg",
         label: "Email",
         value: "akaduy@protonmail.me",
         external: false,
       },
       {
         href: "https://github.com/ak4duy.gpg",
-        icon: "key",
+        icon: "/contact-icons/pgp.svg",
         label: "PGP Key",
         value: "Dùng cho liên lạc mã hóa",
         external: true,
