@@ -31,7 +31,7 @@ export function LanguageToggle() {
           <button
             type="button"
             onClick={() => handleLanguageChange(option)}
-            className={`rounded-md px-2.5 py-1 font-medium transition-all duration-200 ${
+            className={`rounded-md px-2.5 py-1 font-medium transition-all duration-150 ease-linear hover:-translate-y-0.5 active:translate-y-0 active:scale-95 ${
               activeLanguage === option
                 ? "bg-foreground text-background"
                 : "text-muted-foreground hover:text-foreground"

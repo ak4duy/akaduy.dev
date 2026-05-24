@@ -90,7 +90,7 @@ export function RoutedHomePage({
                 <TabsTrigger
                   key={tab.value}
                   value={tab.value}
-                  className="relative rounded-none border-b-2 border-transparent px-4 py-3 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground data-[state=active]:shadow-none bg-transparent"
+                  className="relative rounded-none border-b-2 border-transparent px-4 py-3 text-sm font-medium text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:text-foreground active:translate-y-0 active:scale-95 data-[state=active]:border-foreground data-[state=active]:text-foreground data-[state=active]:shadow-none bg-transparent"
                 >
                   {tab.label}
                 </TabsTrigger>
@@ -121,7 +121,7 @@ export function RoutedHomePage({
                   {tools.map((tool) => (
                     <span
                       key={tool}
-                      className="rounded-lg bg-muted/50 border border-border px-4 py-2 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground hover:scale-105 transition-all duration-200 cursor-default"
+                      className="rounded-lg bg-muted/50 border border-border px-4 py-2 text-xs font-medium text-muted-foreground hover:-translate-y-0.5 hover:bg-muted hover:text-foreground hover:scale-105 transition-all duration-150 ease-linear cursor-default"
                     >
                       {tool}
                     </span>
@@ -138,7 +138,7 @@ export function RoutedHomePage({
                   {interests.map((interest) => (
                     <span
                       key={interest}
-                      className="rounded-lg bg-muted/50 border border-border px-4 py-2 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground hover:scale-105 transition-all duration-200 cursor-default"
+                      className="rounded-lg bg-muted/50 border border-border px-4 py-2 text-xs font-medium text-muted-foreground hover:-translate-y-0.5 hover:bg-muted hover:text-foreground hover:scale-105 transition-all duration-150 ease-linear cursor-default"
                     >
                       {interest}
                     </span>
@@ -167,7 +167,7 @@ export function RoutedHomePage({
                           href={project.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-muted-foreground hover:text-foreground hover:scale-110 transition-all duration-300"
+                          className="text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:scale-110 hover:text-foreground active:translate-y-0 active:scale-95"
                         >
                           <ExternalLink className="h-4 w-4" />
                         </Link>
@@ -222,7 +222,7 @@ export function RoutedHomePage({
                   <Link
                     key={post.slug}
                     href={`${localePrefix}/blog/${post.slug}`}
-                    className="block group rounded-xl border border-border bg-card/50 p-5 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 transition-all duration-200 cursor-pointer"
+                    className="block group rounded-xl border border-border bg-card/50 p-5 transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 active:translate-y-0 active:scale-[0.99] cursor-pointer"
                   >
                     <div className="flex items-start justify-between">
                       <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
@@ -265,9 +265,9 @@ export function RoutedHomePage({
                     href={contact.href}
                     target={contact.external ? "_blank" : undefined}
                     rel={contact.external ? "noopener noreferrer" : undefined}
-                    className="group flex items-center gap-4 rounded-xl border border-border bg-card/50 p-4 transition-all duration-200 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 hover:translate-x-1"
+                    className="group flex items-center gap-4 rounded-xl border border-border bg-card/50 p-4 transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 active:translate-y-0 active:scale-[0.99]"
                   >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border/60 bg-muted/50 p-2 group-hover:bg-muted group-hover:scale-105 transition-all duration-200">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border/60 bg-muted/50 p-2 transition-all duration-150 ease-linear group-hover:bg-muted group-hover:scale-105">
                       <img
                         src={contact.icon}
                         alt=""
@@ -283,7 +283,7 @@ export function RoutedHomePage({
                         {contact.value}
                       </p>
                     </div>
-                    <ExternalLink className="h-4 w-4 text-muted-foreground/50 group-hover:text-muted-foreground transition-all duration-300 opacity-0 group-hover:opacity-100" />
+                    <ExternalLink className="h-4 w-4 text-muted-foreground/50 opacity-0 transition-all duration-150 ease-linear group-hover:translate-x-0.5 group-hover:text-muted-foreground group-hover:opacity-100" />
                   </Link>
                 ))}
               </div>
