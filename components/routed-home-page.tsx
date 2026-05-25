@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, X } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
 import { useLanguage } from "@/components/language-provider";
@@ -12,6 +12,21 @@ import { Language, translations } from "@/lib/i18n";
 
 const tools = ["Java", "Rust", "Python", "Linux"];
 const interests = ["TypeScript", "JavaScript", "Kotlin", "Go"];
+
+/*
+  normalize vietnamese special cases
+  copied from @/components/markdown-content
+*/
+function normalizeSearchText(text: string) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/đ/g, "d")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .trim()
+    .replace(/[\s-]+/g, " ");
+}
 
 export type TabValue = "about" | "experience" | "blog" | "contact";
 
@@ -27,6 +42,7 @@ export function RoutedHomePage({
   initialLanguage,
 }: RoutedHomePageProps) {
   const [currentTab, setCurrentTab] = useState<TabValue>(activeTab);
+  const [blogSearch, setBlogSearch] = useState("");
   const { language, setLanguage } = useLanguage();
   const activeLanguage = initialLanguage ?? language;
   const t = translations[activeLanguage];
@@ -41,6 +57,14 @@ export function RoutedHomePage({
     { value: "blog", label: t.nav.blog, href: `${localePrefix}/blog` },
     { value: "contact", label: t.nav.contact, href: `${localePrefix}/contact` },
   ] as const;
+  const normalizedBlogSearch = normalizeSearchText(blogSearch);
+  const filteredBlogPosts = normalizedBlogSearch
+    ? blogPosts.filter((post) =>
+        normalizeSearchText(
+          [post.title, post.excerpt, post.date, ...post.tags].join(" "),
+        ).includes(normalizedBlogSearch),
+      )
+    : blogPosts;
 
   useEffect(() => {
     setCurrentTab(activeTab);
@@ -217,8 +241,28 @@ export function RoutedHomePage({
                 <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
                 {t.home.blogPostsTitle}
               </h2>
+              <div className="relative mb-5">
+                <input
+                  type="text"
+                  value={blogSearch}
+                  onChange={(event) => setBlogSearch(event.target.value)}
+                  placeholder={t.blog.searchPlaceholder}
+                  aria-label={t.blog.searchPlaceholder}
+                  className="w-full rounded-xl border border-border bg-card/50 py-3 pl-4 pr-11 text-sm text-foreground outline-none transition-all duration-150 placeholder:text-muted-foreground/60 hover:bg-card hover:border-muted-foreground/30 focus:border-muted-foreground/50 focus:bg-card focus:ring-2 focus:ring-foreground/10"
+                />
+                {blogSearch && (
+                  <button
+                    type="button"
+                    onClick={() => setBlogSearch("")}
+                    aria-label="Clear search"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-white/80 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
               <div className="space-y-4">
-                {blogPosts.map((post) => (
+                {filteredBlogPosts.map((post) => (
                   <Link
                     key={post.slug}
                     href={`${localePrefix}/blog/${post.slug}`}
@@ -247,10 +291,17 @@ export function RoutedHomePage({
                     </div>
                   </Link>
                 ))}
+                {filteredBlogPosts.length === 0 && (
+                  <div className="rounded-xl border border-dashed border-border bg-muted/20 p-6 text-center text-sm text-muted-foreground">
+                    {t.blog.noSearchResults}
+                  </div>
+                )}
               </div>
-              <p className="mt-6 text-sm text-muted-foreground/70 text-center">
-                {t.home.morePosts}
-              </p>
+              {!normalizedBlogSearch && (
+                <p className="mt-6 text-sm text-muted-foreground/70 text-center">
+                  {t.home.morePosts}
+                </p>
+              )}
             </TabsContent>
 
             <TabsContent value="contact" className="tab-enter">

@@ -41,6 +41,8 @@ export type Translation = {
   }>;
   blog: {
     contents: string;
+    searchPlaceholder: string;
+    noSearchResults: string;
   };
 };
 
@@ -134,6 +136,8 @@ export const translations: Record<Language, Translation> = {
     ],
     blog: {
       contents: "Contents",
+      searchPlaceholder: "Search posts...",
+      noSearchResults: "No posts found.",
     },
   },
   VN: {
@@ -225,6 +229,8 @@ export const translations: Record<Language, Translation> = {
     ],
     blog: {
       contents: "Nội dung",
+      searchPlaceholder: "Tìm bài viết...",
+      noSearchResults: "Không tìm thấy bài viết.",
     },
   },
 };
