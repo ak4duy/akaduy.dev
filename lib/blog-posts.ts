@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { basename, join } from "node:path";
+import type { Metadata } from "next";
 import { Language } from "@/lib/i18n";
 
 export type BlogPost = {
@@ -99,4 +100,11 @@ export function getBlogPosts(language: Language) {
     .filter((fileName) => fileName.endsWith(".md"))
     .map((fileName) => getBlogPost(language, basename(fileName, ".md")))
     .sort((a, b) => b.date.localeCompare(a.date));
+}
+
+export function createBlogPostMetadata(post: BlogPost): Metadata {
+  return {
+    title: `Blog: ${post.title} | ak4duy`,
+    description: post.excerpt,
+  };
 }
