@@ -10,7 +10,6 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "ak4duy",
   description: `Self-taught developer. Working with Java, Python, Rust, and whatever breaks next.`,
-  generator: "v0.app",
   icons: {
     icon: "/favicon-200x200.jpg",
     apple: "/favicon-200x200.jpg",
