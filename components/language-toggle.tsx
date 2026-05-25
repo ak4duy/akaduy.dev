@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { languages } from "@/lib/i18n";
+import { languages } from "@/lib/i18n/index";
 import { useLanguage } from "@/components/language-provider";
 
 export function LanguageToggle() {

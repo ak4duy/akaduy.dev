@@ -8,7 +8,7 @@ import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
 import { useLanguage } from "@/components/language-provider";
 import { BlogPost } from "@/lib/blog-posts";
-import { Language, translations } from "@/lib/i18n";
+import { Language, translations } from "@/lib/i18n/index";
 
 const tools = ["Java", "Rust", "Python", "Linux"];
 const interests = ["TypeScript", "JavaScript", "Kotlin", "Go"];

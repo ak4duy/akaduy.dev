@@ -8,7 +8,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { useLanguage } from "@/components/language-provider";
 import { MarkdownContent } from "@/components/markdown-content";
 import { BlogPost } from "@/lib/blog-posts";
-import { Language, translations } from "@/lib/i18n";
+import { Language, translations } from "@/lib/i18n/index";
 
 type BlogPostPageProps = {
   initialLanguage: Language;

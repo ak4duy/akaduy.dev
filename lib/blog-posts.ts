@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { basename, join } from "node:path";
 import type { Metadata } from "next";
-import { Language } from "@/lib/i18n";
+import { Language } from "@/lib/i18n/index";
 
 export type BlogPost = {
   slug: string;
