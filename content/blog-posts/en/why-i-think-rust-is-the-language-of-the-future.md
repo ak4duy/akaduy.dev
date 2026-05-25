@@ -50,21 +50,15 @@ There is something exciting about seeing a relatively new language slowly appear
 
 And the thing that changed me the most was Rust's incredibly consistent way of handling Ownership.
 
-At first... I honestly hated it.
+At first... I honestly hated it. I could not understand why the compiler would not let me do things that felt completely normal. 
 
-I could not understand why the compiler would not let me do things that felt completely normal. Why did this variable get moved? Why does this borrow fail? Why does changing one line suddenly create a whole bunch of other errors?
+Why did this variable get moved? Why does this borrow fail? Why does changing one line suddenly create a whole bunch of other errors?
 
 But after some time, I realized Rust was forcing me to think more carefully.
 
-Who owns this data?
+Who owns this data? Who is allowed to modify it? Does this data still exist at this point?
 
-Who is allowed to modify it?
-
-Does this data still exist at this point?
-
-Those questions may sound small.
-
-But they changed the way I write code, not only in Rust, but in other languages too.
+Those questions may sound small. But they changed the way I write code, not only in Rust, but in other languages too.
 
 # Cargo and the Ecosystem Are Amazing
 
@@ -98,4 +92,4 @@ Or at least, it's a future I want to keep learning and exploring. And if you ask
 
 ---
 
-Image source: ![r/ProgrammerHumor](https://www.reddit.com/r/ProgrammerHumor/comments/zt0hrt/hating_memory_safety_since_day_2147483648/)
+Image source: [u/l1F](https://www.reddit.com/r/ProgrammerHumor/comments/zt0hrt/hating_memory_safety_since_day_2147483648/)
