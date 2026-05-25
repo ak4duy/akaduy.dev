@@ -1,11 +1,55 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
 type MarkdownContentProps = {
   content: string;
+  contentsLabel?: string;
 };
 
+type MarkdownBlock =
+  | { type: "heading"; level: 1 | 2 | 3 | 4 | 5 | 6; text: string; id: string }
+  | { type: "paragraph"; lines: string[] }
+  | { type: "quote"; lines: string[] }
+  | { type: "unordered-list"; items: string[] }
+  | { type: "ordered-list"; items: string[] }
+  | { type: "rule" };
+
+type HeadingBlock = Extract<MarkdownBlock, { type: "heading" }>;
+
+function slugify(text: string) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/đ/g, "d") //special vnese case
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
 function renderInlineMarkdown(text: string) {
-  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
+  const parts = text.split(
+    /(\[[^\]]+\]\([^)]+\)|`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g,
+  );
 
   return parts.map((part, index) => {
+    const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+
+    if (link) {
+      return (
+        <a
+          key={index}
+          href={link[2]}
+          target={link[2].startsWith("http") ? "_blank" : undefined}
+          rel={link[2].startsWith("http") ? "noopener noreferrer" : undefined}
+          className="font-medium text-foreground underline decoration-muted-foreground/40 underline-offset-4 transition-colors hover:decoration-foreground"
+        >
+          {link[1]}
+        </a>
+      );
+    }
+
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
         <strong key={index} className="font-semibold text-foreground">
@@ -14,11 +58,19 @@ function renderInlineMarkdown(text: string) {
       );
     }
 
+    if (part.startsWith("*") && part.endsWith("*")) {
+      return (
+        <em key={index} className="italic text-foreground/95">
+          {part.slice(1, -1)}
+        </em>
+      );
+    }
+
     if (part.startsWith("`") && part.endsWith("`")) {
       return (
         <code
           key={index}
-          className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm text-foreground"
+          className="rounded-md border border-border bg-muted/70 px-1.5 py-0.5 font-mono text-[0.9em] text-foreground"
         >
           {part.slice(1, -1)}
         </code>
@@ -29,73 +81,335 @@ function renderInlineMarkdown(text: string) {
   });
 }
 
-export function MarkdownContent({ content }: MarkdownContentProps) {
-  const blocks = content.trim().split(/\n{2,}/);
+function parseMarkdown(content: string): MarkdownBlock[] {
+  const lines = content.trim().split(/\r?\n/);
+  const blocks: MarkdownBlock[] = [];
+  const headingCounts = new Map<string, number>();
+  let paragraph: string[] = [];
+  let quote: string[] = [];
+  let unorderedList: string[] = [];
+  let orderedList: string[] = [];
+
+  const flushParagraph = () => {
+    if (paragraph.length > 0) {
+      blocks.push({ type: "paragraph", lines: paragraph });
+      paragraph = [];
+    }
+  };
+
+  const flushQuote = () => {
+    if (quote.length > 0) {
+      blocks.push({ type: "quote", lines: quote });
+      quote = [];
+    }
+  };
+
+  const flushUnorderedList = () => {
+    if (unorderedList.length > 0) {
+      blocks.push({ type: "unordered-list", items: unorderedList });
+      unorderedList = [];
+    }
+  };
+
+  const flushOrderedList = () => {
+    if (orderedList.length > 0) {
+      blocks.push({ type: "ordered-list", items: orderedList });
+      orderedList = [];
+    }
+  };
+
+  const flushAll = () => {
+    flushParagraph();
+    flushQuote();
+    flushUnorderedList();
+    flushOrderedList();
+  };
+
+  const createHeadingId = (text: string) => {
+    const baseId = slugify(text) || "section";
+    const count = headingCounts.get(baseId) ?? 0;
+    headingCounts.set(baseId, count + 1);
+
+    return count === 0 ? baseId : `${baseId}-${count + 1}`;
+  };
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      flushAll();
+      continue;
+    }
+
+    const heading = trimmed.match(/^(#{1,6})\s+(.+)$/);
+    if (heading) {
+      flushAll();
+      const text = heading[2];
+      blocks.push({
+        type: "heading",
+        level: heading[1].length as 1 | 2 | 3 | 4 | 5 | 6,
+        text,
+        id: createHeadingId(text),
+      });
+      continue;
+    }
+
+    if (/^-{3,}$/.test(trimmed)) {
+      flushAll();
+      blocks.push({ type: "rule" });
+      continue;
+    }
+
+    if (trimmed.startsWith(">")) {
+      flushParagraph();
+      flushUnorderedList();
+      flushOrderedList();
+      quote.push(trimmed.replace(/^>\s?/, ""));
+      continue;
+    }
+
+    if (/^[-*]\s+/.test(trimmed)) {
+      flushParagraph();
+      flushQuote();
+      flushOrderedList();
+      unorderedList.push(trimmed.replace(/^[-*]\s+/, ""));
+      continue;
+    }
+
+    if (/^\d+\.\s+/.test(trimmed)) {
+      flushParagraph();
+      flushQuote();
+      flushUnorderedList();
+      orderedList.push(trimmed.replace(/^\d+\.\s+/, ""));
+      continue;
+    }
+
+    flushQuote();
+    flushUnorderedList();
+    flushOrderedList();
+    paragraph.push(trimmed);
+  }
+
+  flushAll();
+  return blocks;
+}
+
+function TableOfContents({
+  headings,
+  variant = "inline",
+  visible = true,
+  label = "Contents",
+}: {
+  headings: HeadingBlock[];
+  variant?: "inline" | "sticky-note";
+  visible?: boolean;
+  label?: string;
+}) {
+  if (headings.length === 0) {
+    return null;
+  }
 
   return (
-    <div className="space-y-7 text-[15px] leading-8 text-foreground/95 sm:text-base">
-      {blocks.map((block, index) => {
-        const trimmed = block.trim();
-
-        if (trimmed.startsWith("### ")) {
-          return (
-            <h3
-              key={index}
-              className="pt-3 text-xl font-semibold tracking-tight text-foreground"
-            >
-              {trimmed.slice(4)}
-            </h3>
-          );
-        }
-
-        if (trimmed.startsWith("## ")) {
-          return (
-            <h2
-              key={index}
-              className="pt-4 text-2xl font-semibold tracking-tight text-foreground"
-            >
-              {trimmed.slice(3)}
-            </h2>
-          );
-        }
-
-        if (trimmed.startsWith("# ")) {
-          return (
-            <h1
-              key={index}
-              className="pt-5 text-3xl font-bold tracking-tight text-foreground"
-            >
-              {trimmed.slice(2)}
-            </h1>
-          );
-        }
-
-        if (trimmed.split("\n").every((line) => line.startsWith("- "))) {
-          return (
-            <ul
-              key={index}
-              className="list-disc space-y-3 rounded-lg border border-border/70 bg-muted/20 py-4 pl-8 pr-4"
-            >
-              {trimmed.split("\n").map((line) => (
-                <li key={line}>{renderInlineMarkdown(line.slice(2))}</li>
-              ))}
-            </ul>
-          );
-        }
-
-        return (
-          <p
-            key={index}
-            className={
-              index === 0
-                ? "whitespace-pre-line text-lg leading-9 text-foreground"
-                : "whitespace-pre-line"
-            }
+    <nav
+      className={
+        variant === "sticky-note"
+          ? "sticky top-28 -ml-96 z-40 hidden max-h-[calc(100vh-8rem)] w-56 overflow-y-auto rounded-2xl border border-border/80 bg-background/85 p-4 text-sm shadow-xl shadow-black/10 backdrop-blur animate-in fade-in slide-in-from-left-2 duration-300 xl:block 2xl:left-[max(2rem,calc((100vw-48rem)/2-18rem))] 2xl:w-64"
+          : "rounded-2xl border border-border/80 bg-muted/20 p-4 text-sm"
+      }
+      aria-label="Table of contents"
+    >
+      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {label}
+      </p>
+      <ol className="space-y-2">
+        {headings.map((heading) => (
+          <li
+            key={heading.id}
+            className={heading.level > 1 ? "ml-4" : undefined}
           >
-            {renderInlineMarkdown(trimmed)}
-          </p>
-        );
-      })}
+            <a
+              href={`#${heading.id}`}
+              className="block truncate text-muted-foreground transition-colors hover:text-foreground"
+              title={heading.text}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
+function Heading({ level, text, id }: HeadingBlock) {
+  const content = renderInlineMarkdown(text);
+  const anchor = (
+    <a
+      href={`#${id}`}
+      aria-label={`Link to ${text}`}
+      className="absolute -left-6 text-muted-foreground/50 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
+    >
+      #
+    </a>
+  );
+
+  if (level === 1) {
+    return (
+      <h2
+        id={id}
+        className="group relative scroll-mt-24 mt-10 border-b border-border/70 pb-3 text-2xl font-bold tracking-tight text-foreground first:mt-0 sm:text-3xl"
+      >
+        {anchor}
+        {content}
+      </h2>
+    );
+  }
+
+  if (level === 2) {
+    return (
+      <h3
+        id={id}
+        className="group relative scroll-mt-24 mt-8 text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
+      >
+        {anchor}
+        {content}
+      </h3>
+    );
+  }
+
+  return (
+    <h4
+      id={id}
+      className="group relative scroll-mt-24 mt-6 text-lg font-semibold tracking-tight text-foreground"
+    >
+      {anchor}
+      {content}
+    </h4>
+  );
+}
+
+export function MarkdownContent({
+  content,
+  contentsLabel = "Contents",
+}: MarkdownContentProps) {
+  const [showStickyContents, setShowStickyContents] = useState(false);
+  const contentsRef = useRef<HTMLDivElement | null>(null);
+  const blocks = parseMarkdown(content);
+  const headings = blocks.filter(
+    (block): block is HeadingBlock => block.type === "heading",
+  );
+
+  useEffect(() => {
+    const contents = contentsRef.current;
+
+    if (!contents) {
+      return;
+    }
+
+    const updateStickyContents = () => {
+      setShowStickyContents(contents.getBoundingClientRect().bottom <= 0);
+    };
+
+    updateStickyContents();
+    window.addEventListener("scroll", updateStickyContents, { passive: true });
+    window.addEventListener("resize", updateStickyContents);
+
+    return () => {
+      window.removeEventListener("scroll", updateStickyContents);
+      window.removeEventListener("resize", updateStickyContents);
+    };
+  }, []);
+
+  return (
+    <div className="relative text-[15px] leading-8 text-foreground/95 sm:text-base">
+      {showStickyContents && (
+        <TableOfContents
+          headings={headings}
+          variant="sticky-note"
+          label={contentsLabel}
+        />
+      )}
+
+      <div ref={contentsRef} className="mb-8">
+        <TableOfContents headings={headings} label={contentsLabel} />
+      </div>
+
+      <div className="min-w-0 space-y-6">
+        {blocks.map((block, index) => {
+          if (block.type === "heading") {
+            return <Heading key={index} {...block} />;
+          }
+
+          if (block.type === "rule") {
+            return <hr key={index} className="my-8 border-border/80" />;
+          }
+
+          if (block.type === "quote") {
+            return (
+              <blockquote
+                key={index}
+                className="rounded-r-xl border-l-4 border-foreground/70 bg-muted/30 px-5 py-4 text-foreground/90 shadow-sm"
+              >
+                <div className="space-y-3 italic">
+                  {block.lines.map((line, lineIndex) => (
+                    <p key={`${line}-${lineIndex}`}>
+                      {renderInlineMarkdown(line)}
+                    </p>
+                  ))}
+                </div>
+              </blockquote>
+            );
+          }
+
+          if (block.type === "unordered-list") {
+            return (
+              <ul
+                key={index}
+                className="list-disc space-y-3 rounded-xl border border-border/70 bg-muted/20 py-4 pl-8 pr-4"
+              >
+                {block.items.map((item, itemIndex) => (
+                  <li key={`${item}-${itemIndex}`}>
+                    {renderInlineMarkdown(item)}
+                  </li>
+                ))}
+              </ul>
+            );
+          }
+
+          if (block.type === "ordered-list") {
+            return (
+              <ol
+                key={index}
+                className="list-decimal space-y-3 rounded-xl border border-border/70 bg-muted/20 py-4 pl-8 pr-4"
+              >
+                {block.items.map((item, itemIndex) => (
+                  <li key={`${item}-${itemIndex}`}>
+                    {renderInlineMarkdown(item)}
+                  </li>
+                ))}
+              </ol>
+            );
+          }
+
+          return (
+            <p
+              key={index}
+              className={
+                index === 0
+                  ? "text-lg leading-9 text-foreground"
+                  : "text-foreground/95"
+              }
+            >
+              {block.lines.map((line, lineIndex) => (
+                <span key={`${line}-${lineIndex}`}>
+                  {lineIndex > 0 && <br />}
+                  {renderInlineMarkdown(line)}
+                </span>
+              ))}
+            </p>
+          );
+        })}
+      </div>
     </div>
   );
 }
