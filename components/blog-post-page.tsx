@@ -15,6 +15,21 @@ type BlogPostPageProps = {
   post: BlogPost;
 };
 
+// based on 200 wpm
+function getReadingTimeMinutes(content: string) {
+  const words = content
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]+`/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, " ")
+    .replace(/\[[^\]]+\]\([^)]+\)/g, " ")
+    .replace(/[#>*_~`\-\d.]/g, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+
+  return Math.max(1, Math.ceil(words / 200));
+}
+
 function BackToBlogLink({
   href,
   label,
@@ -90,6 +105,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
   }
 
   const progressPercent = Math.round(readingProgress * 100);
+  const readingTimeMinutes = getReadingTimeMinutes(post.content);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -128,6 +144,10 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
           </h1>
           <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground/70">
             <time>{post.date}</time>
+            <span aria-hidden="true">|</span>
+            <span>
+              {readingTimeMinutes} {t.blog.minuteRead}
+            </span>
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag) => (
                 <span

@@ -43,6 +43,7 @@ export type Translation = {
     contents: string;
     searchPlaceholder: string;
     noSearchResults: string;
+    minuteRead: string;
   };
 };
 
@@ -138,6 +139,7 @@ export const translations: Record<Language, Translation> = {
       contents: "Contents",
       searchPlaceholder: "Search posts...",
       noSearchResults: "No posts found.",
+      minuteRead: "min read",
     },
   },
   VN: {
@@ -231,6 +233,7 @@ export const translations: Record<Language, Translation> = {
       contents: "Nội dung",
       searchPlaceholder: "Tìm bài viết...",
       noSearchResults: "Không tìm thấy bài viết.",
+      minuteRead: "phút đọc",
     },
   },
 };
