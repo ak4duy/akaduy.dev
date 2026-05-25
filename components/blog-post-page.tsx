@@ -148,7 +148,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
             <span>
               {readingTimeMinutes} {t.blog.minuteRead}
             </span>
-            <div className="flex flex-wrap gap-2">
+            <div className="ml-auto flex gap-2">
               {post.tags.map((tag) => (
                 <span
                   key={tag}
@@ -159,7 +159,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
               ))}
             </div>
           </div>
-          <div className="mt-4 h-px bg-linear-to-r from-border via-muted-foreground/30 to-transparent" />
+          <div className="mt-4 h-px bg-linear-to-r from-transparent via-muted-foreground/35 to-transparent" />
         </header>
 
         <div className="rounded-2xl border border-border/80 bg-card/95 p-6 shadow-2xl shadow-black/20 ring-1 ring-foreground/5 tab-enter sm:p-8">
