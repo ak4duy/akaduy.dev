@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 type MarkdownContentProps = {
   content: string;
   contentsLabel?: string;
+  onStickyContentsChange?: (visible: boolean) => void;
 };
 
 type MarkdownBlock =
@@ -303,6 +304,7 @@ function Heading({ level, text, id }: HeadingBlock) {
 export function MarkdownContent({
   content,
   contentsLabel = "Contents",
+  onStickyContentsChange,
 }: MarkdownContentProps) {
   const [showStickyContents, setShowStickyContents] = useState(false);
   const contentsRef = useRef<HTMLDivElement | null>(null);
@@ -319,7 +321,10 @@ export function MarkdownContent({
     }
 
     const updateStickyContents = () => {
-      setShowStickyContents(contents.getBoundingClientRect().bottom <= 0);
+      const shouldShowStickyContents =
+        contents.getBoundingClientRect().bottom <= 0;
+      setShowStickyContents(shouldShowStickyContents);
+      onStickyContentsChange?.(shouldShowStickyContents);
     };
 
     updateStickyContents();
@@ -330,7 +335,7 @@ export function MarkdownContent({
       window.removeEventListener("scroll", updateStickyContents);
       window.removeEventListener("resize", updateStickyContents);
     };
-  }, []);
+  }, [onStickyContentsChange]);
 
   return (
     <div className="relative text-[15px] leading-8 text-foreground/95 sm:text-base">

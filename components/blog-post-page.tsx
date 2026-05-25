@@ -15,12 +15,37 @@ type BlogPostPageProps = {
   post: BlogPost;
 };
 
+function BackToBlogLink({
+  href,
+  label,
+  variant = "inline",
+}: {
+  href: string;
+  label: string;
+  variant?: "inline" | "floating";
+}) {
+  return (
+    <Link
+      href={href}
+      className={
+        variant === "floating"
+          ? "fixed left-111 top-15 z-50 inline-flex items-center gap-2 rounded-xl border border-border/80 bg-background/85 px-3 py-2 text-sm text-muted-foreground shadow-xl shadow-black/10 backdrop-blur transition-colors animate-in fade-in slide-in-from-top-2 duration-300 hover:text-foreground"
+          : "group flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+      }
+    >
+      <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+      {label}
+    </Link>
+  );
+}
+
 export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
   const { language, setLanguage } = useLanguage();
   const t = translations[initialLanguage];
   const localePrefix = `/${initialLanguage.toLowerCase()}`;
   const readingRootRef = useRef<HTMLElement | null>(null);
   const [readingProgress, setReadingProgress] = useState(0);
+  const [showFloatingBackLink, setShowFloatingBackLink] = useState(false);
 
   useEffect(() => {
     if (language !== initialLanguage) {
@@ -35,7 +60,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
       return;
     }
 
-    const updateReadingProgress = () => {
+    const updateScrollState = () => {
       const rect = root.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
       const scrollableDistance = Math.max(rect.height - viewportHeight, 1);
@@ -44,13 +69,13 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
       setReadingProgress(clamped);
     };
 
-    updateReadingProgress();
-    window.addEventListener("scroll", updateReadingProgress, { passive: true });
-    window.addEventListener("resize", updateReadingProgress);
+    updateScrollState();
+    window.addEventListener("scroll", updateScrollState, { passive: true });
+    window.addEventListener("resize", updateScrollState);
 
     return () => {
-      window.removeEventListener("scroll", updateReadingProgress);
-      window.removeEventListener("resize", updateReadingProgress);
+      window.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
     };
   }, [post.slug]);
 
@@ -80,19 +105,21 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
         {progressPercent}%
       </div>
 
+      {showFloatingBackLink && (
+        <BackToBlogLink
+          href={`${localePrefix}/blog`}
+          label={t.nav.blog}
+          variant="floating"
+        />
+      )}
+
       <article
         ref={readingRootRef}
         className="relative mx-auto max-w-3xl px-6 py-16 page-enter"
       >
         <header className="mb-10">
-          <div className="mb-6 flex items-center justify-between">
-            <Link
-              href={`${localePrefix}/blog`}
-              className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-              {t.nav.blog}
-            </Link>
+          <div className="mb-2 flex items-center justify-between">
+            <BackToBlogLink href={`${localePrefix}/blog`} label={t.nav.blog} />
             <LanguageToggle />
           </div>
 
@@ -119,6 +146,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
           <MarkdownContent
             content={post.content}
             contentsLabel={t.blog.contents}
+            onStickyContentsChange={setShowFloatingBackLink}
           />
         </div>
 
