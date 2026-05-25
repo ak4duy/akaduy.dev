@@ -42,7 +42,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, [language]);
 
   return (
-    <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
+    <LanguageContext.Provider value={value}>
+      {children}
+    </LanguageContext.Provider>
   );
 }
 

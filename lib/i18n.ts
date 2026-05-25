@@ -39,6 +39,9 @@ export type Translation = {
     external: boolean;
     icon: string;
   }>;
+  blog: {
+    contents: string;
+  };
 };
 
 export const translations: Record<Language, Translation> = {
@@ -129,6 +132,9 @@ export const translations: Record<Language, Translation> = {
         external: true,
       },
     ],
+    blog: {
+      contents: "Contents",
+    },
   },
   VN: {
     nav: {
@@ -217,5 +223,8 @@ export const translations: Record<Language, Translation> = {
         external: true,
       },
     ],
+    blog: {
+      contents: "Nội dung",
+    },
   },
 };

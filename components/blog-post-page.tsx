@@ -73,7 +73,10 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
         </header>
 
         <div className="rounded-2xl border border-border/80 bg-card/95 p-6 shadow-2xl shadow-black/20 ring-1 ring-foreground/5 tab-enter sm:p-8">
-          <MarkdownContent content={post.content} />
+          <MarkdownContent
+            content={post.content}
+            contentsLabel={t.blog.contents}
+          />
         </div>
 
         <SiteFooter tagline={t.home.footer} />
