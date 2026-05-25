@@ -13,6 +13,7 @@ type MarkdownBlock =
   | { type: "quote"; lines: string[] }
   | { type: "unordered-list"; items: string[] }
   | { type: "ordered-list"; items: string[] }
+  | { type: "image"; alt: string; src: string }
   | { type: "rule" };
 
 type HeadingBlock = Extract<MarkdownBlock, { type: "heading" }>;
@@ -165,6 +166,17 @@ function parseMarkdown(content: string): MarkdownBlock[] {
       flushUnorderedList();
       flushOrderedList();
       quote.push(trimmed.replace(/^>\s?/, ""));
+      continue;
+    }
+
+    const image = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if (image) {
+      flushAll();
+      blocks.push({
+        type: "image",
+        alt: image[1],
+        src: image[2],
+      });
       continue;
     }
 
@@ -342,6 +354,27 @@ export function MarkdownContent({
 
           if (block.type === "rule") {
             return <hr key={index} className="my-8 border-border/80" />;
+          }
+
+          if (block.type === "image") {
+            return (
+              <figure
+                key={index}
+                className="overflow-hidden rounded-xl border border-border/70 bg-muted/10"
+              >
+                <img
+                  src={block.src}
+                  alt={block.alt || "Blog image"}
+                  className="h-auto w-full"
+                  loading="lazy"
+                />
+                {block.alt && (
+                  <figcaption className="border-t border-border/70 px-3 py-2 text-xs text-muted-foreground">
+                    {block.alt}
+                  </figcaption>
+                )}
+              </figure>
+            );
           }
 
           if (block.type === "quote") {

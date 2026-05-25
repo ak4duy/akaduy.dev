@@ -14,6 +14,8 @@ Rust is a pretty interesting language, and also a pain for a lot of people.
 
 At first, I found Rust the same way most programmers do: through jokes about the borrow checker, the "strict" compiler, and memes about fighting Ownership at 3 AM. Back then, I didn't really understand why people both loved and hated it so much.
 
+![](https://i.redd.it/x3at51cabj7a1.png)
+
 I used to think:
 
 > "Why make things so complicated when Java or Python make them much easier?"
@@ -95,3 +97,5 @@ But I think the future will definitely include Rust.
 Or at least, it's a future I want to keep learning and exploring. And if you ask me what language someone should start learning... Well, you probably already know my answer: Rust 🦀
 
 ---
+
+Image source: ![r/ProgrammerHumor](https://www.reddit.com/r/ProgrammerHumor/comments/zt0hrt/hating_memory_safety_since_day_2147483648/)
