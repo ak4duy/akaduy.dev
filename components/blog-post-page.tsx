@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
@@ -19,12 +19,40 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
   const { language, setLanguage } = useLanguage();
   const t = translations[initialLanguage];
   const localePrefix = `/${initialLanguage.toLowerCase()}`;
+  const readingRootRef = useRef<HTMLElement | null>(null);
+  const [readingProgress, setReadingProgress] = useState(0);
 
   useEffect(() => {
     if (language !== initialLanguage) {
       setLanguage(initialLanguage);
     }
   }, [initialLanguage, language, setLanguage]);
+
+  useEffect(() => {
+    const root = readingRootRef.current;
+
+    if (!root) {
+      return;
+    }
+
+    const updateReadingProgress = () => {
+      const rect = root.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const scrollableDistance = Math.max(rect.height - viewportHeight, 1);
+      const progressed = (0 - rect.top) / scrollableDistance;
+      const clamped = Math.min(1, Math.max(0, progressed));
+      setReadingProgress(clamped);
+    };
+
+    updateReadingProgress();
+    window.addEventListener("scroll", updateReadingProgress, { passive: true });
+    window.addEventListener("resize", updateReadingProgress);
+
+    return () => {
+      window.removeEventListener("scroll", updateReadingProgress);
+      window.removeEventListener("resize", updateReadingProgress);
+    };
+  }, [post.slug]);
 
   if (!post) {
     return (
@@ -36,11 +64,26 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
     );
   }
 
+  const progressPercent = Math.round(readingProgress * 100);
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="fixed inset-0 bg-linear-to-br from-background via-background to-accent/20 pointer-events-none" />
+      <div className="fixed inset-x-0 top-0 z-50 h-0.5 bg-muted/60">
+        <div
+          className="h-full bg-foreground transition-[width] duration-100"
+          style={{ width: `${progressPercent}%` }}
+          aria-hidden="true"
+        />
+      </div>
+      <div className="fixed right-4 top-2 z-50 hidden rounded-md border border-border/80 bg-background/80 px-2 py-1 text-[11px] font-medium text-muted-foreground backdrop-blur sm:block">
+        {progressPercent}%
+      </div>
 
-      <article className="relative mx-auto max-w-3xl px-6 py-16 page-enter">
+      <article
+        ref={readingRootRef}
+        className="relative mx-auto max-w-3xl px-6 py-16 page-enter"
+      >
         <header className="mb-10">
           <div className="mb-6 flex items-center justify-between">
             <Link
