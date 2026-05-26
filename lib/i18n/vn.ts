@@ -31,7 +31,7 @@ export const vn: Translation = {
   projects: [
     {
       name: "Kopuz",
-      href: "https://github.com/Kopuz-org/kopuz/pulls?q=is%3Apr+is%3Aclosed+author%3Aak4duy",
+      href: "https://github.com/Kopuz-org/kopuz/",
       description: [
         "Trình phát nhạc mã nguồn mở xây bằng Rust và Dioxus.",
         "Hiện đang đóng góp tính năng và sửa lỗi.",
@@ -40,7 +40,7 @@ export const vn: Translation = {
     },
     {
       name: "1 in 10000 chance of Foxy jumpscare per second",
-      href: "https://github.com/ak4duy/1_10000_jumpscare",
+      href: "https://ankiweb.net/shared/info/1601646218",
       description: [
         "Một add-on vui vẻ cho Anki.",
         "Mỗi giây sẽ có 1/10000 cơ hội Foxy jumpscare ngẫu nhiên.",

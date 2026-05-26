@@ -31,7 +31,7 @@ export const en: Translation = {
   projects: [
     {
       name: "Kopuz",
-      href: "https://github.com/Kopuz-org/kopuz/pulls?q=is%3Apr+is%3Aclosed+author%3Aak4duy",
+      href: "https://github.com/Kopuz-org/kopuz/",
       description: [
         "Open-source music player built with Rust and Dioxus.",
         "Currently contributing features and fixing bugs.",
@@ -40,7 +40,7 @@ export const en: Translation = {
     },
     {
       name: "1 in 10000 chance of Foxy jumpscare per second",
-      href: "https://github.com/ak4duy/1_10000_jumpscare",
+      href: "https://ankiweb.net/shared/info/1601646218",
       description: [
         "An add-on that makes your study thrilling.",
         "Every second, there is a 1 in 10000 chance that Foxy will randomly jumpscare you.",
