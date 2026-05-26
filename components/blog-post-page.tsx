@@ -30,23 +30,11 @@ function getReadingTimeMinutes(content: string) {
   return Math.max(1, Math.ceil(words / 200));
 }
 
-function BackToBlogLink({
-  href,
-  label,
-  variant = "inline",
-}: {
-  href: string;
-  label: string;
-  variant?: "inline" | "floating";
-}) {
+function BackToBlogLink({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className={
-        variant === "floating"
-          ? "fixed left-111 top-15 z-50 inline-flex items-center gap-2 rounded-xl border border-border/80 bg-background/85 px-3 py-2 text-sm text-muted-foreground shadow-xl shadow-black/10 backdrop-blur transition-colors animate-in fade-in slide-in-from-top-2 duration-300 hover:text-foreground"
-          : "group flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-      }
+      className="group flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
     >
       <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
       {label}
@@ -60,7 +48,6 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
   const localePrefix = `/${initialLanguage.toLowerCase()}`;
   const readingRootRef = useRef<HTMLElement | null>(null);
   const [readingProgress, setReadingProgress] = useState(0);
-  const [showFloatingBackLink, setShowFloatingBackLink] = useState(false);
 
   useEffect(() => {
     if (language !== initialLanguage) {
@@ -121,14 +108,6 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
         {progressPercent}%
       </div>
 
-      {showFloatingBackLink && (
-        <BackToBlogLink
-          href={`${localePrefix}/blog`}
-          label={t.nav.blog}
-          variant="floating"
-        />
-      )}
-
       <article
         ref={readingRootRef}
         className="relative mx-auto max-w-3xl px-6 py-16 page-enter"
@@ -166,7 +145,8 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
           <MarkdownContent
             content={post.content}
             contentsLabel={t.blog.contents}
-            onStickyContentsChange={setShowFloatingBackLink}
+            stickyBackHref={`${localePrefix}/blog`}
+            stickyBackLabel={t.nav.blog}
           />
         </div>
 

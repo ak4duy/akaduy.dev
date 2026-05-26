@@ -1,11 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { ArrowLeft } from "lucide-react";
 
 type MarkdownContentProps = {
   content: string;
   contentsLabel?: string;
-  onStickyContentsChange?: (visible: boolean) => void;
+  stickyBackHref?: string;
+  stickyBackLabel?: string;
 };
 
 type MarkdownBlock =
@@ -207,6 +210,18 @@ function parseMarkdown(content: string): MarkdownBlock[] {
   return blocks;
 }
 
+function StickyBackLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="group inline-flex w-fit items-center gap-2 rounded-xl border border-border/80 bg-background/85 px-3 py-2 text-sm text-muted-foreground shadow-xl shadow-black/10 backdrop-blur transition-colors hover:text-foreground"
+    >
+      <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+      {label}
+    </Link>
+  );
+}
+
 function TableOfContents({
   headings,
   variant = "inline",
@@ -226,7 +241,7 @@ function TableOfContents({
     <nav
       className={
         variant === "sticky-note"
-          ? "sticky top-28 -ml-96 z-40 hidden max-h-[calc(100vh-8rem)] w-56 overflow-y-auto rounded-2xl border border-border/80 bg-background/85 p-4 text-sm shadow-xl shadow-black/10 backdrop-blur animate-in fade-in slide-in-from-left-2 duration-300 xl:block 2xl:left-[max(2rem,calc((100vw-48rem)/2-18rem))] 2xl:w-64"
+          ? "max-h-[calc(100vh-12rem)] overflow-y-auto rounded-2xl border border-border/80 bg-background/85 p-4 text-sm shadow-xl shadow-black/10 backdrop-blur"
           : "rounded-2xl border border-border/80 bg-muted/20 p-4 text-sm"
       }
       aria-label="Table of contents"
@@ -304,7 +319,8 @@ function Heading({ level, text, id }: HeadingBlock) {
 export function MarkdownContent({
   content,
   contentsLabel = "Contents",
-  onStickyContentsChange,
+  stickyBackHref,
+  stickyBackLabel,
 }: MarkdownContentProps) {
   const [showStickyContents, setShowStickyContents] = useState(false);
   const contentsRef = useRef<HTMLDivElement | null>(null);
@@ -324,7 +340,6 @@ export function MarkdownContent({
       const shouldShowStickyContents =
         contents.getBoundingClientRect().bottom <= 0;
       setShowStickyContents(shouldShowStickyContents);
-      onStickyContentsChange?.(shouldShowStickyContents);
     };
 
     updateStickyContents();
@@ -335,16 +350,23 @@ export function MarkdownContent({
       window.removeEventListener("scroll", updateStickyContents);
       window.removeEventListener("resize", updateStickyContents);
     };
-  }, [onStickyContentsChange]);
+  }, []);
 
   return (
     <div className="relative text-[15px] leading-8 text-foreground/95 sm:text-base">
       {showStickyContents && (
-        <TableOfContents
-          headings={headings}
-          variant="sticky-note"
-          label={contentsLabel}
-        />
+        <div className="sticky top-28 -ml-96 z-40 hidden w-56 animate-in fade-in slide-in-from-left-2 duration-300 xl:block 2xl:left-[max(2rem,calc((100vw-48rem)/2-18rem))] 2xl:w-64">
+          {stickyBackHref && stickyBackLabel && (
+            <div className="mb-4 flex justify-end">
+              <StickyBackLink href={stickyBackHref} label={stickyBackLabel} />
+            </div>
+          )}
+          <TableOfContents
+            headings={headings}
+            variant="sticky-note"
+            label={contentsLabel}
+          />
+        </div>
       )}
 
       <div ref={contentsRef} className="mb-8">
