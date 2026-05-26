@@ -2,8 +2,12 @@ import { notFound } from "next/navigation";
 import { RoutedHomePage } from "@/components/routed-home-page";
 import { getBlogPageCount, getBlogPosts } from "@/lib/blog-posts";
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
-  return Array.from({ length: getBlogPageCount("VN") - 1 }, (_, index) => ({
+  const pageCount = getBlogPageCount("VN");
+
+  return Array.from({ length: Math.max(0, pageCount - 1) }, (_, index) => ({
     page: String(index + 2),
   }));
 }
@@ -17,7 +21,11 @@ export default async function Page({
   const pageNumber = Number(page);
   const pageCount = getBlogPageCount("VN");
 
-  if (!Number.isInteger(pageNumber) || pageNumber < 2 || pageNumber > pageCount) {
+  if (
+    !Number.isInteger(pageNumber) ||
+    pageNumber < 2 ||
+    pageNumber > pageCount
+  ) {
     notFound();
   }
 
