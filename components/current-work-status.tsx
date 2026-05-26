@@ -40,15 +40,22 @@ export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
         });
 
         if (!response.ok) {
+          if (!ignored) {
+            setStatus(null);
+          }
           return;
         }
 
         const data = (await response.json()) as HackatimeStatus;
 
         if (!ignored) {
-          setStatus(data);
+          setStatus(data.project ? data : null);
         }
-      } catch {}
+      } catch {
+        if (!ignored) {
+          setStatus(null);
+        }
+      }
     }
 
     loadStatus();
