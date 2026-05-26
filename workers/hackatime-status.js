@@ -1,5 +1,6 @@
 const HACKATIME_API_BASE = "https://hackatime.hackclub.com/api/v1";
 const GITHUB_OWNER = "ak4duy";
+const ACTIVE_HEARTBEAT_WINDOW_MS = 5 * 60 * 1000;
 
 function json(data, init = {}) {
   return new Response(JSON.stringify(data), {
@@ -65,6 +66,57 @@ function normalizeProjectName(payload) {
         typeof candidate === "string" && candidate.trim().length > 0,
     )
     ?.trim();
+}
+
+function normalizeHeartbeatTime(payload) {
+  const data = getPayloadData(payload);
+
+  const candidates = [
+    data?.time,
+    data?.timestamp,
+    data?.created_at,
+    data?.updated_at,
+    data?.heartbeat?.time,
+    data?.heartbeat?.timestamp,
+    data?.heartbeat?.created_at,
+    data?.heartbeat?.updated_at,
+    data?.latest_heartbeat?.time,
+    data?.latest_heartbeat?.timestamp,
+    data?.latest_heartbeat?.created_at,
+    data?.latest_heartbeat?.updated_at,
+    data?.current?.time,
+    data?.current?.timestamp,
+    data?.current?.created_at,
+    data?.current?.updated_at,
+  ];
+
+  for (const candidate of candidates) {
+    if (typeof candidate === "number" && Number.isFinite(candidate)) {
+      const milliseconds =
+        candidate < 1_000_000_000_000 ? candidate * 1000 : candidate;
+      return new Date(milliseconds);
+    }
+
+    if (typeof candidate === "string" && candidate.trim().length > 0) {
+      const date = new Date(candidate);
+
+      if (!Number.isNaN(date.getTime())) {
+        return date;
+      }
+    }
+  }
+
+  return null;
+}
+
+function isActiveHeartbeat(heartbeatTime) {
+  if (!heartbeatTime) {
+    return false;
+  }
+
+  const ageMs = Date.now() - heartbeatTime.getTime();
+
+  return ageMs >= 0 && ageMs <= ACTIVE_HEARTBEAT_WINDOW_MS;
 }
 
 function normalizeRepoUrl(payload) {
@@ -229,14 +281,19 @@ export default {
 
     try {
       const { payload } = await fetchHackatimeStatus(env.HACKATIME_API_KEY);
-      const project = normalizeProjectName(payload);
-      const repoUrl =
-        normalizeRepoUrl(payload) ?? (await fetchGithubRepoUrl(project));
+      const heartbeatTime = normalizeHeartbeatTime(payload);
+      const active = isActiveHeartbeat(heartbeatTime);
+      const project = active ? normalizeProjectName(payload) : null;
+      const repoUrl = project
+        ? (normalizeRepoUrl(payload) ?? (await fetchGithubRepoUrl(project)))
+        : null;
 
       return json({
-        project: project ?? null,
+        project,
         repoUrl,
         text: project ? `currently working on ${project}` : null,
+        active,
+        lastHeartbeatAt: heartbeatTime?.toISOString() ?? null,
       });
     } catch (error) {
       return json(
@@ -244,6 +301,8 @@ export default {
           project: null,
           repoUrl: null,
           text: null,
+          active: false,
+          lastHeartbeatAt: null,
           error: error instanceof Error ? error.message : "Unknown error",
           attempts: error?.attemptLog,
         },
