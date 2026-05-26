@@ -1,5 +1,8 @@
+// This does not fetch when user reading blog
+
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type HackatimeStatus = {
@@ -26,10 +29,21 @@ type CurrentWorkStatusProps = {
   label: string;
 };
 
+function isBlogPostPath(pathname: string) {
+  return /^\/(?:en|vn)\/blog\/[^/]+\/?$/.test(pathname);
+}
+
 export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
+  const pathname = usePathname();
   const [status, setStatus] = useState<HackatimeStatus | null>(null);
+  const shouldFetchStatus = !isBlogPostPath(pathname);
 
   useEffect(() => {
+    if (!shouldFetchStatus) {
+      setStatus(null);
+      return;
+    }
+
     let ignored = false;
 
     async function loadStatus() {
@@ -65,7 +79,7 @@ export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
       ignored = true;
       window.clearInterval(intervalId);
     };
-  }, []);
+  }, [shouldFetchStatus]);
 
   if (!status?.project) {
     return null;
