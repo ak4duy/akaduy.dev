@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ExternalLink, X } from "lucide-react";
+import { CurrentWorkStatus } from "@/components/current-work-status";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
 import { useLanguage } from "@/components/language-provider";
@@ -138,9 +139,12 @@ export function RoutedHomePage({
           <div className="flex items-center justify-end mb-4">
             <LanguageToggle />
           </div>
-          <h1 className="text-4xl font-bold tracking-tight bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-            ak4duy
-          </h1>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-3">
+            <h1 className="text-4xl font-bold tracking-tight bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+              ak4duy
+            </h1>
+            <CurrentWorkStatus label={t.home.currentlyWorkingOn} />
+          </div>
           <p className="mt-3 text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
             {t.home.intro}
           </p>

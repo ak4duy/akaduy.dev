@@ -14,6 +14,7 @@ export type Translation = {
   };
   home: {
     intro: string;
+    currentlyWorkingOn: string;
     backgroundTitle: string;
     background: string[];
     languagesTitle: string;

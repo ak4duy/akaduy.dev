@@ -10,6 +10,7 @@ export const en: Translation = {
   home: {
     intro:
       "Self-taught developer.\nCurrently working with Java, Python, Rust, and whatever breaks next.",
+    currentlyWorkingOn: "currently working on",
     backgroundTitle: "Background",
     background: [
       "Self-taught developer back in 2017 by learning Lua",

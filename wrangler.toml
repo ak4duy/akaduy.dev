@@ -1,0 +1,7 @@
+name = "ak4duy-hackatime-status"
+main = "workers/hackatime-status.js"
+compatibility_date = "2026-05-26"
+
+routes = [
+  { pattern = "yud-on.top/api/hackatime/current", zone_name = "yud-on.top" }
+]

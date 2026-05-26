@@ -10,6 +10,7 @@ export const vn: Translation = {
   home: {
     intro:
       "Lập trình viên tự học (đa số).\nHiện đang làm với Java, Python, Rust, và bất cứ thứ gì.",
+    currentlyWorkingOn: "đang code project",
     backgroundTitle: "Nền tảng",
     background: [
       "Tự học lập trình từ năm 2017 bằng Lua",
