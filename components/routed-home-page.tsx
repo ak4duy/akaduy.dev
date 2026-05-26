@@ -12,6 +12,7 @@ import { Language, translations } from "@/lib/i18n/index";
 
 const tools = ["Java", "Rust", "Python", "Linux"];
 const interests = ["TypeScript", "JavaScript", "Kotlin", "Go"];
+const BLOG_POSTS_PER_PAGE = 5;
 
 /*
   normalize vietnamese special cases
@@ -43,6 +44,7 @@ export function RoutedHomePage({
 }: RoutedHomePageProps) {
   const [currentTab, setCurrentTab] = useState<TabValue>(activeTab);
   const [blogSearch, setBlogSearch] = useState("");
+  const [blogPage, setBlogPage] = useState(1);
   const { language, setLanguage } = useLanguage();
   const activeLanguage = initialLanguage ?? language;
   const t = translations[activeLanguage];
@@ -65,6 +67,15 @@ export function RoutedHomePage({
         ).includes(normalizedBlogSearch),
       )
     : blogPosts;
+  const totalBlogPages = Math.max(
+    1,
+    Math.ceil(filteredBlogPosts.length / BLOG_POSTS_PER_PAGE),
+  );
+  const currentBlogPage = Math.min(blogPage, totalBlogPages);
+  const paginatedBlogPosts = filteredBlogPosts.slice(
+    (currentBlogPage - 1) * BLOG_POSTS_PER_PAGE,
+    currentBlogPage * BLOG_POSTS_PER_PAGE,
+  );
 
   useEffect(() => {
     setCurrentTab(activeTab);
@@ -75,6 +86,10 @@ export function RoutedHomePage({
       setLanguage(initialLanguage);
     }
   }, [initialLanguage, language, setLanguage]);
+
+  useEffect(() => {
+    setBlogPage(1);
+  }, [blogSearch, activeLanguage]);
 
   const handleTabChange = (value: string) => {
     const tab = tabs.find((tab) => tab.value === value);
@@ -262,7 +277,7 @@ export function RoutedHomePage({
                 )}
               </div>
               <div className="space-y-4">
-                {filteredBlogPosts.map((post) => (
+                {paginatedBlogPosts.map((post) => (
                   <Link
                     key={post.slug}
                     href={`${localePrefix}/blog/${post.slug}`}
@@ -297,11 +312,57 @@ export function RoutedHomePage({
                   </div>
                 )}
               </div>
-              {!normalizedBlogSearch && (
-                <p className="mt-6 text-sm text-muted-foreground/70 text-center">
-                  {t.home.morePosts}
-                </p>
+              {filteredBlogPosts.length > BLOG_POSTS_PER_PAGE && (
+                <div className="mt-6 flex items-center justify-center gap-2 text-sm">
+                  <button
+                    type="button"
+                    onClick={() => setBlogPage((page) => Math.max(1, page - 1))}
+                    disabled={currentBlogPage === 1}
+                    aria-label="Previous page"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95 disabled:pointer-events-none disabled:opacity-40"
+                  >
+                    &lt;
+                  </button>
+                  {Array.from({ length: totalBlogPages }, (_, pageIndex) => {
+                    const page = pageIndex + 1;
+                    const isActive = page === currentBlogPage;
+
+                    return (
+                      <button
+                        key={page}
+                        type="button"
+                        onClick={() => setBlogPage(page)}
+                        aria-label={`Page ${page}`}
+                        aria-current={isActive ? "page" : undefined}
+                        className={
+                          isActive
+                            ? "flex h-9 w-9 items-center justify-center rounded-lg border border-foreground bg-foreground text-background shadow-md shadow-foreground/10 transition-all duration-150 ease-linear active:scale-95"
+                            : "flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95"
+                        }
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setBlogPage((page) => Math.min(totalBlogPages, page + 1))
+                    }
+                    disabled={currentBlogPage === totalBlogPages}
+                    aria-label="Next page"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95 disabled:pointer-events-none disabled:opacity-40"
+                  >
+                    &gt;
+                  </button>
+                </div>
               )}
+              {!normalizedBlogSearch &&
+                filteredBlogPosts.length <= BLOG_POSTS_PER_PAGE && (
+                  <p className="mt-6 text-sm text-muted-foreground/70 text-center">
+                    {t.home.morePosts}
+                  </p>
+                )}
             </TabsContent>
 
             <TabsContent value="contact" className="tab-enter">
