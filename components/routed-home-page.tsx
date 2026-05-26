@@ -1,18 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ExternalLink, X } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
 import { useLanguage } from "@/components/language-provider";
-import { BlogPost } from "@/lib/blog-posts";
+import { BLOG_POSTS_PER_PAGE } from "@/lib/blog-config";
+import type { BlogPost } from "@/lib/blog-posts";
 import { Language, translations } from "@/lib/i18n/index";
 
 const tools = ["Java", "Rust", "Python", "Linux"];
 const interests = ["TypeScript", "JavaScript", "Kotlin", "Go"];
-const BLOG_POSTS_PER_PAGE = 5;
 
 /*
   normalize vietnamese special cases
@@ -35,16 +35,20 @@ type RoutedHomePageProps = {
   activeTab: TabValue;
   blogPosts: BlogPost[];
   initialLanguage?: Language;
+  initialBlogPage?: number;
 };
 
 export function RoutedHomePage({
   activeTab,
   blogPosts,
   initialLanguage,
+  initialBlogPage = 1,
 }: RoutedHomePageProps) {
   const [currentTab, setCurrentTab] = useState<TabValue>(activeTab);
   const [blogSearch, setBlogSearch] = useState("");
-  const [blogPage, setBlogPage] = useState(1);
+  const [blogPage, setBlogPage] = useState(initialBlogPage);
+  const [routeBlogPage, setRouteBlogPage] = useState(initialBlogPage);
+  const hasMountedBlogResetRef = useRef(false);
   const { language, setLanguage } = useLanguage();
   const activeLanguage = initialLanguage ?? language;
   const t = translations[activeLanguage];
@@ -71,7 +75,8 @@ export function RoutedHomePage({
     1,
     Math.ceil(filteredBlogPosts.length / BLOG_POSTS_PER_PAGE),
   );
-  const currentBlogPage = Math.min(blogPage, totalBlogPages);
+  const requestedBlogPage = normalizedBlogSearch ? blogPage : routeBlogPage;
+  const currentBlogPage = Math.min(requestedBlogPage, totalBlogPages);
   const paginatedBlogPosts = filteredBlogPosts.slice(
     (currentBlogPage - 1) * BLOG_POSTS_PER_PAGE,
     currentBlogPage * BLOG_POSTS_PER_PAGE,
@@ -82,20 +87,44 @@ export function RoutedHomePage({
   }, [activeTab]);
 
   useEffect(() => {
+    setRouteBlogPage(initialBlogPage);
+  }, [initialBlogPage]);
+
+  useEffect(() => {
     if (initialLanguage && initialLanguage !== language) {
       setLanguage(initialLanguage);
     }
   }, [initialLanguage, language, setLanguage]);
 
   useEffect(() => {
+    if (!hasMountedBlogResetRef.current) {
+      hasMountedBlogResetRef.current = true;
+      return;
+    }
+
     setBlogPage(1);
   }, [blogSearch, activeLanguage]);
+
+  const getBlogPageHref = (page: number) =>
+    page === 1 ? `${localePrefix}/blog` : `${localePrefix}/blog/${page}`;
+
+  const handleBlogRoutePageChange = (page: number) => {
+    setRouteBlogPage(page);
+    setBlogPage(page);
+    window.history.pushState(null, "", getBlogPageHref(page));
+  };
 
   const handleTabChange = (value: string) => {
     const tab = tabs.find((tab) => tab.value === value);
 
     if (tab) {
       setCurrentTab(tab.value);
+
+      if (tab.value === "blog") {
+        setBlogPage(1);
+        setRouteBlogPage(1);
+      }
+
       window.history.pushState(null, "", tab.href);
     }
   };
@@ -314,47 +343,107 @@ export function RoutedHomePage({
               </div>
               {filteredBlogPosts.length > BLOG_POSTS_PER_PAGE && (
                 <div className="mt-6 flex items-center justify-center gap-2 text-sm">
-                  <button
-                    type="button"
-                    onClick={() => setBlogPage((page) => Math.max(1, page - 1))}
-                    disabled={currentBlogPage === 1}
-                    aria-label="Previous page"
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95 disabled:pointer-events-none disabled:opacity-40"
-                  >
-                    &lt;
-                  </button>
+                  {normalizedBlogSearch ? (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setBlogPage((page) => Math.max(1, page - 1))
+                      }
+                      disabled={currentBlogPage === 1}
+                      aria-label="Previous page"
+                      className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95 disabled:pointer-events-none disabled:opacity-40"
+                    >
+                      &lt;
+                    </button>
+                  ) : (
+                    <a
+                      href={getBlogPageHref(Math.max(1, currentBlogPage - 1))}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        handleBlogRoutePageChange(
+                          Math.max(1, currentBlogPage - 1),
+                        );
+                      }}
+                      aria-label="Previous page"
+                      className={`flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95 ${
+                        currentBlogPage === 1
+                          ? "pointer-events-none opacity-40"
+                          : ""
+                      }`}
+                    >
+                      &lt;
+                    </a>
+                  )}
                   {Array.from({ length: totalBlogPages }, (_, pageIndex) => {
                     const page = pageIndex + 1;
                     const isActive = page === currentBlogPage;
 
-                    return (
+                    const className = isActive
+                      ? "flex h-9 w-9 items-center justify-center rounded-lg border border-foreground bg-foreground text-background shadow-md shadow-foreground/10 transition-all duration-150 ease-linear active:scale-95"
+                      : "flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95";
+
+                    return normalizedBlogSearch ? (
                       <button
                         key={page}
                         type="button"
                         onClick={() => setBlogPage(page)}
                         aria-label={`Page ${page}`}
                         aria-current={isActive ? "page" : undefined}
-                        className={
-                          isActive
-                            ? "flex h-9 w-9 items-center justify-center rounded-lg border border-foreground bg-foreground text-background shadow-md shadow-foreground/10 transition-all duration-150 ease-linear active:scale-95"
-                            : "flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95"
-                        }
+                        className={className}
                       >
                         {page}
                       </button>
+                    ) : (
+                      <a
+                        key={page}
+                        href={getBlogPageHref(page)}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          handleBlogRoutePageChange(page);
+                        }}
+                        aria-label={`Page ${page}`}
+                        aria-current={isActive ? "page" : undefined}
+                        className={className}
+                      >
+                        {page}
+                      </a>
                     );
                   })}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setBlogPage((page) => Math.min(totalBlogPages, page + 1))
-                    }
-                    disabled={currentBlogPage === totalBlogPages}
-                    aria-label="Next page"
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95 disabled:pointer-events-none disabled:opacity-40"
-                  >
-                    &gt;
-                  </button>
+                  {normalizedBlogSearch ? (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setBlogPage((page) =>
+                          Math.min(totalBlogPages, page + 1),
+                        )
+                      }
+                      disabled={currentBlogPage === totalBlogPages}
+                      aria-label="Next page"
+                      className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95 disabled:pointer-events-none disabled:opacity-40"
+                    >
+                      &gt;
+                    </button>
+                  ) : (
+                    <a
+                      href={getBlogPageHref(
+                        Math.min(totalBlogPages, currentBlogPage + 1),
+                      )}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        handleBlogRoutePageChange(
+                          Math.min(totalBlogPages, currentBlogPage + 1),
+                        );
+                      }}
+                      aria-label="Next page"
+                      className={`flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95 ${
+                        currentBlogPage === totalBlogPages
+                          ? "pointer-events-none opacity-40"
+                          : ""
+                      }`}
+                    >
+                      &gt;
+                    </a>
+                  )}
                 </div>
               )}
               {!normalizedBlogSearch &&

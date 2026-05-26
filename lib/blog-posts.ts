@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { basename, join } from "node:path";
 import type { Metadata } from "next";
+import { BLOG_POSTS_PER_PAGE } from "@/lib/blog-config";
 import { Language } from "@/lib/i18n/index";
 
 export type BlogPost = {
@@ -10,6 +11,7 @@ export type BlogPost = {
   tags: string[];
   excerpt: string;
   content: string;
+  draft: boolean;
 };
 
 const languageDirectory: Record<Language, string> = {
@@ -31,12 +33,12 @@ function parseFrontmatter(markdown: string) {
 
   if (!match) {
     return {
-      frontmatter: {} as Record<string, string | string[]>,
+      frontmatter: {} as Record<string, string | string[] | boolean>,
       content: markdown.trim(),
     };
   }
 
-  const frontmatter: Record<string, string | string[]> = {};
+  const frontmatter: Record<string, string | string[] | boolean> = {};
   const lines = match[1].split(/\r?\n/);
 
   for (let i = 0; i < lines.length; i++) {
@@ -61,7 +63,9 @@ function parseFrontmatter(markdown: string) {
 
       frontmatter[key] = values;
     } else {
-      frontmatter[key] = rawValue.replace(/^['\"]|['\"]$/g, "");
+      const value = rawValue.replace(/^['\"]|['\"]$/g, "");
+      frontmatter[key] =
+        value === "true" ? true : value === "false" ? false : value;
     }
   }
 
@@ -92,6 +96,7 @@ export function getBlogPost(language: Language, slug: string): BlogPost {
     tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : [],
     excerpt: String(frontmatter.excerpt ?? createExcerpt(content)),
     content,
+    draft: frontmatter.draft === true,
   };
 }
 
@@ -99,7 +104,15 @@ export function getBlogPosts(language: Language) {
   return readdirSync(getBlogPostDirectory(language))
     .filter((fileName) => fileName.endsWith(".md"))
     .map((fileName) => getBlogPost(language, basename(fileName, ".md")))
+    .filter((post) => !post.draft)
     .sort((a, b) => b.date.localeCompare(a.date));
+}
+
+export function getBlogPageCount(language: Language) {
+  return Math.max(
+    1,
+    Math.ceil(getBlogPosts(language).length / BLOG_POSTS_PER_PAGE),
+  );
 }
 
 export function createBlogPostMetadata(post: BlogPost): Metadata {
