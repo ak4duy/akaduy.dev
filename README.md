@@ -1,4 +1,4 @@
-# [https://yud-on.top](https://yud-on.top)
+# [yud-on.top](https://yud-on.top)
 
 Temporary domain for now (nobrain domain name ngl). I originally bought it for a self-hosted ebook project, but I'm using it for my personal website until next year.
 
