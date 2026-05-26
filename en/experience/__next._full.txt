@@ -1,0 +1,113 @@
+1:"$Sreact.fragment"
+2:I[38447,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js"],"LanguageProvider"]
+3:I[39756,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js"],"default"]
+4:I[37457,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js"],"default"]
+5:I[36768,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js","/_next/static/chunks/0egwemds1et.n.js"],"default"]
+6:I[2355,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js"],"Analytics"]
+7:I[89799,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js","/_next/static/chunks/0abk9hhy06x6w.js","/_next/static/chunks/0x8n.1r83k_37.js"],"RoutedHomePage"]
+e:I[68027,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js"],"default",1]
+:HL["/_next/static/chunks/11unif--rw5h8.css","style"]
+:HL["/_next/static/chunks/0qgo1~r7gp51u.css","style"]
+:HL["/_next/static/media/797e433ab948586e-s.p.09zddjkbdep5a.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+8:T10d0,# Rust and First Impressions
+
+Rust is a pretty interesting language, and also a pain for a lot of people.
+
+At first, I found Rust the same way most programmers do: through jokes about the borrow checker, the "strict" compiler, and memes about fighting Ownership at 3 AM. Back then, I didn't really understand why people both loved and hated it so much.
+
+![](https://i.redd.it/x3at51cabj7a1.png)
+
+I used to think:
+
+> "Why make things so complicated when Java or Python make them much easier?"
+
+When writing Java, I didn't have to think too much about where data lived, who owned it, or when it would be freed. Python felt even more relaxed. Write code, run it, fix bugs if they appear.
+
+Rust felt different.
+
+It felt like having an extremely strict roommate. Make one mistake and you immediately get called out. There were times when I just wanted to write something simple, only for the compiler to throw an entire wall of errors at me and make me question whether I was fighting my own code or the computer itself.
+
+But the longer I used Rust, the more I realized the compiler wasn't trying to make my life harder.
+
+It was trying to stop me from doing something stupid ><.
+
+# What Is Rust Trying to Solve?
+
+Modern software keeps getting more complicated. People want programs to run faster, stay more stable, make better use of hardware resources, and have fewer bugs. But the closer we get to low-level performance, the more painful problems begin to appear.
+
+Some bugs don't show up immediately. Some only appear after hours of runtime. Some bugs only need one small mistake to turn an entire evening into a desperate bug-hunting session.
+
+Rust was built to solve a huge portion of those problems.
+
+# What Makes Rust Interesting to Me
+
+Also, what makes Rust exciting to me is not just one thing.
+
+I like that it is fast. I like that it tries to solve memory safety problems at compile time. I like its approach to concurrency. And I also like seeing more major companies start using Rust in real-world systems.
+
+There is something exciting about seeing a relatively new language slowly appear in more places. The Linux kernel started supporting Rust. Large technology companies are investing in it. More libraries and tools continue to grow around its ecosystem.
+
+# Ownership Changed How I Think
+
+And the thing that changed me the most was Rust's incredibly consistent way of handling Ownership.
+
+At first... I honestly hated it. I could not understand why the compiler would not let me do things that felt completely normal. 
+
+Why did this variable get moved? Why does this borrow fail? Why does changing one line suddenly create a whole bunch of other errors?
+
+But after some time, I realized Rust was forcing me to think more carefully.
+
+Who owns this data? Who is allowed to modify it? Does this data still exist at this point?
+
+Those questions may sound small. But they changed the way I write code, not only in Rust, but in other languages too.
+
+# Cargo and the Ecosystem Are Amazing
+
+Another thing I absolutely love is Cargo.
+
+Some technologies just feel like everything fits together naturally. Cargo gives me that feeling. Managing dependencies, building projects, formatting code, running tests, everything feels clean and unified.
+
+The ecosystem feels designed to work together instead of feeling stitched together afterward.
+
+# Is Rust the Future?
+
+Could Rust become the language of the future?
+
+I think it could. Maybe even replace a lot of things, though that still depends heavily on the field.
+
+Python will remain strong.
+
+Java will continue existing, even though everyone jokes about hating it.
+
+C++ isn't disappearing overnight.
+
+But I think Rust is moving in the right direction.
+
+In a world where software increasingly needs higher performance, stronger reliability, and better resource usage, I think the ideas Rust is pushing toward will only become more important.
+
+Maybe the future isn't "everyone uses Rust."
+
+But I think the future will definitely include Rust.
+
+Or at least, it's a future I want to keep learning and exploring. And if you ask me what language someone should start learning... Well, you probably already know my answer: Rust 🦀
+
+---
+
+Image source: [u/l1F](https://www.reddit.com/r/ProgrammerHumor/comments/zt0hrt/hating_memory_safety_since_day_2147483648/)0:{"P":null,"c":["","en","experience"],"q":"","i":false,"f":[[["",{"children":["en",{"children":["experience",{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",16],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/11unif--rw5h8.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","link","1",{"rel":"stylesheet","href":"/_next/static/chunks/0qgo1~r7gp51u.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/_next/static/chunks/0sbn0ayej7m02.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/_next/static/chunks/0_t29vi~hh.tn.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"dark bg-background","children":["$","body",null,{"className":"font-sans antialiased","children":[["$","$L2",null,{"children":["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$L5",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","$L6",null,{}]]}]}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["$","$1","c",{"children":[["$","$L7",null,{"activeTab":"experience","initialLanguage":"EN","blogPosts":[{"slug":"why-i-think-rust-is-the-language-of-the-future","title":"Why I Think Rust Is the Language of the Future","date":"25-05-2026","tags":["Rust","Opinion ","Programming"],"excerpt":"I used to think girls were hard to understand, until I met Rust.","content":"$8","draft":false},{"slug":"hello-world","title":"Hello, World!","date":"24-05-2026","tags":["Journey"],"excerpt":"A short intro about this website and what I want to write here.","content":"Greeting everyone,\n\nMaybe this is the first Blog post I've ever written in my entire life, and also the beginning of a new chapter for this website (24/05/2026).\n\nThis will be a place where I share about myself, my learning journey, programming work, projects I'm building, things I learn along the way, and thoughts and experiences from life.\n\nIf you happen to stop by one day, I hope you'll find something useful here, or at least see someone trying to get a little better every day.\n\nBy the way, tags on this blog will probably be added somewhat randomly, and there won't be any filtering.\n\nWelcome :)","draft":false}]}],["$L9","$La"],"$Lb"]}],{},null,false,null]},null,false,"$@c"]},null,false,"$@c"]},null,false,null],"$Ld",false]],"m":"$undefined","G":["$e",["$Lf","$L10"]],"S":true,"h":null,"s":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"HSZJY1E6rDBb6gF08oHsC"}
+11:I[97367,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js"],"OutletBoundary"]
+12:"$Sreact.suspense"
+15:I[97367,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js"],"ViewportBoundary"]
+17:I[97367,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js"],"MetadataBoundary"]
+9:["$","script","script-0",{"src":"/_next/static/chunks/0abk9hhy06x6w.js","async":true,"nonce":"$undefined"}]
+a:["$","script","script-1",{"src":"/_next/static/chunks/0x8n.1r83k_37.js","async":true,"nonce":"$undefined"}]
+b:["$","$L11",null,{"children":["$","$12",null,{"name":"Next.MetadataOutlet","children":"$@13"}]}]
+14:[]
+c:"$W14"
+d:["$","$1","h",{"children":[null,["$","$L15",null,{"children":"$L16"}],["$","div",null,{"hidden":true,"children":["$","$L17",null,{"children":["$","$12",null,{"name":"Next.Metadata","children":"$L18"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}]
+f:["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/11unif--rw5h8.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]
+10:["$","link","1",{"rel":"stylesheet","href":"/_next/static/chunks/0qgo1~r7gp51u.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]
+16:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+19:I[27201,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js"],"IconMark"]
+13:null
+18:[["$","title","0",{"children":"ak4duy"}],["$","meta","1",{"name":"description","content":"Self-taught developer. Working with Java, Python, Rust, and whatever breaks next."}],["$","link","2",{"rel":"icon","href":"/favicon-200x200.jpg"}],["$","link","3",{"rel":"apple-touch-icon","href":"/favicon-200x200.jpg"}],["$","$L19","4",{}]]

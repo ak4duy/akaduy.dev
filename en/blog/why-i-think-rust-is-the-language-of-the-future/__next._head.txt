@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[97367,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js"],"ViewportBoundary"]
+3:I[97367,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js"],"MetadataBoundary"]
+4:"$Sreact.suspense"
+5:I[27201,["/_next/static/chunks/0sbn0ayej7m02.js","/_next/static/chunks/0_t29vi~hh.tn.js"],"IconMark"]
+0:{"rsc":["$","$1","h",{"children":[null,["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Blog: Why I Think Rust Is the Language of the Future | ak4duy"}],["$","meta","1",{"name":"description","content":"I used to think girls were hard to understand, until I met Rust."}],["$","link","2",{"rel":"icon","href":"/favicon-200x200.jpg"}],["$","link","3",{"rel":"apple-touch-icon","href":"/favicon-200x200.jpg"}],["$","$L5","4",{}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"HSZJY1E6rDBb6gF08oHsC"}
