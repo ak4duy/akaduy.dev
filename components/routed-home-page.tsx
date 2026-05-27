@@ -496,7 +496,10 @@ export function RoutedHomePage({
           </Tabs>
         </div>
 
-        <SiteFooter tagline={t.home.footer} />
+        <SiteFooter
+          tagline={t.home.footer}
+          privacyHref={`${localePrefix}/privacy`}
+        />
       </div>
     </main>
   );

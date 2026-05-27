@@ -150,7 +150,10 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
           />
         </div>
 
-        <SiteFooter tagline={t.home.footer} />
+        <SiteFooter
+          tagline={t.home.footer}
+          privacyHref={`${localePrefix}/privacy`}
+        />
       </article>
     </main>
   );

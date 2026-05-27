@@ -1,8 +1,9 @@
 type SiteFooterProps = {
   tagline: string;
+  privacyHref: string;
 };
 
-export function SiteFooter({ tagline }: SiteFooterProps) {
+export function SiteFooter({ tagline, privacyHref }: SiteFooterProps) {
   const prefix = "|";
   return (
     <footer className="mt-20 text-center">
@@ -37,8 +38,14 @@ export function SiteFooter({ tagline }: SiteFooterProps) {
           Donate
         </a>
         <span className="text-muted-foreground/40">{prefix}</span>
-        <span>© 2026 ak4duy</span>
+        <a
+          href={privacyHref}
+          className="transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:text-foreground active:translate-y-0 active:scale-95"
+        >
+          Privacy
+        </a>
       </div>
+      <p className="mt-3 text-xs text-muted-foreground/70">© 2026 ak4duy</p>
     </footer>
   );
 }
