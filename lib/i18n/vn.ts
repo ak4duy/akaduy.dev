@@ -31,6 +31,15 @@ export const vn: Translation = {
   },
   projects: [
     {
+      name: "yud-on.top",
+      href: "https://github.com/ak4duy/yud-on.top",
+      description: [
+        "Đây là trang web cá nhân và blog của tôi.",
+        "Tôi thường ghi blog ở đây và chia sẻ về dự án cá nhân của mình.",
+      ],
+      tags: ["Next.js", "React", "Typescript", "Markdown"],
+    },
+    {
       name: "Kopuz",
       href: "https://github.com/Kopuz-org/kopuz/",
       description: [

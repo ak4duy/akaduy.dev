@@ -31,6 +31,15 @@ export const en: Translation = {
   },
   projects: [
     {
+      name: "yud-on.top",
+      href: "https://github.com/ak4duy/yud-on.top",
+      description: [
+        "My personal portfolio and blog website.",
+        "I write blogs here and share updates about my personal projects.",
+      ],
+      tags: ["Next.js", "React", "Typescript", "Markdown"],
+    },
+    {
       name: "Kopuz",
       href: "https://github.com/Kopuz-org/kopuz/",
       description: [
