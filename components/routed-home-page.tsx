@@ -2,8 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ExternalLink, X } from "lucide-react";
+import { ExternalLink, Tag, X } from "lucide-react";
 import { CurrentWorkStatus } from "@/components/current-work-status";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
@@ -47,6 +54,7 @@ export function RoutedHomePage({
 }: RoutedHomePageProps) {
   const [currentTab, setCurrentTab] = useState<TabValue>(activeTab);
   const [blogSearch, setBlogSearch] = useState("");
+  const [selectedBlogTag, setSelectedBlogTag] = useState<string | null>(null);
   const [blogPage, setBlogPage] = useState(initialBlogPage);
   const [routeBlogPage, setRouteBlogPage] = useState(initialBlogPage);
   const hasMountedBlogResetRef = useRef(false);
@@ -65,18 +73,27 @@ export function RoutedHomePage({
     { value: "contact", label: t.nav.contact, href: `${localePrefix}/contact` },
   ] as const;
   const normalizedBlogSearch = normalizeSearchText(blogSearch);
-  const filteredBlogPosts = normalizedBlogSearch
-    ? blogPosts.filter((post) =>
-        normalizeSearchText(
+  const blogTags = Array.from(
+    new Set(blogPosts.flatMap((post) => post.tags)),
+  ).sort((a, b) => a.localeCompare(b));
+  const hasBlogFilters = Boolean(normalizedBlogSearch || selectedBlogTag);
+  const filteredBlogPosts = blogPosts.filter((post) => {
+    const matchesSearch = normalizedBlogSearch
+      ? normalizeSearchText(
           [post.title, post.excerpt, post.date, ...post.tags].join(" "),
-        ).includes(normalizedBlogSearch),
-      )
-    : blogPosts;
+        ).includes(normalizedBlogSearch)
+      : true;
+    const matchesTag = selectedBlogTag
+      ? post.tags.includes(selectedBlogTag)
+      : true;
+
+    return matchesSearch && matchesTag;
+  });
   const totalBlogPages = Math.max(
     1,
     Math.ceil(filteredBlogPosts.length / BLOG_POSTS_PER_PAGE),
   );
-  const requestedBlogPage = normalizedBlogSearch ? blogPage : routeBlogPage;
+  const requestedBlogPage = hasBlogFilters ? blogPage : routeBlogPage;
   const currentBlogPage = Math.min(requestedBlogPage, totalBlogPages);
   const paginatedBlogPosts = filteredBlogPosts.slice(
     (currentBlogPage - 1) * BLOG_POSTS_PER_PAGE,
@@ -104,7 +121,7 @@ export function RoutedHomePage({
     }
 
     setBlogPage(1);
-  }, [blogSearch, activeLanguage]);
+  }, [blogSearch, selectedBlogTag, activeLanguage]);
 
   const getBlogPageHref = (page: number) =>
     page === 1 ? `${localePrefix}/blog` : `${localePrefix}/blog/${page}`;
@@ -289,25 +306,68 @@ export function RoutedHomePage({
                 <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
                 {t.home.blogPostsTitle}
               </h2>
-              <div className="relative mb-5">
-                <input
-                  type="text"
-                  value={blogSearch}
-                  onChange={(event) => setBlogSearch(event.target.value)}
-                  placeholder={t.blog.searchPlaceholder}
-                  aria-label={t.blog.searchPlaceholder}
-                  className="w-full rounded-xl border border-border bg-card/50 py-3 pl-4 pr-11 text-sm text-foreground outline-none transition-all duration-150 placeholder:text-muted-foreground/60 hover:bg-card hover:border-muted-foreground/30 focus:border-muted-foreground/50 focus:bg-card focus:ring-2 focus:ring-foreground/10"
-                />
-                {blogSearch && (
-                  <button
-                    type="button"
-                    onClick={() => setBlogSearch("")}
-                    aria-label="Clear search"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-white/80 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+              <div className="mb-5 grid gap-3 sm:grid-cols-[2fr_1fr]">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={blogSearch}
+                    onChange={(event) => setBlogSearch(event.target.value)}
+                    placeholder={t.blog.searchPlaceholder}
+                    aria-label={t.blog.searchPlaceholder}
+                    className="h-12 w-full rounded-xl border border-border bg-card/50 px-4 pr-11 text-sm text-foreground outline-none transition-all duration-150 placeholder:text-muted-foreground/60 hover:bg-card hover:border-muted-foreground/30 focus:border-muted-foreground/50 focus:bg-card focus:ring-2 focus:ring-foreground/10"
+                  />
+                  {blogSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setBlogSearch("")}
+                      aria-label="Clear search"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-white/80 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <Select
+                    value={selectedBlogTag ?? "all"}
+                    onValueChange={(value) =>
+                      setSelectedBlogTag(value === "all" ? null : value)
+                    }
                   >
-                    <X className="h-4 w-4" />
-                  </button>
-                )}
+                    <SelectTrigger
+                      aria-label="Filter posts by tag"
+                      className="h-12! w-full rounded-xl border-border bg-card/50 px-4 text-muted-foreground shadow-none transition-all duration-150 hover:bg-card hover:border-muted-foreground/30 focus:ring-2 focus:ring-foreground/10"
+                    >
+                      <span className="flex min-w-0 items-center gap-2">
+                        <Tag className="h-4 w-4 shrink-0 text-muted-foreground/70" />
+                        <SelectValue placeholder="All tags" />
+                      </span>
+                    </SelectTrigger>
+                    <SelectContent
+                      side="right"
+                      align="start"
+                      sideOffset={8}
+                      className="max-h-64 rounded-xl border-border bg-card/95 backdrop-blur"
+                    >
+                      <SelectItem value="all">All tags</SelectItem>
+                      {blogTags.map((tag) => (
+                        <SelectItem key={tag} value={tag}>
+                          {tag}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {selectedBlogTag && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedBlogTag(null)}
+                      aria-label="Clear tag filter"
+                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-card/50 text-muted-foreground transition-all duration-150 hover:-translate-y-0.5 hover:bg-card hover:text-foreground active:translate-y-0 active:scale-95"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
               </div>
               <div className="space-y-4">
                 {paginatedBlogPosts.map((post) => (
@@ -347,7 +407,7 @@ export function RoutedHomePage({
               </div>
               {filteredBlogPosts.length > BLOG_POSTS_PER_PAGE && (
                 <div className="mt-6 flex items-center justify-center gap-2 text-sm">
-                  {normalizedBlogSearch ? (
+                  {hasBlogFilters ? (
                     <button
                       type="button"
                       onClick={() =>
@@ -386,7 +446,7 @@ export function RoutedHomePage({
                       ? "flex h-9 w-9 items-center justify-center rounded-lg border border-foreground bg-foreground text-background shadow-md shadow-foreground/10 transition-all duration-150 ease-linear active:scale-95"
                       : "flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95";
 
-                    return normalizedBlogSearch ? (
+                    return hasBlogFilters ? (
                       <button
                         key={page}
                         type="button"
@@ -413,7 +473,7 @@ export function RoutedHomePage({
                       </a>
                     );
                   })}
-                  {normalizedBlogSearch ? (
+                  {hasBlogFilters ? (
                     <button
                       type="button"
                       onClick={() =>
@@ -450,7 +510,7 @@ export function RoutedHomePage({
                   )}
                 </div>
               )}
-              {!normalizedBlogSearch &&
+              {!hasBlogFilters &&
                 filteredBlogPosts.length <= BLOG_POSTS_PER_PAGE && (
                   <p className="mt-6 text-sm text-muted-foreground/70 text-center">
                     {t.home.morePosts}
