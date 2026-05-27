@@ -88,7 +88,7 @@ export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
   const projectUrl = status.repoUrl ?? getFallbackRepoUrl(status.project);
 
   return (
-    <span className="relative top-px inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-muted/30 px-2.5 py-1 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur-sm">
+    <span className="relative top-px inline-flex animate-in zoom-in-95 fade-in slide-in-from-bottom-1 duration-300 items-center gap-1.5 rounded-full border border-border/60 bg-muted/30 px-2.5 py-1 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur-sm">
       <span
         className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"
         aria-hidden="true"
