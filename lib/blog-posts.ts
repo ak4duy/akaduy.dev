@@ -117,8 +117,7 @@ export function getBlogPageCount(language: Language) {
 
 export function createBlogPostMetadata(post: BlogPost): Metadata {
   const title = `Blog: ${post.title} | ak4duy`;
-  const tagLine = post.tags.length > 0 ? `Tags: ${post.tags.join(", ")}` : "";
-  const description = tagLine ? `${post.excerpt}\n\n${tagLine}` : post.excerpt;
+  const description = post.excerpt;
 
   return {
     title,
