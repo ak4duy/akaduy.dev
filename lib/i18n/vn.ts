@@ -99,6 +99,9 @@ export const vn: Translation = {
   blog: {
     contents: "Nội dung",
     searchPlaceholder: "Tìm bài viết...",
+    tagFilterLabel: "Lọc bài viết theo từ khóa",
+    allTags: "Tất cả từ khóa",
+    clearTagFilter: "Xóa bộ lọc từ khóa",
     noSearchResults: "Không tìm thấy bài viết.",
     minuteRead: "phút đọc",
   },

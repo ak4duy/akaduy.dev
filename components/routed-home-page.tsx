@@ -335,12 +335,12 @@ export function RoutedHomePage({
                     }
                   >
                     <SelectTrigger
-                      aria-label="Filter posts by tag"
+                      aria-label={t.blog.tagFilterLabel}
                       className="h-12! w-full rounded-xl border-border bg-card/50 px-4 text-muted-foreground shadow-none transition-all duration-150 hover:bg-card hover:border-muted-foreground/30 focus:ring-2 focus:ring-foreground/10"
                     >
                       <span className="flex min-w-0 items-center gap-2">
                         <Tag className="h-4 w-4 shrink-0 text-muted-foreground/70" />
-                        <SelectValue placeholder="All tags" />
+                        <SelectValue placeholder={t.blog.allTags} />
                       </span>
                     </SelectTrigger>
                     <SelectContent
@@ -349,7 +349,7 @@ export function RoutedHomePage({
                       sideOffset={8}
                       className="max-h-64 rounded-xl border-border bg-card/95 backdrop-blur"
                     >
-                      <SelectItem value="all">All tags</SelectItem>
+                      <SelectItem value="all">{t.blog.allTags}</SelectItem>
                       {blogTags.map((tag) => (
                         <SelectItem key={tag} value={tag}>
                           {tag}
@@ -361,7 +361,7 @@ export function RoutedHomePage({
                     <button
                       type="button"
                       onClick={() => setSelectedBlogTag(null)}
-                      aria-label="Clear tag filter"
+                      aria-label={t.blog.clearTagFilter}
                       className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-card/50 text-muted-foreground transition-all duration-150 hover:-translate-y-0.5 hover:bg-card hover:text-foreground active:translate-y-0 active:scale-95"
                     >
                       <X className="h-4 w-4" />

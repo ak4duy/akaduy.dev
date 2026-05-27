@@ -97,6 +97,9 @@ export const en: Translation = {
   blog: {
     contents: "Contents",
     searchPlaceholder: "Search posts...",
+    tagFilterLabel: "Filter posts by tag",
+    allTags: "All tags",
+    clearTagFilter: "Clear tag filter",
     noSearchResults: "No posts found.",
     minuteRead: "min read",
   },

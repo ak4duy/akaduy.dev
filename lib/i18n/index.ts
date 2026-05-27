@@ -45,6 +45,9 @@ export type Translation = {
   blog: {
     contents: string;
     searchPlaceholder: string;
+    tagFilterLabel: string;
+    allTags: string;
+    clearTagFilter: string;
     noSearchResults: string;
     minuteRead: string;
   };
