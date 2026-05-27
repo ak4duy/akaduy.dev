@@ -1,10 +1,12 @@
 ---
 title: "Ký Túc Xá"
-date: "26-05-2026"
+date: "27-05-2026"
 excerpt: "Một câu truyện ngắn về Ký Túc Xá."
 tags:
   - Truyện ngắn
   - Giả tưởng
+  - Kinh dị
+  - Tâm lý
 ---
 
 # Chương 1: Ký Túc Xá
