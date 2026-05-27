@@ -116,8 +116,25 @@ export function getBlogPageCount(language: Language) {
 }
 
 export function createBlogPostMetadata(post: BlogPost): Metadata {
+  const title = `Blog: ${post.title} | ak4duy`;
+  const tagLine = post.tags.length > 0 ? `Tags: ${post.tags.join(", ")}` : "";
+  const description = tagLine ? `${post.excerpt}\n\n${tagLine}` : post.excerpt;
+
   return {
-    title: `Blog: ${post.title} | ak4duy`,
-    description: post.excerpt,
+    title,
+    description,
+    keywords: post.tags,
+    openGraph: {
+      title,
+      description,
+      siteName: "ak4duy blog",
+      type: "article",
+      tags: post.tags,
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
   };
 }
