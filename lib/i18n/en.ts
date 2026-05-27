@@ -80,10 +80,10 @@ export const en: Translation = {
       external: true,
     },
     {
-      href: "mailto:akaduy@protonmail.me",
+      href: "mailto:akaduy@yud-on.top",
       icon: "/contact-icons/mail.svg",
       label: "Email",
-      value: "akaduy@protonmail.me",
+      value: "akaduy@yud-on.top",
       external: false,
     },
     {
