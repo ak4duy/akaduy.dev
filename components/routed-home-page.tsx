@@ -336,7 +336,16 @@ export function RoutedHomePage({
                   >
                     <SelectTrigger
                       aria-label={t.blog.tagFilterLabel}
-                      className="h-12! w-full rounded-xl border-border bg-card/50 px-4 text-muted-foreground shadow-none transition-all duration-150 hover:bg-card hover:border-muted-foreground/30 focus:ring-2 focus:ring-foreground/10"
+                      className="
+                         h-12! w-full rounded-xl border-border bg-card/50 px-4
+                         text-muted-foreground shadow-none transition-all duration-150
+                         hover:bg-card
+                         hover:border-muted-foreground/30
+                         hover:ring-2
+                         hover:ring-foreground/10
+                         focus:ring-0
+                         focus:outline-none
+                       "
                     >
                       <span className="flex min-w-0 items-center gap-2">
                         <Tag className="h-4 w-4 shrink-0 text-muted-foreground/70" />
@@ -362,7 +371,7 @@ export function RoutedHomePage({
                       type="button"
                       onClick={() => setSelectedBlogTag(null)}
                       aria-label={t.blog.clearTagFilter}
-                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-card/50 text-muted-foreground transition-all duration-150 hover:-translate-y-0.5 hover:bg-card hover:text-foreground active:translate-y-0 active:scale-95"
+                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-card/50 text-muted-foreground outline-none transition-all duration-150 hover:bg-card hover:border-muted-foreground/30 hover:text-foreground focus-visible:border-muted-foreground/50 focus-visible:bg-card focus-visible:ring-2 focus-visible:ring-foreground/10"
                     >
                       <X className="h-4 w-4" />
                     </button>
