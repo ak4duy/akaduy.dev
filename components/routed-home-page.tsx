@@ -275,7 +275,7 @@ export function RoutedHomePage({
                             <ExternalLink className="h-4 w-4" />
                           </Link>
                         </div>
-                        <div className="mt-2 space-y-1 text-sm text-muted-foreground leading-relaxed">
+                        <div className="mt-2 space-y-0 text-sm text-muted-foreground leading-relaxed">
                           {item.description.map((line) => (
                             <p key={line}>{line}</p>
                           ))}
