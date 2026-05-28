@@ -12,7 +12,7 @@ export default function Page() {
       initialLanguage="VN"
       content={{
         title: "Quyền riêng tư",
-        updated: "Cập nhật lần cuối: 27 tháng 5, 2026",
+        updated: "Cập nhật lần cuối: 28 tháng 5, 2026",
         intro:
           "Trang này giải thích dữ liệu nào được, và không được, chủ động thu thập khi bạn truy cập website này.",
         homeLabel: "Trang chủ",
@@ -22,6 +22,13 @@ export default function Page() {
             paragraphs: [
               "Website này không yêu cầu tài khoản người dùng và không chủ động thu thập thông tin cá nhân thông qua biểu mẫu trên trang.",
               "Website này không sử dụng trình theo dõi quảng cáo và không bán dữ liệu người truy cập.",
+            ],
+          },
+          {
+            title: "Poll trong blog",
+            paragraphs: [
+              "Nếu bạn bình chọn trong poll của bài viết, lựa chọn bình chọn sẽ được lưu cùng ID của poll để tính kết quả.",
+              "Để giảm spam bình chọn, API tạo một hash có salt từ dữ liệu kỹ thuật của request như địa chỉ IP, User-Agent và ID của poll. Địa chỉ IP gốc không được lưu trong database của poll.",
             ],
           },
           {

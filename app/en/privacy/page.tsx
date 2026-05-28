@@ -12,7 +12,7 @@ export default function Page() {
       initialLanguage="EN"
       content={{
         title: "Privacy",
-        updated: "Last updated: 27 May, 2026",
+        updated: "Last updated: 28 May, 2026",
         intro:
           "This page explains what data is, and is not, intentionally collected when you visit this website.",
         homeLabel: "Home",
@@ -22,6 +22,13 @@ export default function Page() {
             paragraphs: [
               "This website does not require user accounts and does not intentionally collect personal information through forms on this site.",
               "This website does not use advertising trackers or sell visitor data.",
+            ],
+          },
+          {
+            title: "Blog polls",
+            paragraphs: [
+              "If you vote in a blog poll, the vote choice is stored with the poll ID so the poll results can be counted.",
+              "To reduce vote spam, the API creates a salted hash from technical request data such as IP address, User-Agent, and poll ID. The raw IP address is not stored in the poll database.",
             ],
           },
           {

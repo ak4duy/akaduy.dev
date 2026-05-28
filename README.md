@@ -24,7 +24,9 @@ Since I also publish blog posts here, many of my GitHub contributions may come f
 
 This website does not use cookies or advertising trackers.
 
-No user accounts are required, and no personal information is intentionally collected.
+No user accounts are required, and no personal information is intentionally collected through forms.
+
+Blog polls store the selected poll option and poll ID in Cloudflare D1. To reduce vote spam, the API stores a salted hash derived from technical request data such as IP address, User-Agent, and poll ID. Raw IP addresses are not stored in the poll database.
 
 The website is hosted using GitHub Pages and Cloudflare. These providers may temporarily process technical information (such as IP addresses, browser information, or request metadata) as part of delivering and securing the website.
 
