@@ -524,9 +524,9 @@ Trên giấy là nét chữ của tôi.
 
 “Minh biết rồi.”
 
-Bốn chữ thôi.
+Ba chữ thôi.
 
-Bốn chữ đủ khiến mọi thứ trong đầu tôi sụp xuống.
+Ba chữ đủ khiến mọi thứ trong đầu tôi sụp xuống.
 
 Tôi nhớ lại tiếng Minh trong hẻm.
 
