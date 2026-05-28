@@ -29,43 +29,60 @@ export const vn: Translation = {
     contactTitle: "Liên hệ",
     footer: "code, ideas, and the journey in between.",
   },
-  projects: [
-    {
-      name: "yud-on.top",
-      href: "https://github.com/ak4duy/yud-on.top",
-      description: [
-        "Đây là trang web cá nhân và blog của tôi.",
-        "Tôi thường ghi blog ở đây và chia sẻ về dự án cá nhân của mình.",
-      ],
-      tags: ["Next.js", "React", "Typescript", "Markdown"],
-    },
-    {
-      name: "Kopuz",
-      href: "https://github.com/Kopuz-org/kopuz/",
-      description: [
-        "Trình phát nhạc mã nguồn mở xây bằng Rust và Dioxus.",
-        "Hiện đang đóng góp tính năng và sửa lỗi.",
-      ],
-      tags: ["Rust", "Dioxus"],
-    },
-    {
-      name: "1 in 10000 chance of Foxy jumpscare per second",
-      href: "https://ankiweb.net/shared/info/1601646218",
-      description: [
-        "Một add-on vui vẻ cho Anki.",
-        "Mỗi giây sẽ có 1/10000 cơ hội Foxy jumpscare ngẫu nhiên.",
-      ],
-      tags: ["Python", "PyQt", "Anki Add-on"],
-    },
-    {
-      name: "DeskForge",
-      href: "https://github.com/ak4duy/DeskForge",
-      description: [
-        "Một TUI chỉnh launcher đơn giản cho Linux mà chẳng ai xài.",
-      ],
-      tags: ["Rust", "Ratatui"],
-    },
-  ],
+  experience: {
+    workingOnTitle: "Đang làm",
+    projectsTitle: "Dự án",
+    contributedToTitle: "Đã đóng góp",
+    workingOn: [
+      {
+        name: "Resonance",
+        href: "https://github.com/ak4duy/resonance-flyout",
+        description: [
+          "Một ứng dụng thay thế flyout media hiện đại cho Windows, được ghi bằng Rust.",
+        ],
+        tags: ["Rust", "Typescript", "Tauri", "Svelte"],
+      },
+    ],
+    projects: [
+      {
+        name: "yud-on.top",
+        href: "https://github.com/ak4duy/yud-on.top",
+        description: [
+          "Đây là trang web cá nhân và blog của tôi.",
+          "Tôi thường ghi blog ở đây và chia sẻ về dự án cá nhân của mình.",
+        ],
+        tags: ["Next.js", "React", "Typescript", "Markdown"],
+      },
+      {
+        name: "1 in 10000 chance of Foxy jumpscare per second",
+        href: "https://ankiweb.net/shared/info/1601646218",
+        description: [
+          "Một add-on vui vẻ cho Anki.",
+          "Mỗi giây sẽ có 1/10000 cơ hội Foxy jumpscare ngẫu nhiên.",
+        ],
+        tags: ["Python", "PyQt", "Anki Add-on"],
+      },
+      {
+        name: "DeskForge",
+        href: "https://github.com/ak4duy/DeskForge",
+        description: [
+          "Một TUI chỉnh launcher đơn giản cho Linux mà chẳng ai xài.",
+        ],
+        tags: ["Rust", "Ratatui"],
+      },
+    ],
+    contributedTo: [
+      {
+        name: "Kopuz",
+        href: "https://github.com/Kopuz-org/kopuz/",
+        description: [
+          "Trình phát nhạc mã nguồn mở xây bằng Rust và Dioxus.",
+          "Hiện đã đóng góp tính năng và sửa lỗi.",
+        ],
+        tags: ["Rust", "Dioxus"],
+      },
+    ],
+  },
   contacts: [
     {
       href: "https://github.com/ak4duy",

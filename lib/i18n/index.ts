@@ -5,6 +5,13 @@ export const languages = ["EN", "VN"] as const;
 
 export type Language = (typeof languages)[number];
 
+type ExperienceItem = {
+  name: string;
+  href: string;
+  description: string[];
+  tags: string[];
+};
+
 export type Translation = {
   nav: {
     about: string;
@@ -29,12 +36,14 @@ export type Translation = {
     contactTitle: string;
     footer: string;
   };
-  projects: Array<{
-    name: string;
-    href: string;
-    description: string[];
-    tags: string[];
-  }>;
+  experience: {
+    workingOnTitle: string;
+    projectsTitle: string;
+    contributedToTitle: string;
+    workingOn: ExperienceItem[];
+    projects: ExperienceItem[];
+    contributedTo: ExperienceItem[];
+  };
   contacts: Array<{
     href: string;
     label: string;

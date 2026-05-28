@@ -29,41 +29,60 @@ export const en: Translation = {
     contactTitle: "Get in Touch",
     footer: "code, ideas, and the journey in between.",
   },
-  projects: [
-    {
-      name: "yud-on.top",
-      href: "https://github.com/ak4duy/yud-on.top",
-      description: [
-        "My personal portfolio and blog website.",
-        "I write blogs here and share updates about my personal projects.",
-      ],
-      tags: ["Next.js", "React", "Typescript", "Markdown"],
-    },
-    {
-      name: "Kopuz",
-      href: "https://github.com/Kopuz-org/kopuz/",
-      description: [
-        "Open-source music player built with Rust and Dioxus.",
-        "Currently contributing features and fixing bugs.",
-      ],
-      tags: ["Rust", "Dioxus"],
-    },
-    {
-      name: "1 in 10000 chance of Foxy jumpscare per second",
-      href: "https://ankiweb.net/shared/info/1601646218",
-      description: [
-        "An add-on that makes your study thrilling.",
-        "Every second, there is a 1 in 10000 chance that Foxy will randomly jumpscare you.",
-      ],
-      tags: ["Python", "PyQt", "Anki Add-on"],
-    },
-    {
-      name: "DeskForge",
-      href: "https://github.com/ak4duy/DeskForge",
-      description: ["A simple TUI launcher editor for Linux no one asked for."],
-      tags: ["Rust", "Ratatui"],
-    },
-  ],
+  experience: {
+    workingOnTitle: "Working on",
+    projectsTitle: "Projects",
+    contributedToTitle: "Contributed to",
+    workingOn: [
+      {
+        name: "Resonance",
+        href: "https://github.com/ak4duy/resonance-flyout",
+        description: [
+          "A modern Windows media flyout replacement built in Rust.",
+        ],
+        tags: ["Rust", "Typescript", "Tauri", "Svelte"],
+      },
+    ],
+    projects: [
+      {
+        name: "yud-on.top",
+        href: "https://github.com/ak4duy/yud-on.top",
+        description: [
+          "My personal portfolio and blog website.",
+          "I write blogs here and share updates about my personal projects.",
+        ],
+        tags: ["Next.js", "React", "Typescript", "Markdown"],
+      },
+      {
+        name: "1 in 10000 chance of Foxy jumpscare per second",
+        href: "https://ankiweb.net/shared/info/1601646218",
+        description: [
+          "An add-on that makes your study thrilling.",
+          "Every second, there is a 1 in 10000 chance that Foxy will randomly jumpscare you.",
+        ],
+        tags: ["Python", "PyQt", "Anki Add-on"],
+      },
+      {
+        name: "DeskForge",
+        href: "https://github.com/ak4duy/DeskForge",
+        description: [
+          "A simple TUI launcher editor for Linux no one asked for.",
+        ],
+        tags: ["Rust", "Ratatui"],
+      },
+    ],
+    contributedTo: [
+      {
+        name: "Kopuz",
+        href: "https://github.com/Kopuz-org/kopuz/",
+        description: [
+          "Open-source music player built with Rust and Dioxus.",
+          "Contributed features and fixing bugs.",
+        ],
+        tags: ["Rust", "Dioxus"],
+      },
+    ],
+  },
   contacts: [
     {
       href: "https://github.com/ak4duy",

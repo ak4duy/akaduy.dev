@@ -237,49 +237,64 @@ export function RoutedHomePage({
             </TabsContent>
 
             <TabsContent value="experience" className="space-y-8 tab-enter">
-              <section>
-                <h2 className="mb-5 text-lg font-semibold flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
-                  {t.home.projectsTitle}
-                </h2>
-                <div className="space-y-4">
-                  {t.projects.map((project) => (
-                    <div
-                      key={project.name}
-                      className="group rounded-xl border border-border bg-card/50 p-5 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 transition-all duration-200"
-                    >
-                      <div className="flex items-start justify-between">
-                        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                          {project.name}
-                        </h3>
-                        <Link
-                          href={project.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:scale-110 hover:text-foreground active:translate-y-0 active:scale-95"
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                        </Link>
-                      </div>
-                      <div className="mt-2 space-y-1 text-sm text-muted-foreground leading-relaxed">
-                        {project.description.map((line) => (
-                          <p key={line}>{line}</p>
-                        ))}
-                      </div>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {project.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-md bg-muted/50 border border-border px-2.5 py-1 text-xs text-muted-foreground"
+              {[
+                {
+                  title: t.experience.workingOnTitle,
+                  items: t.experience.workingOn,
+                },
+                {
+                  title: t.experience.projectsTitle,
+                  items: t.experience.projects,
+                },
+                {
+                  title: t.experience.contributedToTitle,
+                  items: t.experience.contributedTo,
+                },
+              ].map((section) => (
+                <section key={section.title}>
+                  <h2 className="mb-5 text-lg font-semibold flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
+                    {section.title}
+                  </h2>
+                  <div className="space-y-4">
+                    {section.items.map((item) => (
+                      <div
+                        key={item.name}
+                        className="group rounded-xl border border-border bg-card/50 p-5 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 transition-all duration-200"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                            {item.name}
+                          </h3>
+                          <Link
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:scale-110 hover:text-foreground active:translate-y-0 active:scale-95"
                           >
-                            {tag}
-                          </span>
-                        ))}
+                            <ExternalLink className="h-4 w-4" />
+                          </Link>
+                        </div>
+                        <div className="mt-2 space-y-1 text-sm text-muted-foreground leading-relaxed">
+                          {item.description.map((line) => (
+                            <p key={line}>{line}</p>
+                          ))}
+                        </div>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {item.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded-md bg-muted/50 border border-border px-2.5 py-1 text-xs text-muted-foreground"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
+                    ))}
+                  </div>
+                </section>
+              ))}
 
               <section>
                 <h2 className="mb-5 text-lg font-semibold flex items-center gap-2">
