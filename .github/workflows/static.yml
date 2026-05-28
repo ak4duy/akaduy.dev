@@ -36,7 +36,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          NEXT_PUBLIC_HACKATIME_STATUS_URL: https://yud-on.top/api/hackatime/current
+          NEXT_PUBLIC_HACKATIME_STATUS_URL: https://api.yud-on.top/hackatime/current
 
       - name: Prepare static output
         run: |

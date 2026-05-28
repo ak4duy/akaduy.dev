@@ -13,7 +13,7 @@ type HackatimeStatus = {
 
 const statusEndpoint =
   process.env.NEXT_PUBLIC_HACKATIME_STATUS_URL ??
-  "https://yud-on.top/api/hackatime/current";
+  "https://api.yud-on.top/hackatime/current";
 const refreshIntervalMs = 60_000;
 const githubOwner = "ak4duy";
 

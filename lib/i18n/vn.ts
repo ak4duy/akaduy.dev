@@ -121,5 +121,14 @@ export const vn: Translation = {
     clearTagFilter: "Xóa bộ lọc từ khóa",
     noSearchResults: "Không tìm thấy bài viết.",
     minuteRead: "phút đọc",
+    pollVote: "Gửi",
+    pollCancel: "Hủy",
+    pollVotes: "lượt bình chọn",
+    pollVoted: "Đã bình chọn",
+    pollUndo: "Hoàn tác bình chọn",
+    pollLoading: "Đang tải poll...",
+    pollPrivacy:
+      "Poll lưu lựa chọn của bạn và dùng hash có salt để tránh bình chọn trùng.",
+    pollError: "Không thể tải kết quả poll.",
   },
 };

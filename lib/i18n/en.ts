@@ -121,5 +121,14 @@ export const en: Translation = {
     clearTagFilter: "Clear tag filter",
     noSearchResults: "No posts found.",
     minuteRead: "min read",
+    pollVote: "Submit",
+    pollCancel: "Cancel",
+    pollVotes: "votes",
+    pollVoted: "Voted",
+    pollUndo: "Undo vote",
+    pollLoading: "Loading poll...",
+    pollPrivacy:
+      "Polls store your choice and use a salted hash to prevent duplicate votes.",
+    pollError: "Could not load poll results.",
   },
 };

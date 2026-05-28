@@ -7,8 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "worker:dev": "npx wrangler dev",
-    "worker:deploy": "npx wrangler deploy"
+    "worker:hackatime:dev": "npx wrangler dev --config wrangler.toml",
+    "worker:hackatime:deploy": "npx wrangler deploy --config wrangler.toml",
+    "worker:polls:dev": "npx wrangler dev --config wrangler.blog-polls.toml",
+    "worker:polls:deploy": "npx wrangler deploy --config wrangler.blog-polls.toml",
+    "worker:deploy": "npm run worker:hackatime:deploy && npm run worker:polls:deploy",
+    "d1:migrate:polls": "npx wrangler d1 migrations apply blog-polls --remote --config wrangler.blog-polls.toml"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

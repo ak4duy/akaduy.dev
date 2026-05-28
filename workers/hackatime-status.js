@@ -17,7 +17,8 @@ function json(data, init = {}) {
 function normalizeApiKey(apiKey) {
   return apiKey
     .trim()
-    .replace(/^['\"]|['\"]$/g, "")
+    .replace(/^[']|[']$/g, "")
+    .replace(/^[\"]|[\"]$/g, "")
     .replace(/^Bearer\s+/i, "")
     .replace(/^Basic\s+/i, "");
 }

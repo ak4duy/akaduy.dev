@@ -1,0 +1,13 @@
+name = "ak4duy-blog-polls"
+main = "workers/blog-polls.js"
+compatibility_date = "2026-05-26"
+
+routes = [
+  { pattern = "api.yud-on.top/blog-polls/*", zone_name = "yud-on.top" },
+  { pattern = "api.yud-on.top/health", zone_name = "yud-on.top" }
+]
+
+[[d1_databases]]
+binding = "BLOG_POLLS_DB"
+database_name = "blog-polls"
+database_id = "87fcd75a-f5f3-4a33-8427-dc092846b83c"

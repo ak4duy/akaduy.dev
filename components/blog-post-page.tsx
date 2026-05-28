@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
+import { BlogPoll } from "@/components/blog-poll";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
 import { useLanguage } from "@/components/language-provider";
@@ -147,6 +148,23 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
             contentsLabel={t.blog.contents}
             stickyBackHref={`${localePrefix}/blog`}
             stickyBackLabel={t.nav.blog}
+            afterFirstRule={
+              post.poll ? (
+                <BlogPoll
+                  poll={post.poll}
+                  labels={{
+                    vote: t.blog.pollVote,
+                    cancel: t.blog.pollCancel,
+                    votes: t.blog.pollVotes,
+                    voted: t.blog.pollVoted,
+                    undo: t.blog.pollUndo,
+                    loading: t.blog.pollLoading,
+                    privacy: t.blog.pollPrivacy,
+                    error: t.blog.pollError,
+                  }}
+                />
+              ) : null
+            }
           />
         </div>
 

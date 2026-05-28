@@ -4,6 +4,17 @@ import type { Metadata } from "next";
 import { BLOG_POSTS_PER_PAGE } from "@/lib/blog-config";
 import { Language } from "@/lib/i18n/index";
 
+export type BlogPollOption = {
+  id: string;
+  label: string;
+};
+
+export type BlogPoll = {
+  id: string;
+  question: string;
+  options: BlogPollOption[];
+};
+
 export type BlogPost = {
   slug: string;
   title: string;
@@ -12,6 +23,7 @@ export type BlogPost = {
   excerpt: string;
   content: string;
   draft: boolean;
+  poll: BlogPoll | null;
 };
 
 const languageDirectory: Record<Language, string> = {
@@ -75,6 +87,43 @@ function parseFrontmatter(markdown: string) {
   };
 }
 
+function createPollOptionId(label: string) {
+  return (
+    label
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/đ/g, "d")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "option"
+  );
+}
+
+function createBlogPoll(
+  slug: string,
+  frontmatter: Record<string, string | string[] | boolean>,
+): BlogPoll | null {
+  const question = frontmatter.pollQuestion;
+  const options = frontmatter.pollOptions;
+  const optionIds = frontmatter.pollOptionIds;
+
+  if (typeof question !== "string" || !Array.isArray(options)) {
+    return null;
+  }
+
+  return {
+    id: String(frontmatter.pollId ?? slug),
+    question,
+    options: options.map((label, index) => ({
+      id:
+        Array.isArray(optionIds) && typeof optionIds[index] === "string"
+          ? createPollOptionId(optionIds[index])
+          : createPollOptionId(label),
+      label,
+    })),
+  };
+}
+
 function createExcerpt(content: string) {
   return (
     content
@@ -97,6 +146,7 @@ export function getBlogPost(language: Language, slug: string): BlogPost {
     excerpt: String(frontmatter.excerpt ?? createExcerpt(content)),
     content,
     draft: frontmatter.draft === true,
+    poll: createBlogPoll(slug, frontmatter),
   };
 }
 

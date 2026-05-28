@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 
 type MarkdownContentProps = {
@@ -9,6 +9,7 @@ type MarkdownContentProps = {
   contentsLabel?: string;
   stickyBackHref?: string;
   stickyBackLabel?: string;
+  afterFirstRule?: ReactNode;
 };
 
 type MarkdownBlock =
@@ -321,6 +322,7 @@ export function MarkdownContent({
   contentsLabel = "Contents",
   stickyBackHref,
   stickyBackLabel,
+  afterFirstRule,
 }: MarkdownContentProps) {
   const [showStickyContents, setShowStickyContents] = useState(false);
   const contentsRef = useRef<HTMLDivElement | null>(null);
@@ -380,7 +382,16 @@ export function MarkdownContent({
           }
 
           if (block.type === "rule") {
-            return <hr key={index} className="my-8 border-border/80" />;
+            const hasPreviousRule = blocks
+              .slice(0, index)
+              .some((previousBlock) => previousBlock.type === "rule");
+
+            return (
+              <div key={index}>
+                <hr className="my-8 border-border/80" />
+                {!hasPreviousRule && afterFirstRule}
+              </div>
+            );
           }
 
           if (block.type === "image") {

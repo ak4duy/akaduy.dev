@@ -59,6 +59,14 @@ export type Translation = {
     clearTagFilter: string;
     noSearchResults: string;
     minuteRead: string;
+    pollVote: string;
+    pollCancel: string;
+    pollVotes: string;
+    pollVoted: string;
+    pollUndo: string;
+    pollLoading: string;
+    pollPrivacy: string;
+    pollError: string;
   };
 };
 
