@@ -152,6 +152,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
               post.poll ? (
                 <BlogPoll
                   poll={post.poll}
+                  privacyHref={`https://yud-on.top${localePrefix}/privacy`}
                   labels={{
                     vote: t.blog.pollVote,
                     cancel: t.blog.pollCancel,
@@ -160,6 +161,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
                     undo: t.blog.pollUndo,
                     loading: t.blog.pollLoading,
                     privacy: t.blog.pollPrivacy,
+                    privacyLink: t.blog.pollPrivacyLink,
                     error: t.blog.pollError,
                   }}
                 />

@@ -129,6 +129,7 @@ export const en: Translation = {
     pollLoading: "Loading poll...",
     pollPrivacy:
       "Polls store your choice and use a salted hash to prevent duplicate votes.",
+    pollPrivacyLink: "Privacy details",
     pollError: "Could not load poll results.",
   },
 };

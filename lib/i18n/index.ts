@@ -66,6 +66,7 @@ export type Translation = {
     pollUndo: string;
     pollLoading: string;
     pollPrivacy: string;
+    pollPrivacyLink: string;
     pollError: string;
   };
 };

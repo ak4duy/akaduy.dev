@@ -13,12 +13,14 @@ type BlogPollLabels = {
   undo: string;
   loading: string;
   privacy: string;
+  privacyLink: string;
   error: string;
 };
 
 type BlogPollProps = {
   poll: BlogPollData;
   labels: BlogPollLabels;
+  privacyHref: string;
 };
 
 const pollsEndpoint =
@@ -28,7 +30,7 @@ function getVoteStorageKey(pollId: string) {
   return `blog-poll:${pollId}:vote`;
 }
 
-export function BlogPoll({ poll, labels }: BlogPollProps) {
+export function BlogPoll({ poll, labels, privacyHref }: BlogPollProps) {
   const [counts, setCounts] = useState<PollCounts>({});
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [savedVote, setSavedVote] = useState<string | null>(null);
@@ -264,7 +266,13 @@ export function BlogPoll({ poll, labels }: BlogPollProps) {
       </div>
 
       <p className="mt-3 border-t border-border/60 pt-3 text-[11px] leading-relaxed text-muted-foreground/60">
-        {labels.privacy}
+        {labels.privacy}{" "}
+        <a
+          href={privacyHref}
+          className="text-muted-foreground underline decoration-muted-foreground/30 underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground"
+        >
+          {labels.privacyLink}
+        </a>
       </p>
 
       {error && <p className="mt-3 text-xs text-destructive">{error}</p>}
