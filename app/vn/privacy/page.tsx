@@ -25,7 +25,7 @@ export default function Page() {
             ],
           },
           {
-            title: "Poll trong blog",
+            title: "Bình chọn trong Blog",
             paragraphs: [
               "Nếu bạn bình chọn trong poll của bài viết, lựa chọn bình chọn sẽ được lưu cùng ID của poll để tính kết quả.",
               "Để giảm spam bình chọn, API tạo một hash có salt từ dữ liệu kỹ thuật của request như địa chỉ IP, User-Agent và ID của poll. Địa chỉ IP gốc không được lưu trong database của poll.",
