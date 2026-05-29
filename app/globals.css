@@ -125,12 +125,114 @@
 }
 
 @layer utilities {
+    .reader-theme-dark {
+        --reader-background: #292929;
+        --reader-background-image: url("/blog-content-theme/dark-paper.png");
+        --reader-foreground: #dcdcdc;
+        --reader-muted: #aeaeae;
+        --reader-card: #292929;
+        --reader-border: rgba(239, 239, 239, 0.125);
+        --reader-accent: rgba(1, 4, 9, 0.5);
+    }
+
+    .reader-theme-sepia {
+        --reader-background: oklch(0.91 0.034 82);
+        --reader-background-image: url("/blog-content-theme/paper.png");
+        --reader-foreground: oklch(0.29 0.036 62);
+        --reader-muted: oklch(0.48 0.035 62);
+        --reader-card: oklch(0.96 0.026 86);
+        --reader-border: oklch(0.78 0.044 76);
+        --reader-accent: oklch(0.88 0.04 78);
+    }
+
+    .reader-theme-light {
+        --reader-background: white;
+        --reader-background-image: url("/blog-content-theme/white-paper.png");
+        --reader-foreground: black;
+        --reader-muted: rgba(0, 0, 0, 0.62);
+        --reader-card: white;
+        --reader-border: rgb(0 0 0 / 13%);
+        --reader-accent: rgb(222, 226, 230);
+    }
+
+    .reader-theme-dark,
+    .reader-theme-sepia,
+    .reader-theme-light {
+        --background: var(--reader-background);
+        --foreground: var(--reader-foreground);
+        --card: var(--reader-card);
+        --card-foreground: var(--reader-foreground);
+        --popover: var(--reader-card);
+        --popover-foreground: var(--reader-foreground);
+        --primary: var(--reader-foreground);
+        --primary-foreground: var(--reader-background);
+        --muted: var(--reader-accent);
+        --muted-foreground: var(--reader-muted);
+        --accent: var(--reader-accent);
+        --accent-foreground: var(--reader-foreground);
+        --border: var(--reader-border);
+        --input: var(--reader-border);
+        --ring: var(--reader-muted);
+    }
+
+    .reader-bg {
+        background-color: var(--reader-background);
+        background-image: var(--reader-background-image, none);
+        background-position: center;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+
+    .reader-text {
+        color: var(--reader-foreground);
+    }
+
+    .reader-muted {
+        color: var(--reader-muted);
+    }
+
+    .reader-card {
+        background: color-mix(in oklch, var(--reader-card) 95%, transparent);
+        border-color: var(--reader-border);
+    }
+
+    .reader-border {
+        border-color: var(--reader-border);
+    }
+
+    .reader-accent-bg {
+        background: var(--reader-accent);
+    }
+
+    .reader-theme-changing::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        pointer-events: none;
+        background-color: var(--reader-background);
+        background-image: var(--reader-background-image, none);
+        background-position: center;
+        background-size: cover;
+        background-attachment: fixed;
+        animation: reader-theme-changing 320ms ease-out both;
+    }
+
     .page-enter {
         animation: page-enter 260ms linear both;
     }
 
     .tab-enter {
         animation: tab-enter 180ms linear both;
+    }
+}
+
+@keyframes reader-theme-changing {
+    from {
+        opacity: 0.36;
+    }
+    to {
+        opacity: 0;
     }
 }
 

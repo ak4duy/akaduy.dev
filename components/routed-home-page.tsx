@@ -428,7 +428,7 @@ export function RoutedHomePage({
                       {post.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded-md bg-muted/50 border border-border px-2.5 py-1 text-xs text-muted-foreground"
+                          className="rounded-md border border-border/80 bg-muted/20 px-2.5 py-1 text-xs text-muted-foreground"
                         >
                           {tag}
                         </span>
