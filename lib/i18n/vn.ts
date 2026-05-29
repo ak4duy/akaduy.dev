@@ -128,8 +128,8 @@ export const vn: Translation = {
     pollUndo: "Hoàn tác bình chọn",
     pollLoading: "Đang tải poll...",
     pollPrivacy:
-      "Poll lưu lựa chọn của bạn và dùng hash có salt để tránh bình chọn trùng.",
-    pollPrivacyLink: "Chi tiết về quyền riêng tư",
+      "Mọi bình chọn đều hoàn toàn ẩn danh. Tôi không thu thập bất kỳ thông tin cá nhân nào.",
+    pollPrivacyLink: "Tìm hiểu thêm",
     pollError: "Không thể tải kết quả poll.",
   },
   privacy: {

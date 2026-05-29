@@ -128,8 +128,9 @@ export const en: Translation = {
     pollUndo: "Undo vote",
     pollLoading: "Loading poll...",
     pollPrivacy:
-      "Polls store your choice and use a salted hash to prevent duplicate votes.",
-    pollPrivacyLink: "Privacy details",
+      "All votes are anonymous. We do not collect personal information.",
+    pollPrivacyLink: "Learn more",
+
     pollError: "Could not load poll results.",
   },
   privacy: {
