@@ -367,7 +367,7 @@ Minh không cười nữa.
 
 Nó nhìn tôi bằng một ánh mắt tôi chưa từng thấy ở nó. Không giận. Không sợ. Chỉ buồn, như thể nó đã biết tôi sẽ làm gì trước cả khi tôi làm.
 
-“Tao chỉ muốn mở ra thôi,” nó nói.
+“Tao chỉ muốn mở ra thôi”, nó nói.
 
 Tôi nghe giọng mình đáp lại, rất lạ, rất thấp.
 
