@@ -8,25 +8,14 @@ import { SiteFooter } from "@/components/site-footer";
 import { useLanguage } from "@/components/language-provider";
 import { Language, translations } from "@/lib/i18n/index";
 
-type PrivacyContent = {
-  title: string;
-  updated: string;
-  intro: string;
-  sections: Array<{
-    title: string;
-    paragraphs: string[];
-  }>;
-  homeLabel: string;
-};
-
 type PrivacyPageProps = {
   initialLanguage: Language;
-  content: PrivacyContent;
 };
 
-export function PrivacyPage({ initialLanguage, content }: PrivacyPageProps) {
+export function PrivacyPage({ initialLanguage }: PrivacyPageProps) {
   const { language, setLanguage } = useLanguage();
   const t = translations[initialLanguage];
+  const content = t.privacy;
   const localePrefix = `/${initialLanguage.toLowerCase()}`;
 
   useEffect(() => {

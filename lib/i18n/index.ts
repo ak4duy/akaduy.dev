@@ -12,6 +12,11 @@ type ExperienceItem = {
   tags: string[];
 };
 
+type PrivacySection = {
+  title: string;
+  paragraphs: string[];
+};
+
 export type Translation = {
   nav: {
     about: string;
@@ -51,6 +56,15 @@ export type Translation = {
     external: boolean;
     icon: string;
   }>;
+  privacy: {
+    metadataTitle: string;
+    metadataDescription: string;
+    title: string;
+    updated: string;
+    intro: string;
+    homeLabel: string;
+    sections: PrivacySection[];
+  };
   blog: {
     contents: string;
     searchPlaceholder: string;
