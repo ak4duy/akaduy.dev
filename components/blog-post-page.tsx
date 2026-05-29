@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowUp } from "lucide-react";
 import { BlogPoll } from "@/components/blog-poll";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
@@ -108,6 +108,20 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
       <div className="fixed right-4 top-2 z-50 hidden rounded-md border border-border/80 bg-background/80 px-2 py-1 text-[11px] font-medium text-muted-foreground backdrop-blur sm:block">
         {progressPercent}%
       </div>
+      <button
+        type="button"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        aria-label="Back to top"
+        aria-hidden={readingProgress <= 0.08}
+        tabIndex={readingProgress > 0.08 ? 0 : -1}
+        className={`fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-border/80 bg-background/85 text-muted-foreground shadow-xl shadow-black/10 backdrop-blur transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-card hover:text-foreground active:translate-y-0 active:scale-95 ${
+          readingProgress > 0.08
+            ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
+            : "pointer-events-none translate-y-3 scale-75 opacity-0"
+        }`}
+      >
+        <ArrowUp className="h-4 w-4" />
+      </button>
 
       <article
         ref={readingRootRef}
