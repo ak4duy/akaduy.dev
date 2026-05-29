@@ -551,7 +551,7 @@ Nhưng cái miệng tôi vẫn cười.
 
 Minh đặt một ngón tay lên môi, như đang dỗ dành một đứa trẻ khóc quá lâu.
 
-“Đừng sợ,” nó nói. “Mùa hè nào cũng có người được nghỉ mà.”
+“Đừng sợ”, nó nói. “Mùa hè nào cũng có người được nghỉ mà.”
 
 Sáng hôm sau, người ta tìm thấy tôi chết trong phòng trọ.
 
