@@ -114,7 +114,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
         aria-label="Back to top"
         aria-hidden={readingProgress <= 0.08}
         tabIndex={readingProgress > 0.08 ? 0 : -1}
-        className={`fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-border/80 bg-background/85 text-muted-foreground shadow-xl shadow-black/10 backdrop-blur transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-card hover:text-foreground active:translate-y-0 active:scale-95 ${
+        className={`fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-50 flex h-10 w-10 items-center justify-center rounded-xl border border-border/80 bg-background/85 text-muted-foreground shadow-xl shadow-black/10 backdrop-blur transition-all duration-200 ease-out hover:bg-card hover:text-foreground active:scale-95 sm:bottom-6 sm:right-6 sm:h-11 sm:w-11 sm:hover:-translate-y-0.5 ${
           readingProgress > 0.08
             ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
             : "pointer-events-none translate-y-3 scale-75 opacity-0"
