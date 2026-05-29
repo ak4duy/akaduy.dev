@@ -228,11 +228,13 @@ function TableOfContents({
   variant = "inline",
   visible = true,
   label = "Contents",
+  activeHeadingId,
 }: {
   headings: HeadingBlock[];
   variant?: "inline" | "sticky-note";
   visible?: boolean;
   label?: string;
+  activeHeadingId?: string | null;
 }) {
   if (headings.length === 0) {
     return null;
@@ -258,7 +260,11 @@ function TableOfContents({
           >
             <a
               href={`#${heading.id}`}
-              className="block truncate text-muted-foreground transition-colors hover:text-foreground"
+              className={`block truncate transition-colors hover:text-foreground ${
+                activeHeadingId === heading.id
+                  ? "font-medium text-foreground"
+                  : "text-muted-foreground"
+              }`}
               title={heading.text}
             >
               {heading.text}
@@ -325,6 +331,7 @@ export function MarkdownContent({
   afterFirstRule,
 }: MarkdownContentProps) {
   const [showStickyContents, setShowStickyContents] = useState(false);
+  const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
   const contentsRef = useRef<HTMLDivElement | null>(null);
   const blocks = parseMarkdown(content);
   const headings = blocks.filter(
@@ -342,6 +349,14 @@ export function MarkdownContent({
       const shouldShowStickyContents =
         contents.getBoundingClientRect().bottom <= 0;
       setShowStickyContents(shouldShowStickyContents);
+
+      const activeHeading = headings
+        .map((heading) => document.getElementById(heading.id))
+        .filter((heading): heading is HTMLElement => Boolean(heading))
+        .filter((heading) => heading.getBoundingClientRect().top <= 120)
+        .at(-1);
+
+      setActiveHeadingId(activeHeading?.id ?? null);
     };
 
     updateStickyContents();
@@ -352,7 +367,7 @@ export function MarkdownContent({
       window.removeEventListener("scroll", updateStickyContents);
       window.removeEventListener("resize", updateStickyContents);
     };
-  }, []);
+  }, [headings]);
 
   return (
     <div className="relative text-[15px] leading-8 text-foreground/95 sm:text-base">
@@ -367,6 +382,7 @@ export function MarkdownContent({
             headings={headings}
             variant="sticky-note"
             label={contentsLabel}
+            activeHeadingId={activeHeadingId}
           />
         </div>
       )}
