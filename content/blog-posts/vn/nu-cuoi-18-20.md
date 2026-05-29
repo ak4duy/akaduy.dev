@@ -6,6 +6,7 @@ tags:
   - Truyện ngắn
   - Giả tưởng
   - Thanh xuân
+  - Tâm lý
 pollId: nu-cuoi-18-20
 pollQuestion: "Cảm nghĩ của bạn sau khi đọc:"
 pollOptionIds:
@@ -434,7 +435,7 @@ Lạnh.
 
 Ngón cái của bàn tay ấy miết nhẹ lên vết sẹo trên tay tôi, như đang kiểm tra một dấu vết cũ.
 
-“Không phải tao giữ cái hộp,” Minh nói. “Là mày.”
+“Không phải tao giữ cái hộp”, Minh nói. “Là mày.”
 
 Tôi muốn nói không phải.
 
