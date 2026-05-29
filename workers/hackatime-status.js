@@ -2,6 +2,12 @@ const HACKATIME_API_BASE = "https://hackatime.hackclub.com/api/v1";
 const GITHUB_OWNER = "ak4duy";
 const ACTIVE_HEARTBEAT_WINDOW_MS = 5 * 60 * 1000;
 
+function getAllowedRequestHeaders(request) {
+  return (
+    request.headers.get("access-control-request-headers") ?? "content-type"
+  );
+}
+
 function json(data, init = {}) {
   return new Response(JSON.stringify(data), {
     ...init,
@@ -296,7 +302,7 @@ export default {
         headers: {
           "access-control-allow-origin": "*",
           "access-control-allow-methods": "GET, OPTIONS",
-          "access-control-allow-headers": "content-type",
+          "access-control-allow-headers": getAllowedRequestHeaders(request),
         },
       });
     }

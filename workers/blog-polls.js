@@ -1,3 +1,9 @@
+function getAllowedRequestHeaders(request) {
+  return (
+    request.headers.get("access-control-request-headers") ?? "content-type"
+  );
+}
+
 function json(data, init = {}) {
   return new Response(JSON.stringify(data), {
     ...init,
@@ -147,7 +153,7 @@ export default {
         headers: {
           "access-control-allow-origin": "*",
           "access-control-allow-methods": "GET, POST, DELETE, OPTIONS",
-          "access-control-allow-headers": "content-type",
+          "access-control-allow-headers": getAllowedRequestHeaders(request),
         },
       });
     }
