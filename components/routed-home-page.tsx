@@ -55,6 +55,7 @@ export function RoutedHomePage({
   const [currentTab, setCurrentTab] = useState<TabValue>(activeTab);
   const [blogSearch, setBlogSearch] = useState("");
   const [selectedBlogTag, setSelectedBlogTag] = useState<string | null>(null);
+  const [isTagFilterDesktop, setIsTagFilterDesktop] = useState(false);
   const [blogPage, setBlogPage] = useState(initialBlogPage);
   const [routeBlogPage, setRouteBlogPage] = useState(initialBlogPage);
   const hasMountedBlogResetRef = useRef(false);
@@ -113,6 +114,18 @@ export function RoutedHomePage({
       setLanguage(initialLanguage);
     }
   }, [initialLanguage, language, setLanguage]);
+
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 640px)");
+    const updateTagFilterPlacement = () => setIsTagFilterDesktop(query.matches);
+
+    updateTagFilterPlacement();
+    query.addEventListener("change", updateTagFilterPlacement);
+
+    return () => {
+      query.removeEventListener("change", updateTagFilterPlacement);
+    };
+  }, []);
 
   useEffect(() => {
     if (!hasMountedBlogResetRef.current) {
@@ -368,7 +381,7 @@ export function RoutedHomePage({
                       </span>
                     </SelectTrigger>
                     <SelectContent
-                      side="right"
+                      side={isTagFilterDesktop ? "right" : "bottom"}
                       align="start"
                       sideOffset={8}
                       className="max-h-64 rounded-xl border-border bg-card/95 backdrop-blur"
