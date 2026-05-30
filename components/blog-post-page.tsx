@@ -161,6 +161,24 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
   const progressPercent = Math.round(readingProgress * 100);
   const readingTimeMinutes = getReadingTimeMinutes(post.content);
   const isNovelStyle = post.style === "novel";
+  const hasInlinePoll = post.content.includes("{{blogPoll}}");
+  const pollNode = post.poll ? (
+    <BlogPoll
+      poll={post.poll}
+      privacyHref={`https://yud-on.top${localePrefix}/privacy`}
+      labels={{
+        vote: t.blog.pollVote,
+        cancel: t.blog.pollCancel,
+        votes: t.blog.pollVotes,
+        voted: t.blog.pollVoted,
+        undo: t.blog.pollUndo,
+        loading: t.blog.pollLoading,
+        privacy: t.blog.pollPrivacy,
+        privacyLink: t.blog.pollPrivacyLink,
+        error: t.blog.pollError,
+      }}
+    />
+  ) : null;
 
   return (
     <main
@@ -263,26 +281,9 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
             contentsLabel={t.blog.contents}
             stickyBackHref={`${localePrefix}/blog`}
             stickyBackLabel={t.nav.blog}
+            poll={pollNode}
             readerStyle={post.style}
-            afterFirstRule={
-              post.poll ? (
-                <BlogPoll
-                  poll={post.poll}
-                  privacyHref={`https://yud-on.top${localePrefix}/privacy`}
-                  labels={{
-                    vote: t.blog.pollVote,
-                    cancel: t.blog.pollCancel,
-                    votes: t.blog.pollVotes,
-                    voted: t.blog.pollVoted,
-                    undo: t.blog.pollUndo,
-                    loading: t.blog.pollLoading,
-                    privacy: t.blog.pollPrivacy,
-                    privacyLink: t.blog.pollPrivacyLink,
-                    error: t.blog.pollError,
-                  }}
-                />
-              ) : null
-            }
+            afterFirstRule={!hasInlinePoll ? pollNode : null}
           />
         </div>
 

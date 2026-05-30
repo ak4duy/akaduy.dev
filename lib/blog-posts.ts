@@ -17,6 +17,8 @@ export type BlogPoll = {
 
 export type BlogPostStyle = "normal" | "novel";
 
+const BLOG_POLL_MARKER = "{{blogPoll}}";
+
 export type BlogPost = {
   slug: string;
   title: string;
@@ -131,6 +133,32 @@ function normalizeBlogPostStyle(value: unknown): BlogPostStyle {
   return value === "novel" ? "novel" : "normal";
 }
 
+function extractMovablePollBlock(
+  content: string,
+  frontmatter: Record<string, string | string[] | boolean>,
+) {
+  const pollBlockPattern =
+    /(?:^|\n)(pollId:\s*[^\n]*\n(?:pollQuestion:\s*[^\n]*\n)?pollOptionIds:\s*\n(?:[ \t]+-[ \t]+[^\n]+\n)+pollOptions:\s*\n(?:[ \t]+-[ \t]+[^\n]+(?:\n|$))+)/;
+  const match = content.match(pollBlockPattern);
+
+  if (!match) {
+    return { content, frontmatter };
+  }
+
+  const pollBlock = match[1].trimEnd();
+  const { frontmatter: pollFrontmatter } = parseFrontmatter(
+    `---\n${pollBlock}\n---\n`,
+  );
+
+  return {
+    content: content.replace(pollBlock, BLOG_POLL_MARKER).trim(),
+    frontmatter: {
+      ...frontmatter,
+      ...pollFrontmatter,
+    },
+  };
+}
+
 function createExcerpt(content: string) {
   return (
     content
@@ -143,7 +171,11 @@ function createExcerpt(content: string) {
 export function getBlogPost(language: Language, slug: string): BlogPost {
   const filePath = join(getBlogPostDirectory(language), `${slug}.md`);
   const markdown = readFileSync(filePath, "utf8");
-  const { frontmatter, content } = parseFrontmatter(markdown);
+  const parsed = parseFrontmatter(markdown);
+  const { frontmatter, content } = extractMovablePollBlock(
+    parsed.content,
+    parsed.frontmatter,
+  );
 
   return {
     slug,

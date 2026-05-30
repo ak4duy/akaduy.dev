@@ -8,16 +8,6 @@ tags:
   - Fiction
   - Youth
   - Psychological
-pollId: nu-cuoi-18-20-en
-pollQuestion: "How did you feel after reading:"
-pollOptionIds:
-  - good
-  - neutral
-  - bad
-pollOptions:
-  - Good
-  - Normal
-  - Bad
 ---
 
 # Chapter 1: Summer
@@ -603,6 +593,17 @@ And below that, in my handwriting.
 “There won’t be enough later.”
 
 ---
+
+pollId: nu-cuoi-18-20-en
+pollQuestion: "How did you feel after reading:"
+pollOptionIds:
+  - good
+  - neutral
+  - bad
+pollOptions:
+  - Good
+  - Normal
+  - Bad
 
 ---
 

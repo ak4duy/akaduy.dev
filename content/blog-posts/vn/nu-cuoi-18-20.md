@@ -8,16 +8,6 @@ tags:
   - Giả tưởng
   - Thanh xuân
   - Tâm lý
-pollId: nu-cuoi-18-20
-pollQuestion: "Cảm nghĩ của bạn sau khi đọc:"
-pollOptionIds:
-  - good
-  - neutral
-  - bad
-pollOptions:
-  - Hay
-  - Bình thường
-  - Tệ
 ---
 
 # Chương 1: Mùa Hè
@@ -603,3 +593,14 @@ Và dưới nữa, bằng nét chữ của tôi.
 “Sau này thiếu.”
 
 ---
+
+pollId: nu-cuoi-18-20
+pollQuestion: "Cảm nghĩ của bạn sau khi đọc:"
+pollOptionIds:
+  - good
+  - neutral
+  - bad
+pollOptions:
+  - Hay
+  - Bình thường
+  - Tệ

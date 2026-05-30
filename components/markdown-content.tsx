@@ -12,6 +12,7 @@ type MarkdownContentProps = {
   stickyBackHref?: string;
   stickyBackLabel?: string;
   afterFirstRule?: ReactNode;
+  poll?: ReactNode;
   readerStyle?: MarkdownContentStyle;
 };
 
@@ -22,6 +23,7 @@ type MarkdownBlock =
   | { type: "unordered-list"; items: string[] }
   | { type: "ordered-list"; items: string[] }
   | { type: "image"; alt: string; src: string }
+  | { type: "poll" }
   | { type: "rule" };
 
 type HeadingBlock = Extract<MarkdownBlock, { type: "heading" }>;
@@ -88,6 +90,13 @@ function renderInlineMarkdown(text: string) {
 
     return part;
   });
+}
+
+function collapseDuplicateRules(blocks: MarkdownBlock[]) {
+  return blocks.filter(
+    (block, index) =>
+      block.type !== "rule" || blocks[index - 1]?.type !== "rule",
+  );
 }
 
 function parseMarkdown(content: string): MarkdownBlock[] {
@@ -163,6 +172,12 @@ function parseMarkdown(content: string): MarkdownBlock[] {
       continue;
     }
 
+    if (trimmed === "{{blogPoll}}") {
+      flushAll();
+      blocks.push({ type: "poll" });
+      continue;
+    }
+
     if (/^-{3,}$/.test(trimmed)) {
       flushAll();
       blocks.push({ type: "rule" });
@@ -211,7 +226,7 @@ function parseMarkdown(content: string): MarkdownBlock[] {
   }
 
   flushAll();
-  return blocks;
+  return collapseDuplicateRules(blocks);
 }
 
 function StickyBackLink({ href, label }: { href: string; label: string }) {
@@ -358,6 +373,7 @@ export function MarkdownContent({
   stickyBackHref,
   stickyBackLabel,
   afterFirstRule,
+  poll,
   readerStyle = "normal",
 }: MarkdownContentProps) {
   const isNovel = readerStyle === "novel";
@@ -432,6 +448,10 @@ export function MarkdownContent({
         {blocks.map((block, index) => {
           if (block.type === "heading") {
             return <Heading key={index} {...block} readerStyle={readerStyle} />;
+          }
+
+          if (block.type === "poll") {
+            return poll ? <div key={index}>{poll}</div> : null;
           }
 
           if (block.type === "rule") {
