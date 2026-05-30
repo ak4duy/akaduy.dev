@@ -263,23 +263,23 @@ function TableOfContents({
     <nav
       className={
         variant === "sticky-note"
-          ? "max-h-[calc(100vh-12rem)] overflow-y-auto rounded-2xl border border-border/80 bg-background/85 p-4 text-sm shadow-xl shadow-black/10 backdrop-blur"
-          : "rounded-2xl border border-border/80 bg-muted/20 p-4 text-sm"
+          ? "max-h-[calc(100vh-12rem)] overflow-y-auto overflow-x-hidden rounded-2xl border border-border/80 bg-background/85 p-4 text-sm shadow-xl shadow-black/10 backdrop-blur"
+          : "overflow-x-hidden rounded-2xl border border-border/80 bg-muted/20 p-4 text-sm"
       }
       aria-label="Table of contents"
     >
       <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
         {label}
       </p>
-      <ol className="space-y-2">
+      <ol className="m-0 space-y-2 p-0">
         {headings.map((heading) => (
           <li
             key={heading.id}
-            className={heading.level > 1 ? "ml-4" : undefined}
+            className={`min-w-0 ${heading.level > 1 ? "pl-4" : ""}`}
           >
             <a
               href={`#${heading.id}`}
-              className={`line-block truncate transition-colors hover:text-foreground ${
+              className={`block min-w-0 whitespace-normal wrap-anywhere transition-colors hover:text-foreground ${
                 activeHeadingId === heading.id
                   ? "font-medium text-foreground"
                   : "text-muted-foreground"
