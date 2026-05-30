@@ -2,7 +2,7 @@
 title: "Đất Mềm"
 date: "31-05-2026"
 style: novel
-excerpt: "Đôi lời giới thiệu về trang web này và những điều mình muốn viết ở đây."
+excerpt: "Không phải chuyện gì phủ thêm ánh vàng cũng thành hoàng hôn."
 tags:
   - Truyện ngắn
   - Tuổi trẻ
