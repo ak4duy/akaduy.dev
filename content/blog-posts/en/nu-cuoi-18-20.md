@@ -367,7 +367,7 @@ Minh was no longer smiling.
 
 He looked at me with an expression I had never seen on him before. Not angry. Not afraid. Only sad, as if he had known what I would do before I did it.
 
-“I just want to open it,” he said.
+“I just want to open it", he said.
 
 I heard my own voice answer, very strange, very low.
 
@@ -435,7 +435,7 @@ Cold.
 
 The thumb of that hand gently rubbed the scar on my hand, as if checking an old mark.
 
-“I was not the one who kept the box,” Minh said. “It was you.”
+“I was not the one who kept the box", Minh said. “It was you.”
 
 I wanted to say no.
 
@@ -551,7 +551,7 @@ But my mouth was still smiling.
 
 Minh placed a finger over his lips, as if soothing a child who had cried too long.
 
-“Do not be scared,” he said. “Every summer, someone gets a break.”
+“Do not be scared", he said. “Every summer, someone gets a break.”
 
 The next morning, they found me dead in my rented room.
 
