@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 
 type MarkdownContentStyle = "normal" | "novel";
@@ -14,6 +14,7 @@ type MarkdownContentProps = {
   afterFirstRule?: ReactNode;
   poll?: ReactNode;
   readerStyle?: MarkdownContentStyle;
+  onStickyContentsChangeAction?: (visible: boolean) => void;
 };
 
 type MarkdownBlock =
@@ -278,7 +279,7 @@ function TableOfContents({
           >
             <a
               href={`#${heading.id}`}
-              className={`block truncate transition-colors hover:text-foreground ${
+              className={`line-block truncate transition-colors hover:text-foreground ${
                 activeHeadingId === heading.id
                   ? "font-medium text-foreground"
                   : "text-muted-foreground"
@@ -375,14 +376,17 @@ export function MarkdownContent({
   afterFirstRule,
   poll,
   readerStyle = "normal",
+  onStickyContentsChangeAction,
 }: MarkdownContentProps) {
   const isNovel = readerStyle === "novel";
   const [showStickyContents, setShowStickyContents] = useState(false);
   const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
   const contentsRef = useRef<HTMLDivElement | null>(null);
-  const blocks = parseMarkdown(content);
-  const headings = blocks.filter(
-    (block): block is HeadingBlock => block.type === "heading",
+  const blocks = useMemo(() => parseMarkdown(content), [content]);
+  const headings = useMemo(
+    () =>
+      blocks.filter((block): block is HeadingBlock => block.type === "heading"),
+    [blocks],
   );
 
   useEffect(() => {
@@ -396,6 +400,7 @@ export function MarkdownContent({
       const shouldShowStickyContents =
         contents.getBoundingClientRect().bottom <= 0;
       setShowStickyContents(shouldShowStickyContents);
+      onStickyContentsChangeAction?.(shouldShowStickyContents);
 
       const activeHeading = headings
         .map((heading) => document.getElementById(heading.id))
@@ -411,10 +416,11 @@ export function MarkdownContent({
     window.addEventListener("resize", updateStickyContents);
 
     return () => {
+      onStickyContentsChangeAction?.(false);
       window.removeEventListener("scroll", updateStickyContents);
       window.removeEventListener("resize", updateStickyContents);
     };
-  }, [headings]);
+  }, [headings, onStickyContentsChangeAction]);
 
   return (
     <div

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowUp } from "lucide-react";
 import { BlogPoll } from "@/components/blog-poll";
 import { LanguageToggle } from "@/components/language-toggle";
@@ -63,6 +63,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
   const [readingProgress, setReadingProgress] = useState(0);
   const [readerTheme, setReaderTheme] = useState<ReaderTheme>("dark");
   const [isThemeChanging, setIsThemeChanging] = useState(false);
+  const [showStickyContents, setShowStickyContents] = useState(false);
 
   useEffect(() => {
     if (language !== initialLanguage) {
@@ -80,6 +81,10 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
     ) {
       setReaderTheme(savedReaderTheme);
     }
+  }, []);
+
+  const handleStickyContentsChange = useCallback((visible: boolean) => {
+    setShowStickyContents(visible);
   }, []);
 
   const handleReaderThemeChange = (nextTheme: ReaderTheme) => {
@@ -201,10 +206,10 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         aria-label="Back to top"
-        aria-hidden={readingProgress <= 0.08}
-        tabIndex={readingProgress > 0.08 ? 0 : -1}
+        aria-hidden={!showStickyContents}
+        tabIndex={showStickyContents ? 0 : -1}
         className={`fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-50 flex h-10 w-10 items-center justify-center rounded-xl border reader-border bg-[color-mix(in_oklch,var(--reader-background)_85%,transparent)] reader-muted shadow-xl shadow-black/10 backdrop-blur transition-all duration-200 ease-out hover:bg-(--reader-card) hover:reader-text active:scale-95 sm:bottom-6 sm:right-6 sm:h-11 sm:w-11 sm:hover:-translate-y-0.5 ${
-          readingProgress > 0.08
+          showStickyContents
             ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
             : "pointer-events-none translate-y-3 scale-75 opacity-0"
         }`}
@@ -284,6 +289,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
             poll={pollNode}
             readerStyle={post.style}
             afterFirstRule={!hasInlinePoll ? pollNode : null}
+            onStickyContentsChangeAction={handleStickyContentsChange}
           />
         </div>
 
