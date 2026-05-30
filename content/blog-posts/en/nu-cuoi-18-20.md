@@ -516,9 +516,9 @@ On the paper was my handwriting.
 
 “Minh knew.”
 
-Only three words.
+Only two words.
 
-Three words were enough to make everything in my head collapse.
+two words were enough to make everything in my head collapse.
 
 I remembered Minh’s voice in the alley.
 
