@@ -1,6 +1,7 @@
 ---
 title: "Ký Túc Xá"
 date: "27-05-2026"
+style: novel
 excerpt: "Một câu truyện ngắn về Ký Túc Xá."
 tags:
   - Truyện ngắn

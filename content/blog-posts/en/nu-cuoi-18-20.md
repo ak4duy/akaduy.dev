@@ -1,6 +1,7 @@
 ---
 title: "Smile of 18 20"
 date: "29-05-2026"
+style: novel
 excerpt: "Is youth really the most beautiful thing, if there are summers we only want to forget?"
 tags:
   - Short story

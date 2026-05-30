@@ -160,6 +160,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
 
   const progressPercent = Math.round(readingProgress * 100);
   const readingTimeMinutes = getReadingTimeMinutes(post.content);
+  const isNovelStyle = post.style === "novel";
 
   return (
     <main
@@ -195,7 +196,9 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
 
       <article
         ref={readingRootRef}
-        className="relative mx-auto max-w-3xl px-6 py-16 page-enter"
+        className={`relative mx-auto px-6 py-16 page-enter ${
+          isNovelStyle ? "max-w-184" : "max-w-3xl"
+        }`}
       >
         <header className="mb-10">
           <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
@@ -221,7 +224,11 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
             </div>
           </div>
 
-          <h1 className="text-4xl font-bold tracking-tight reader-text">
+          <h1
+            className={`font-bold tracking-tight reader-text ${
+              isNovelStyle ? "text-center text-4xl sm:text-5xl" : "text-4xl"
+            }`}
+          >
             {post.title}
           </h1>
           <div className="mt-4 flex flex-wrap items-center gap-3 text-xs reader-muted">
@@ -244,12 +251,19 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
           <div className="mt-4 h-px bg-linear-to-r from-transparent via-(--reader-border) to-transparent" />
         </header>
 
-        <div className="rounded-2xl border reader-card p-6 shadow-2xl shadow-black/15 ring-1 ring-[color-mix(in_oklch,var(--reader-foreground)_8%,transparent)] tab-enter sm:p-8">
+        <div
+          className={
+            isNovelStyle
+              ? "tab-enter"
+              : "rounded-2xl border reader-card p-6 shadow-2xl shadow-black/15 ring-1 ring-[color-mix(in_oklch,var(--reader-foreground)_8%,transparent)] tab-enter sm:p-8"
+          }
+        >
           <MarkdownContent
             content={post.content}
             contentsLabel={t.blog.contents}
             stickyBackHref={`${localePrefix}/blog`}
             stickyBackLabel={t.nav.blog}
+            readerStyle={post.style}
             afterFirstRule={
               post.poll ? (
                 <BlogPoll

@@ -1,6 +1,7 @@
 ---
 title: "Dormitory"
 date: "27-05-2026"
+style: novel
 excerpt: "A short story about the Dormitory."
 tags:
   - Short story

@@ -4,12 +4,15 @@ import Link from "next/link";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 
+type MarkdownContentStyle = "normal" | "novel";
+
 type MarkdownContentProps = {
   content: string;
   contentsLabel?: string;
   stickyBackHref?: string;
   stickyBackLabel?: string;
   afterFirstRule?: ReactNode;
+  readerStyle?: MarkdownContentStyle;
 };
 
 type MarkdownBlock =
@@ -276,26 +279,48 @@ function TableOfContents({
   );
 }
 
-function Heading({ level, text, id }: HeadingBlock) {
+function Heading({
+  level,
+  text,
+  id,
+  readerStyle = "normal",
+}: HeadingBlock & { readerStyle?: MarkdownContentStyle }) {
+  const isNovel = readerStyle === "novel";
   const content = renderInlineMarkdown(text);
   const anchor = (
     <a
       href={`#${id}`}
       aria-label={`Link to ${text}`}
-      className="absolute -left-6 text-muted-foreground/50 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
+      className={`absolute text-muted-foreground/50 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 ${
+        isNovel ? "right-full top-1/2 mr-2 -translate-y-1/2" : "-left-6"
+      }`}
     >
       #
     </a>
+  );
+  const headingContent = isNovel ? (
+    <span className="relative inline-block">
+      {anchor}
+      {content}
+    </span>
+  ) : (
+    <>
+      {anchor}
+      {content}
+    </>
   );
 
   if (level === 1) {
     return (
       <h2
         id={id}
-        className="group relative scroll-mt-24 mt-10 border-b border-border/70 pb-3 text-2xl font-bold tracking-tight text-foreground first:mt-0 sm:text-3xl"
+        className={`group relative scroll-mt-24 border-b border-border/70 pb-3 font-bold tracking-tight text-foreground first:mt-0 ${
+          isNovel
+            ? "mt-14 text-center text-3xl sm:text-4xl"
+            : "mt-10 text-2xl sm:text-3xl"
+        }`}
       >
-        {anchor}
-        {content}
+        {headingContent}
       </h2>
     );
   }
@@ -304,10 +329,13 @@ function Heading({ level, text, id }: HeadingBlock) {
     return (
       <h3
         id={id}
-        className="group relative scroll-mt-24 mt-8 text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
+        className={`group relative scroll-mt-24 font-semibold tracking-tight text-foreground ${
+          isNovel
+            ? "mt-12 text-center text-2xl sm:text-3xl"
+            : "mt-8 text-xl sm:text-2xl"
+        }`}
       >
-        {anchor}
-        {content}
+        {headingContent}
       </h3>
     );
   }
@@ -315,10 +343,11 @@ function Heading({ level, text, id }: HeadingBlock) {
   return (
     <h4
       id={id}
-      className="group relative scroll-mt-24 mt-6 text-lg font-semibold tracking-tight text-foreground"
+      className={`group relative scroll-mt-24 font-semibold tracking-tight text-foreground ${
+        isNovel ? "mt-10 text-center text-xl" : "mt-6 text-lg"
+      }`}
     >
-      {anchor}
-      {content}
+      {headingContent}
     </h4>
   );
 }
@@ -329,7 +358,9 @@ export function MarkdownContent({
   stickyBackHref,
   stickyBackLabel,
   afterFirstRule,
+  readerStyle = "normal",
 }: MarkdownContentProps) {
+  const isNovel = readerStyle === "novel";
   const [showStickyContents, setShowStickyContents] = useState(false);
   const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
   const contentsRef = useRef<HTMLDivElement | null>(null);
@@ -370,7 +401,13 @@ export function MarkdownContent({
   }, [headings]);
 
   return (
-    <div className="relative text-[15px] leading-8 text-foreground/95 sm:text-base">
+    <div
+      className={`relative text-foreground/95 ${
+        isNovel
+          ? "text-[17px] leading-9 tracking-[0.005em] sm:text-[18px] sm:leading-10"
+          : "text-[15px] leading-8 sm:text-base"
+      }`}
+    >
       {showStickyContents && (
         <div className="sticky top-28 -ml-96 z-40 hidden w-56 animate-in fade-in slide-in-from-left-2 duration-300 xl:block 2xl:left-[max(2rem,calc((100vw-48rem)/2-18rem))] 2xl:w-64">
           {stickyBackHref && stickyBackLabel && (
@@ -394,7 +431,7 @@ export function MarkdownContent({
       <div className="min-w-0 space-y-4">
         {blocks.map((block, index) => {
           if (block.type === "heading") {
-            return <Heading key={index} {...block} />;
+            return <Heading key={index} {...block} readerStyle={readerStyle} />;
           }
 
           if (block.type === "rule") {
@@ -482,9 +519,11 @@ export function MarkdownContent({
             <p
               key={index}
               className={
-                index === 0
-                  ? "text-lg leading-9 text-foreground"
-                  : "text-foreground/95"
+                isNovel
+                  ? "text-foreground/95 first-letter:pl-0 sm:text-justify"
+                  : index === 0
+                    ? "text-lg leading-9 text-foreground"
+                    : "text-foreground/95"
               }
             >
               {block.lines.map((line, lineIndex) => (

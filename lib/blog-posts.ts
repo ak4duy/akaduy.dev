@@ -15,6 +15,8 @@ export type BlogPoll = {
   options: BlogPollOption[];
 };
 
+export type BlogPostStyle = "normal" | "novel";
+
 export type BlogPost = {
   slug: string;
   title: string;
@@ -23,6 +25,7 @@ export type BlogPost = {
   excerpt: string;
   content: string;
   draft: boolean;
+  style: BlogPostStyle;
   poll: BlogPoll | null;
 };
 
@@ -124,6 +127,10 @@ function createBlogPoll(
   };
 }
 
+function normalizeBlogPostStyle(value: unknown): BlogPostStyle {
+  return value === "novel" ? "novel" : "normal";
+}
+
 function createExcerpt(content: string) {
   return (
     content
@@ -146,6 +153,7 @@ export function getBlogPost(language: Language, slug: string): BlogPost {
     excerpt: String(frontmatter.excerpt ?? createExcerpt(content)),
     content,
     draft: frontmatter.draft === true,
+    style: normalizeBlogPostStyle(frontmatter.style),
     poll: createBlogPoll(slug, frontmatter),
   };
 }

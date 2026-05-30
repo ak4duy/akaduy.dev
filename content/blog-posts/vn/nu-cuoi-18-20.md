@@ -1,6 +1,7 @@
 ---
 title: "Nụ Cười 18 20"
 date: "29-05-2026"
+style: novel
 excerpt: "Liệu tuổi thanh xuân có thật là điều đẹp nhất, nếu có những mùa hè ta chỉ muốn quên đi?"
 tags:
   - Truyện ngắn
