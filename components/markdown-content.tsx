@@ -391,7 +391,7 @@ export function MarkdownContent({
         <TableOfContents headings={headings} label={contentsLabel} />
       </div>
 
-      <div className="min-w-0 space-y-6">
+      <div className="min-w-0 space-y-4">
         {blocks.map((block, index) => {
           if (block.type === "heading") {
             return <Heading key={index} {...block} />;
