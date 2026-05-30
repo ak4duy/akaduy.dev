@@ -24,6 +24,23 @@ const readerThemes: Array<{ value: ReaderTheme; label: string }> = [
   { value: "light", label: "Light" },
 ];
 
+const READING_POSITION_STORAGE_PREFIX = "blog-reading-position";
+const COMPLETED_READING_THRESHOLD = 0.95;
+
+function getReadingPositionStorageKey(language: Language, slug: string) {
+  return `${READING_POSITION_STORAGE_PREFIX}:${language.toLowerCase()}:${slug}`;
+}
+
+function getStoredReadingPosition(storageKey: string) {
+  const value = Number(window.localStorage.getItem(storageKey));
+
+  return Number.isFinite(value) &&
+    value > 0 &&
+    value < COMPLETED_READING_THRESHOLD
+    ? value
+    : null;
+}
+
 // based on 200 wpm
 function getReadingTimeMinutes(content: string) {
   const words = content
@@ -134,24 +151,73 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
       return;
     }
 
-    const updateScrollState = () => {
+    const storageKey = getReadingPositionStorageKey(initialLanguage, post.slug);
+    let hasRestoredReadingPosition = false;
+    let restoreFrame: number | null = null;
+    let lastSavedPosition = getStoredReadingPosition(storageKey) ?? 0;
+
+    const getReadingMetrics = () => {
       const rect = root.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
+      const articleTop = window.scrollY + rect.top;
       const scrollableDistance = Math.max(rect.height - viewportHeight, 1);
       const progressed = (0 - rect.top) / scrollableDistance;
       const clamped = Math.min(1, Math.max(0, progressed));
-      setReadingProgress(clamped);
+
+      return { articleTop, clamped, scrollableDistance };
     };
 
-    updateScrollState();
+    const saveReadingPosition = (position: number) => {
+      if (position >= COMPLETED_READING_THRESHOLD) {
+        window.localStorage.removeItem(storageKey);
+        lastSavedPosition = 0;
+        return;
+      }
+
+      if (Math.abs(position - lastSavedPosition) < 0.01) {
+        return;
+      }
+
+      window.localStorage.setItem(storageKey, position.toFixed(4));
+      lastSavedPosition = position;
+    };
+
+    const updateScrollState = () => {
+      const { clamped } = getReadingMetrics();
+      setReadingProgress(clamped);
+
+      if (hasRestoredReadingPosition) {
+        saveReadingPosition(clamped);
+      }
+    };
+
+    restoreFrame = requestAnimationFrame(() => {
+      const savedPosition = getStoredReadingPosition(storageKey);
+
+      if (savedPosition !== null) {
+        const { articleTop, scrollableDistance } = getReadingMetrics();
+        window.scrollTo({
+          top: articleTop + savedPosition * scrollableDistance,
+          behavior: "auto",
+        });
+      }
+
+      hasRestoredReadingPosition = true;
+      updateScrollState();
+    });
+
     window.addEventListener("scroll", updateScrollState, { passive: true });
     window.addEventListener("resize", updateScrollState);
 
     return () => {
+      if (restoreFrame !== null) {
+        cancelAnimationFrame(restoreFrame);
+      }
+
       window.removeEventListener("scroll", updateScrollState);
       window.removeEventListener("resize", updateScrollState);
     };
-  }, [post.slug]);
+  }, [initialLanguage, post.slug]);
 
   if (!post) {
     return (
