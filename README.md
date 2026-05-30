@@ -62,5 +62,6 @@ lib/i18n/vn.ts
 
 ## License
 
-- Code: [MIT](https://choosealicense.com/licenses/mit/)
-- Blog posts, personal writing, images, and branding are © ak4duy. All rights reserved unless stated otherwise.
+- Code: [GNU GPLv3 or later](./LICENSE)
+- Blog posts and personal writing: [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+- Images and branding are © ak4duy. All rights reserved unless stated otherwise.

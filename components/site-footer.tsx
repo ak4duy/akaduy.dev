@@ -46,6 +46,17 @@ export function SiteFooter({ tagline, privacyHref }: SiteFooterProps) {
         </a>
       </div>
       <p className="mt-3 text-xs text-muted-foreground/70">© 2026 ak4duy</p>
+      <p className="mt-2 text-[11px] text-muted-foreground/55">
+        Writing licensed under{" "}
+        <a
+          href="https://creativecommons.org/licenses/by-nc-nd/4.0/"
+          target="_blank"
+          rel="noopener noreferrer license"
+          className="underline decoration-muted-foreground/25 underline-offset-4 transition-colors hover:text-muted-foreground hover:decoration-muted-foreground/60"
+        >
+          CC BY-NC-ND 4.0
+        </a>
+      </p>
     </footer>
   );
 }
