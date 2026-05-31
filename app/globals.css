@@ -177,16 +177,14 @@
 
     .reader-bg {
         background-color: var(--reader-background);
-        background-image: var(--reader-background-image, none);
-        background-position: center;
-        background-size: cover;
-        background-attachment: scroll;
     }
 
-    @media (min-width: 768px) and (hover: hover) and (pointer: fine) {
-        .reader-bg {
-            background-attachment: fixed;
-        }
+    .reader-background-layer {
+        background-image: var(--reader-background-image, none);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        transform: translateZ(0);
     }
 
     .reader-text {
@@ -219,8 +217,8 @@
         background-color: var(--reader-background);
         background-image: var(--reader-background-image, none);
         background-position: center;
+        background-repeat: no-repeat;
         background-size: cover;
-        background-attachment: scroll;
         animation: reader-theme-changing 320ms ease-out both;
     }
 

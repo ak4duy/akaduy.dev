@@ -257,7 +257,8 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
         isThemeChanging ? "reader-theme-changing" : ""
       }`}
     >
-      <div className="fixed inset-0 bg-linear-to-br from-transparent via-transparent to-[color-mix(in_oklch,var(--reader-accent)_55%,transparent)] pointer-events-none" />
+      <div className="fixed inset-0 z-0 reader-background-layer pointer-events-none" />
+      <div className="fixed inset-0 z-0 bg-linear-to-br from-transparent via-transparent to-[color-mix(in_oklch,var(--reader-accent)_55%,transparent)] pointer-events-none" />
       <div className="fixed inset-x-0 top-0 z-50 h-0.5 reader-accent-bg">
         <div
           className="h-full bg-(--reader-foreground) transition-[width] duration-100"
@@ -285,7 +286,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
 
       <article
         ref={readingRootRef}
-        className={`relative mx-auto px-6 py-16 page-enter ${
+        className={`relative z-10 mx-auto px-6 py-16 page-enter ${
           isNovelStyle ? "max-w-184" : "max-w-3xl"
         }`}
       >
