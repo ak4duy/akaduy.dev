@@ -126,6 +126,49 @@ function isActiveHeartbeat(heartbeatTime) {
   return ageMs >= 0 && ageMs <= ACTIVE_HEARTBEAT_WINDOW_MS;
 }
 
+function normalizeEntity(payload) {
+  const data = getPayloadData(payload);
+
+  const candidates = [
+    data?.entity,
+    data?.file,
+    data?.file_path,
+    data?.filePath,
+    data?.path,
+    data?.heartbeat?.entity,
+    data?.heartbeat?.file,
+    data?.heartbeat?.file_path,
+    data?.heartbeat?.filePath,
+    data?.heartbeat?.path,
+    data?.latest_heartbeat?.entity,
+    data?.latest_heartbeat?.file,
+    data?.latest_heartbeat?.file_path,
+    data?.latest_heartbeat?.filePath,
+    data?.latest_heartbeat?.path,
+    data?.current?.entity,
+    data?.current?.file,
+    data?.current?.file_path,
+    data?.current?.filePath,
+    data?.current?.path,
+  ];
+
+  const entity = candidates.find(
+    (candidate) => typeof candidate === "string" && candidate.trim().length > 0,
+  );
+
+  if (!entity) {
+    return null;
+  }
+
+  return (
+    entity
+      .trim()
+      .split(/[\\/]+/)
+      .filter(Boolean)
+      .pop() ?? entity.trim()
+  );
+}
+
 function normalizeRepoUrl(payload) {
   const data = getPayloadData(payload);
 
@@ -323,14 +366,20 @@ export default {
       const heartbeatTime = normalizeHeartbeatTime(payload);
       const active = isActiveHeartbeat(heartbeatTime);
       const project = active ? normalizeProjectName(payload) : null;
+      const entity = active ? normalizeEntity(payload) : null;
       const repoUrl = project
         ? (normalizeRepoUrl(payload) ?? (await fetchGithubRepoUrl(project)))
+        : null;
+      const projectLabel = project
+        ? `${project}${entity ? ` (${entity})` : ""}`
         : null;
 
       return json({
         project,
         repoUrl,
-        text: project ? `currently working on ${project}` : null,
+        entity,
+        projectLabel,
+        text: projectLabel ? `currently working on ${projectLabel}` : null,
         active,
         lastHeartbeatAt: heartbeatTime?.toISOString() ?? null,
       });
@@ -339,6 +388,8 @@ export default {
         {
           project: null,
           repoUrl: null,
+          entity: null,
+          projectLabel: null,
           text: null,
           active: false,
           lastHeartbeatAt: null,

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 type HackatimeStatus = {
   project: string | null;
   repoUrl: string | null;
+  entity: string | null;
   text: string | null;
 };
 
@@ -105,6 +106,11 @@ export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
         </a>
       ) : (
         <span className="font-semibold text-foreground">{status.project}</span>
+      )}
+      {status.entity && (
+        <span className="max-w-40 truncate font-mono text-[0.7rem] text-muted-foreground/80 sm:max-w-56">
+          ({status.entity})
+        </span>
       )}
     </span>
   );
