@@ -6,7 +6,7 @@ excerpt: "Không phải chuyện gì phủ thêm ánh vàng cũng thành hoàng 
 tags:
   - Truyện ngắn
   - Tuổi trẻ
-  - Thanh xuân
+  - Phi lý
 ---
 
 # Chương 1: Một Tấm Ảnh Thiếu Người Chụp
@@ -245,7 +245,7 @@ Bảo đặt điện thoại úp xuống. “Tao hỏi thật. Tới giờ mày 
 
 Bảo nhìn tôi một lúc, rồi bật cười. Tiếng cười rất ngắn, không giống cười. Kiệt cúi mặt. Ngoài hẻm, một chiếc xe máy chạy ngang, tiếng pô dội vào tường rồi tắt.
 
-“Mày hay thật,” cậu nói. “Lúc nào cũng nói như đang ghi biên bản. Đất mềm, trượt chân, cứu hộ tới trễ, rồi chết. Hết. Nghe gọn ghê ha.”
+“Mày hay thật”, cậu nói. “Lúc nào cũng nói như đang ghi biên bản. Đất mềm, trượt chân, cứu hộ tới trễ, rồi chết. Hết. Nghe gọn ghê ha.”
 
 Tôi thấy cổ mình nóng lên.
 

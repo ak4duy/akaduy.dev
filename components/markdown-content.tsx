@@ -56,14 +56,33 @@ function findSingleMarkerClose(text: string, marker: "*" | "_", start: number) {
   return -1;
 }
 
+function smartenDoubleQuotes(text: string, startsOpen: boolean) {
+  let nextQuoteIsOpen = startsOpen;
+  let smartText = "";
+
+  for (const character of text) {
+    if (character === '"') {
+      smartText += nextQuoteIsOpen ? "“" : "”";
+      nextQuoteIsOpen = !nextQuoteIsOpen;
+    } else {
+      smartText += character;
+    }
+  }
+
+  return { text: smartText, nextQuoteIsOpen };
+}
+
 function renderInlineMarkdown(text: string, keyPrefix = "inline"): ReactNode[] {
   const nodes: ReactNode[] = [];
   let index = 0;
   let textBuffer = "";
+  let nextQuoteIsOpen = true;
 
   const flushText = () => {
     if (textBuffer) {
-      nodes.push(textBuffer);
+      const smartText = smartenDoubleQuotes(textBuffer, nextQuoteIsOpen);
+      nodes.push(smartText.text);
+      nextQuoteIsOpen = smartText.nextQuoteIsOpen;
       textBuffer = "";
     }
   };
