@@ -40,57 +40,164 @@ function slugify(text: string) {
     .replace(/\s+/g, "-");
 }
 
-function renderInlineMarkdown(text: string) {
-  const parts = text.split(
-    /(\[[^\]]+\]\([^)]+\)|`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g,
-  );
+function findSingleMarkerClose(text: string, marker: "*" | "_", start: number) {
+  for (let index = start + 1; index < text.length; index++) {
+    if (text[index] !== marker) {
+      continue;
+    }
 
-  return parts.map((part, index) => {
-    const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (text[index - 1] === marker || text[index + 1] === marker) {
+      continue;
+    }
+
+    return index;
+  }
+
+  return -1;
+}
+
+function renderInlineMarkdown(text: string, keyPrefix = "inline"): ReactNode[] {
+  const nodes: ReactNode[] = [];
+  let index = 0;
+  let textBuffer = "";
+
+  const flushText = () => {
+    if (textBuffer) {
+      nodes.push(textBuffer);
+      textBuffer = "";
+    }
+  };
+
+  const pushNode = (node: ReactNode) => {
+    flushText();
+    nodes.push(node);
+  };
+
+  while (index < text.length) {
+    const rest = text.slice(index);
+    const link = rest.match(/^\[([^\]]+)\]\(([^)]+)\)/);
 
     if (link) {
-      return (
+      const href = link[2];
+      pushNode(
         <a
-          key={index}
-          href={link[2]}
-          target={link[2].startsWith("http") ? "_blank" : undefined}
-          rel={link[2].startsWith("http") ? "noopener noreferrer" : undefined}
+          key={`${keyPrefix}-link-${index}`}
+          href={href}
+          target={href.startsWith("http") ? "_blank" : undefined}
+          rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
           className="font-medium text-foreground underline decoration-muted-foreground/40 underline-offset-4 transition-colors hover:decoration-foreground"
         >
-          {link[1]}
-        </a>
+          {renderInlineMarkdown(link[1], `${keyPrefix}-link-${index}`)}
+        </a>,
       );
+      index += link[0].length;
+      continue;
     }
 
-    if (part.startsWith("**") && part.endsWith("**")) {
-      return (
-        <strong key={index} className="font-semibold text-foreground">
-          {part.slice(2, -2)}
-        </strong>
-      );
+    if (text[index] === "`") {
+      const endIndex = text.indexOf("`", index + 1);
+
+      if (endIndex !== -1) {
+        pushNode(
+          <code
+            key={`${keyPrefix}-code-${index}`}
+            className="rounded-md border border-border bg-muted/70 px-1.5 py-0.5 font-mono text-[0.9em] text-foreground"
+          >
+            {text.slice(index + 1, endIndex)}
+          </code>,
+        );
+        index = endIndex + 1;
+        continue;
+      }
     }
 
-    if (part.startsWith("*") && part.endsWith("*")) {
-      return (
-        <em key={index} className="italic text-foreground/95">
-          {part.slice(1, -1)}
-        </em>
-      );
+    const tripleMarker = text.startsWith("***", index)
+      ? "***"
+      : text.startsWith("___", index)
+        ? "___"
+        : null;
+
+    if (tripleMarker) {
+      const endIndex = text.indexOf(tripleMarker, index + 3);
+
+      if (endIndex !== -1) {
+        pushNode(
+          <strong
+            key={`${keyPrefix}-strong-em-${index}`}
+            className="font-semibold text-foreground"
+          >
+            <em className="italic">
+              {renderInlineMarkdown(
+                text.slice(index + 3, endIndex),
+                `${keyPrefix}-strong-em-${index}`,
+              )}
+            </em>
+          </strong>,
+        );
+        index = endIndex + 3;
+        continue;
+      }
     }
 
-    if (part.startsWith("`") && part.endsWith("`")) {
-      return (
-        <code
-          key={index}
-          className="rounded-md border border-border bg-muted/70 px-1.5 py-0.5 font-mono text-[0.9em] text-foreground"
-        >
-          {part.slice(1, -1)}
-        </code>
-      );
+    const doubleMarker = text.startsWith("**", index)
+      ? "**"
+      : text.startsWith("__", index)
+        ? "__"
+        : null;
+
+    if (doubleMarker) {
+      const endIndex = text.indexOf(doubleMarker, index + 2);
+
+      if (endIndex !== -1) {
+        pushNode(
+          <strong
+            key={`${keyPrefix}-strong-${index}`}
+            className="font-semibold text-foreground"
+          >
+            {renderInlineMarkdown(
+              text.slice(index + 2, endIndex),
+              `${keyPrefix}-strong-${index}`,
+            )}
+          </strong>,
+        );
+        index = endIndex + 2;
+        continue;
+      }
     }
 
-    return part;
-  });
+    const singleMarker: "*" | "_" | null =
+      text[index] === "*" ? "*" : text[index] === "_" ? "_" : null;
+
+    if (
+      singleMarker &&
+      text[index + 1] !== singleMarker &&
+      text[index - 1] !== singleMarker
+    ) {
+      const endIndex = findSingleMarkerClose(text, singleMarker, index);
+
+      if (endIndex !== -1) {
+        pushNode(
+          <em
+            key={`${keyPrefix}-em-${index}`}
+            className="italic text-foreground/95"
+          >
+            {renderInlineMarkdown(
+              text.slice(index + 1, endIndex),
+              `${keyPrefix}-em-${index}`,
+            )}
+          </em>,
+        );
+        index = endIndex + 1;
+        continue;
+      }
+    }
+
+    textBuffer += text[index];
+    index++;
+  }
+
+  flushText();
+  return nodes;
 }
 
 function collapseDuplicateRules(blocks: MarkdownBlock[]) {
