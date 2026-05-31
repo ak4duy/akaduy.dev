@@ -491,3 +491,5 @@ pollOptions:
 ---
 
 ![](https://media.newyorker.com/photos/5909675d019dfc3494ea0dd0/master/pass/120409_r22060_g2048.jpg)
+
+*Truyện được lấy cảm hứng từ Albert Camus và chủ nghĩa phi lý, nơi con người không tìm thấy ý nghĩa có sẵn trong thế giới, nhưng vẫn phải tiếp tục sống giữa sự im lặng đó. **Đất Mềm** không viết về một cái chết đẹp, mà về nhu cầu con người của chúng ta: biến mất mát thành điều gì đó dễ nhìn hơn, dù đôi khi sự thật chỉ cần được nhớ đúng như nó đã xảy ra. Trong đất mềm ấy, người ta vẫn phải tiếp tục sống.*
