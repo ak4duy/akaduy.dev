@@ -138,6 +138,7 @@
     .reader-theme-sepia {
         --reader-background: oklch(0.91 0.034 82);
         --reader-background-image: url("/blog-content-theme/paper.png");
+        --reader-background-position: top left;
         --reader-foreground: oklch(0.29 0.036 62);
         --reader-muted: oklch(0.48 0.035 62);
         --reader-card: oklch(0.96 0.026 86);
@@ -148,6 +149,7 @@
     .reader-theme-light {
         --reader-background: white;
         --reader-background-image: url("/blog-content-theme/white-paper.png");
+        --reader-background-position: center;
         --reader-foreground: black;
         --reader-muted: rgba(0, 0, 0, 0.62);
         --reader-card: white;
@@ -181,7 +183,7 @@
 
     .reader-background-layer {
         background-image: var(--reader-background-image, none);
-        background-position: center;
+        background-position: var(--reader-background-position, center);
         background-repeat: no-repeat;
         background-size: cover;
         transform: translateZ(0);
@@ -216,7 +218,7 @@
         pointer-events: none;
         background-color: var(--reader-background);
         background-image: var(--reader-background-image, none);
-        background-position: center;
+        background-position: var(--reader-background-position, center);
         background-repeat: no-repeat;
         background-size: cover;
         animation: reader-theme-changing 320ms ease-out both;
