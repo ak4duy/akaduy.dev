@@ -168,6 +168,18 @@ function createExcerpt(content: string) {
   );
 }
 
+function getBlogPostDateTime(date: string) {
+  const match = date.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+
+  if (!match) {
+    return 0;
+  }
+
+  const [, day, month, year] = match;
+
+  return new Date(Number(year), Number(month) - 1, Number(day)).getTime();
+}
+
 export function getBlogPost(language: Language, slug: string): BlogPost {
   const filePath = join(getBlogPostDirectory(language), `${slug}.md`);
   const markdown = readFileSync(filePath, "utf8");
@@ -195,7 +207,7 @@ export function getBlogPosts(language: Language) {
     .filter((fileName) => fileName.endsWith(".md"))
     .map((fileName) => getBlogPost(language, basename(fileName, ".md")))
     .filter((post) => !post.draft)
-    .sort((a, b) => b.date.localeCompare(a.date));
+    .sort((a, b) => getBlogPostDateTime(b.date) - getBlogPostDateTime(a.date));
 }
 
 export function getBlogPageCount(language: Language) {

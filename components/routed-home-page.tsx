@@ -37,6 +37,54 @@ function normalizeSearchText(text: string) {
     .replace(/[\s-]+/g, " ");
 }
 
+function getBlogMonthKey(date: string) {
+  const match = date.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+
+  if (!match) {
+    return null;
+  }
+
+  const [, , month, year] = match;
+
+  return `${year}-${month}`;
+}
+
+function getCalendarMonthKey(date: Date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+    2,
+    "0",
+  )}`;
+}
+
+function formatBlogMonth(monthKey: string, language: Language) {
+  const [year, month] = monthKey.split("-").map(Number);
+
+  if (!year || !month) {
+    return monthKey;
+  }
+
+  return new Intl.DateTimeFormat(language === "VN" ? "vi-VN" : "en-US", {
+    month: "long",
+    year: "numeric",
+  }).format(new Date(year, month - 1));
+}
+
+function formatArchiveMonth(monthKey: string, language: Language) {
+  const [, month] = monthKey.split("-").map(Number);
+
+  if (!month) {
+    return monthKey;
+  }
+
+  if (language === "VN") {
+    return `THÁNG ${month}`;
+  }
+
+  return new Intl.DateTimeFormat("en-US", { month: "long" })
+    .format(new Date(2026, month - 1))
+    .toUpperCase();
+}
+
 export type TabValue = "about" | "experience" | "blog" | "contact";
 
 type RoutedHomePageProps = {
@@ -55,6 +103,9 @@ export function RoutedHomePage({
   const [currentTab, setCurrentTab] = useState<TabValue>(activeTab);
   const [blogSearch, setBlogSearch] = useState("");
   const [selectedBlogTag, setSelectedBlogTag] = useState<string | null>(null);
+  const [selectedBlogMonth, setSelectedBlogMonth] = useState<string | null>(
+    null,
+  );
   const [isTagFilterDesktop, setIsTagFilterDesktop] = useState(false);
   const [blogPage, setBlogPage] = useState(initialBlogPage);
   const [routeBlogPage, setRouteBlogPage] = useState(initialBlogPage);
@@ -77,7 +128,48 @@ export function RoutedHomePage({
   const blogTags = Array.from(
     new Set(blogPosts.flatMap((post) => post.tags)),
   ).sort((a, b) => a.localeCompare(b));
-  const hasBlogFilters = Boolean(normalizedBlogSearch || selectedBlogTag);
+  const blogMonthCounts = blogPosts.reduce((months, post) => {
+    const monthKey = getBlogMonthKey(post.date);
+
+    if (monthKey) {
+      months.set(monthKey, (months.get(monthKey) ?? 0) + 1);
+    }
+
+    return months;
+  }, new Map<string, number>());
+  const currentDate = new Date();
+  const currentMonthKey = getCalendarMonthKey(currentDate);
+  const lastMonthKey = getCalendarMonthKey(
+    new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1),
+  );
+  const monthlyWritingSummary = [
+    {
+      label: t.blog.thisMonth,
+      count: blogMonthCounts.get(currentMonthKey) ?? 0,
+    },
+    {
+      label: t.blog.lastMonth,
+      count: blogMonthCounts.get(lastMonthKey) ?? 0,
+    },
+  ];
+  const blogArchiveMonths = Array.from(blogMonthCounts).sort(([a], [b]) =>
+    b.localeCompare(a),
+  );
+  const blogArchiveYears = blogArchiveMonths.reduce(
+    (years, [monthKey, count]) => {
+      const [year] = monthKey.split("-");
+      const months = years.get(year) ?? [];
+
+      months.push([monthKey, count]);
+      years.set(year, months);
+
+      return years;
+    },
+    new Map<string, Array<[string, number]>>(),
+  );
+  const hasBlogFilters = Boolean(
+    normalizedBlogSearch || selectedBlogTag || selectedBlogMonth,
+  );
   const filteredBlogPosts = blogPosts.filter((post) => {
     const matchesSearch = normalizedBlogSearch
       ? normalizeSearchText(
@@ -87,8 +179,11 @@ export function RoutedHomePage({
     const matchesTag = selectedBlogTag
       ? post.tags.includes(selectedBlogTag)
       : true;
+    const matchesMonth = selectedBlogMonth
+      ? getBlogMonthKey(post.date) === selectedBlogMonth
+      : true;
 
-    return matchesSearch && matchesTag;
+    return matchesSearch && matchesTag && matchesMonth;
   });
   const totalBlogPages = Math.max(
     1,
@@ -134,7 +229,7 @@ export function RoutedHomePage({
     }
 
     setBlogPage(1);
-  }, [blogSearch, selectedBlogTag, activeLanguage]);
+  }, [blogSearch, selectedBlogTag, selectedBlogMonth, activeLanguage]);
 
   const getBlogPageHref = (page: number) =>
     page === 1 ? `${localePrefix}/blog` : `${localePrefix}/blog/${page}`;
@@ -348,65 +443,78 @@ export function RoutedHomePage({
                     <button
                       type="button"
                       onClick={() => setBlogSearch("")}
-                      aria-label="Clear search"
+                      aria-label={t.blog.clearTagFilter}
                       className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-white/80 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
                     >
                       <X className="h-4 w-4" />
                     </button>
                   )}
                 </div>
-                <div className="flex gap-2">
-                  <Select
-                    value={selectedBlogTag ?? "all"}
-                    onValueChange={(value) =>
-                      setSelectedBlogTag(value === "all" ? null : value)
-                    }
+                <Select
+                  value={selectedBlogTag ?? "all"}
+                  onValueChange={(value) =>
+                    setSelectedBlogTag(value === "all" ? null : value)
+                  }
+                >
+                  <SelectTrigger
+                    aria-label={t.blog.tagFilterLabel}
+                    className="
+                       h-12! w-full rounded-xl border-border bg-card/50 px-4
+                       text-muted-foreground shadow-none transition-all duration-150
+                       hover:bg-card
+                       hover:border-muted-foreground/30
+                       hover:ring-2
+                       hover:ring-foreground/10
+                       focus:ring-0
+                       focus:outline-none
+                     "
                   >
-                    <SelectTrigger
-                      aria-label={t.blog.tagFilterLabel}
-                      className="
-                         h-12! w-full rounded-xl border-border bg-card/50 px-4
-                         text-muted-foreground shadow-none transition-all duration-150
-                         hover:bg-card
-                         hover:border-muted-foreground/30
-                         hover:ring-2
-                         hover:ring-foreground/10
-                         focus:ring-0
-                         focus:outline-none
-                       "
+                    <span className="flex min-w-0 items-center gap-2">
+                      <Tag className="h-4 w-4 shrink-0 text-muted-foreground/70" />
+                      <SelectValue placeholder={t.blog.allTags} />
+                    </span>
+                  </SelectTrigger>
+                  <SelectContent
+                    side={isTagFilterDesktop ? "right" : "bottom"}
+                    align="start"
+                    sideOffset={8}
+                    className="max-h-64 rounded-xl border-border bg-card/95 backdrop-blur"
+                  >
+                    <SelectItem value="all">{t.blog.allTags}</SelectItem>
+                    {blogTags.map((tag) => (
+                      <SelectItem key={tag} value={tag}>
+                        {tag}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {hasBlogFilters && (selectedBlogTag || selectedBlogMonth) && (
+                <div className="mb-5 flex flex-wrap gap-2 text-xs">
+                  {selectedBlogMonth && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedBlogMonth(null)}
+                      className="rounded-full border border-border bg-muted/30 px-3 py-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                     >
-                      <span className="flex min-w-0 items-center gap-2">
-                        <Tag className="h-4 w-4 shrink-0 text-muted-foreground/70" />
-                        <SelectValue placeholder={t.blog.allTags} />
-                      </span>
-                    </SelectTrigger>
-                    <SelectContent
-                      side={isTagFilterDesktop ? "right" : "bottom"}
-                      align="start"
-                      sideOffset={8}
-                      className="max-h-64 rounded-xl border-border bg-card/95 backdrop-blur"
-                    >
-                      <SelectItem value="all">{t.blog.allTags}</SelectItem>
-                      {blogTags.map((tag) => (
-                        <SelectItem key={tag} value={tag}>
-                          {tag}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                      {formatArchiveMonth(selectedBlogMonth, activeLanguage)} ×
+                    </button>
+                  )}
                   {selectedBlogTag && (
                     <button
                       type="button"
                       onClick={() => setSelectedBlogTag(null)}
-                      aria-label={t.blog.clearTagFilter}
-                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-card/50 text-muted-foreground outline-none transition-all duration-150 hover:bg-card hover:border-muted-foreground/30 hover:text-foreground focus-visible:border-muted-foreground/50 focus-visible:bg-card focus-visible:ring-2 focus-visible:ring-foreground/10"
+                      className="rounded-full border border-border bg-muted/30 px-3 py-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                     >
-                      <X className="h-4 w-4" />
+                      {selectedBlogTag} ×
                     </button>
                   )}
                 </div>
-              </div>
-              <div className="space-y-4">
+              )}
+              <div
+                key={`${selectedBlogMonth ?? "all"}-${selectedBlogTag ?? "all"}-${blogSearch}-${currentBlogPage}`}
+                className="space-y-4 animate-in fade-in slide-in-from-bottom-1 duration-300"
+              >
                 {paginatedBlogPosts.map((post) => (
                   <Link
                     key={post.slug}
@@ -441,6 +549,76 @@ export function RoutedHomePage({
                     {t.blog.noSearchResults}
                   </div>
                 )}
+              </div>
+              <aside className="fixed left-[calc(50%+21rem+10px)] top-29 hidden w-48 font-mono text-sm xl:block">
+                <h3 className="mb-5 text-center text-xs font-bold uppercase tracking-[0.24em] text-foreground">
+                  {t.blog.archive}
+                </h3>
+                <div className="space-y-5">
+                  {Array.from(blogArchiveYears).map(([year, months]) => (
+                    <div key={year} className="relative pl-5">
+                      <div className="absolute bottom-1 left-1.5 top-7 w-px bg-border" />
+                      <div className="mb-3 inline-flex rounded-md border border-border bg-card/60 px-2.5 py-1 text-xs font-semibold tracking-[0.18em] text-foreground">
+                        {year}
+                      </div>
+                      <div className="space-y-2.5">
+                        {months.map(([monthKey, count]) => {
+                          const isActiveMonth = monthKey === selectedBlogMonth;
+
+                          return (
+                            <button
+                              key={monthKey}
+                              type="button"
+                              onClick={() =>
+                                setSelectedBlogMonth((currentMonth) =>
+                                  currentMonth === monthKey ? null : monthKey,
+                                )
+                              }
+                              className={`relative grid w-full cursor-pointer grid-cols-[1fr_2.5rem] items-center gap-4 rounded-md px-1.5 py-1 text-left outline-none transition-all duration-200 hover:translate-x-1 hover:bg-muted/25 hover:text-foreground focus-visible:ring-2 focus-visible:ring-foreground/15 active:translate-x-0 ${
+                                isActiveMonth
+                                  ? "translate-x-1 bg-muted/30 text-foreground"
+                                  : "text-muted-foreground"
+                              }`}
+                            >
+                              <span
+                                className={`absolute left-[-1.12rem] h-2 w-2 rotate-45 rounded-[2px] border transition-all duration-200 ${
+                                  isActiveMonth
+                                    ? "scale-125 border-foreground bg-foreground"
+                                    : "border-border bg-background"
+                                }`}
+                              />
+                              <span>
+                                {formatArchiveMonth(monthKey, activeLanguage)}
+                              </span>
+                              <span
+                                className={`text-right font-semibold tabular-nums transition-all duration-200 ${
+                                  isActiveMonth
+                                    ? "text-foreground"
+                                    : "text-foreground/80"
+                                }`}
+                              >
+                                {String(count).padStart(2, "0")}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </aside>
+              <div className="mt-5 rounded-xl border border-border/70 bg-muted/15 px-4 py-3 text-center text-sm text-muted-foreground">
+                {monthlyWritingSummary.map((summary, index) => (
+                  <span key={summary.label}>
+                    {index > 0 && (
+                      <span className="mx-2 text-muted-foreground/50">|</span>
+                    )}
+                    <span>{summary.label}: </span>
+                    <span className="font-medium text-foreground">
+                      {summary.count}
+                    </span>
+                  </span>
+                ))}
               </div>
               {filteredBlogPosts.length > BLOG_POSTS_PER_PAGE && (
                 <div className="mt-6 flex items-center justify-center gap-2 text-sm">

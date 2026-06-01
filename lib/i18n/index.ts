@@ -70,6 +70,9 @@ export type Translation = {
     searchPlaceholder: string;
     tagFilterLabel: string;
     allTags: string;
+    archive: string;
+    thisMonth: string;
+    lastMonth: string;
     clearTagFilter: string;
     noSearchResults: string;
     minuteRead: string;
