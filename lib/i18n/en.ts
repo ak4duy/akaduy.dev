@@ -92,6 +92,13 @@ export const en: Translation = {
       external: true,
     },
     {
+      href: "https://matrix.to/#/@akaduy:matrix.yud-on.top",
+      icon: "/contact-icons/matrix-icon-white.png",
+      label: "Matrix",
+      value: "@akaduy:matrix.yud-on.top",
+      external: true,
+    },
+    {
       href: "https://discord.com/users/799965541283528714",
       icon: "/contact-icons/discord.svg",
       label: "Discord",
