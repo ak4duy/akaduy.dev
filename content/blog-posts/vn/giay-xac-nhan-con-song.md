@@ -5,6 +5,8 @@ style: novel
 excerpt: "Có những điều hiển nhiên vẫn cần một con dấu để được công nhận."
 tags:
   - Truyện ngắn
+  - Đời thường
+  - Phi lý
 ---
 
 # Chương 1: Phòng Số Bảy

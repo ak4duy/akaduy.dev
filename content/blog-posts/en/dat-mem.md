@@ -6,7 +6,7 @@ excerpt: "Not everything covered in golden light becomes a sunset."
 tags:
   - Short Story
   - Youth
-  - Absurd
+  - Absurdism
 ---
 
 # Chapter 1: A Photograph Missing the Photographer
