@@ -232,24 +232,27 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
   const progressPercent = Math.round(readingProgress * 100);
   const readingTimeMinutes = getReadingTimeMinutes(post.content);
   const isNovelStyle = post.style === "novel";
-  const hasInlinePoll = post.content.includes("{{blogPoll}}");
-  const pollNode = post.poll ? (
+  const hasInlinePoll = /\{\{blogPoll(?::\d+)?\}\}/.test(post.content);
+  const pollLabels = {
+    vote: t.blog.pollVote,
+    cancel: t.blog.pollCancel,
+    votes: t.blog.pollVotes,
+    voted: t.blog.pollVoted,
+    undo: t.blog.pollUndo,
+    loading: t.blog.pollLoading,
+    privacy: t.blog.pollPrivacy,
+    privacyLink: t.blog.pollPrivacyLink,
+    error: t.blog.pollError,
+  };
+  const pollNodes = post.polls.map((poll) => (
     <BlogPoll
-      poll={post.poll}
+      key={poll.id}
+      poll={poll}
       privacyHref={`https://yud-on.top${localePrefix}/privacy`}
-      labels={{
-        vote: t.blog.pollVote,
-        cancel: t.blog.pollCancel,
-        votes: t.blog.pollVotes,
-        voted: t.blog.pollVoted,
-        undo: t.blog.pollUndo,
-        loading: t.blog.pollLoading,
-        privacy: t.blog.pollPrivacy,
-        privacyLink: t.blog.pollPrivacyLink,
-        error: t.blog.pollError,
-      }}
+      labels={pollLabels}
     />
-  ) : null;
+  ));
+  const pollNode = pollNodes[0] ?? null;
 
   return (
     <main
@@ -354,6 +357,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
             stickyBackHref={`${localePrefix}/blog`}
             stickyBackLabel={t.nav.blog}
             poll={pollNode}
+            polls={pollNodes}
             readerStyle={post.style}
             afterFirstRule={!hasInlinePoll ? pollNode : null}
             onStickyContentsChangeAction={handleStickyContentsChange}

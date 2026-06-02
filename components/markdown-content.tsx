@@ -13,6 +13,7 @@ type MarkdownContentProps = {
   stickyBackLabel?: string;
   afterFirstRule?: ReactNode;
   poll?: ReactNode;
+  polls?: ReactNode[];
   readerStyle?: MarkdownContentStyle;
   onStickyContentsChangeAction?: (visible: boolean) => void;
 };
@@ -24,7 +25,7 @@ type MarkdownBlock =
   | { type: "unordered-list"; items: string[] }
   | { type: "ordered-list"; items: string[] }
   | { type: "image"; alt: string; src: string }
-  | { type: "poll" }
+  | { type: "poll"; index: number }
   | { type: "rule" };
 
 type HeadingBlock = Extract<MarkdownBlock, { type: "heading" }>;
@@ -299,9 +300,10 @@ function parseMarkdown(content: string): MarkdownBlock[] {
       continue;
     }
 
-    if (trimmed === "{{blogPoll}}") {
+    const poll = trimmed.match(/^\{\{blogPoll(?::(\d+))?\}\}$/);
+    if (poll) {
       flushAll();
-      blocks.push({ type: "poll" });
+      blocks.push({ type: "poll", index: poll[1] ? Number(poll[1]) : 0 });
       continue;
     }
 
@@ -501,6 +503,7 @@ export function MarkdownContent({
   stickyBackLabel,
   afterFirstRule,
   poll,
+  polls,
   readerStyle = "normal",
   onStickyContentsChangeAction,
 }: MarkdownContentProps) {
@@ -509,6 +512,7 @@ export function MarkdownContent({
   const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
   const contentsRef = useRef<HTMLDivElement | null>(null);
   const blocks = useMemo(() => parseMarkdown(content), [content]);
+  const pollNodes = polls ?? (poll ? [poll] : []);
   const headings = useMemo(
     () =>
       blocks.filter((block): block is HeadingBlock => block.type === "heading"),
@@ -583,7 +587,8 @@ export function MarkdownContent({
           }
 
           if (block.type === "poll") {
-            return poll ? <div key={index}>{poll}</div> : null;
+            const pollNode = pollNodes[block.index];
+            return pollNode ? <div key={index}>{pollNode}</div> : null;
           }
 
           if (block.type === "rule") {

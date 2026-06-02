@@ -18,6 +18,7 @@ export type BlogPoll = {
 export type BlogPostStyle = "normal" | "novel";
 
 const BLOG_POLL_MARKER = "{{blogPoll}}";
+const createBlogPollMarker = (index: number) => `{{blogPoll:${index}}}`;
 
 export type BlogPost = {
   slug: string;
@@ -29,6 +30,7 @@ export type BlogPost = {
   draft: boolean;
   style: BlogPostStyle;
   poll: BlogPoll | null;
+  polls: BlogPoll[];
 };
 
 const languageDirectory: Record<Language, string> = {
@@ -129,33 +131,56 @@ function createBlogPoll(
   };
 }
 
+function createBlogPolls(
+  slug: string,
+  frontmatter: Record<string, string | string[] | boolean>,
+  inlinePollFrontmatters: Record<string, string | string[] | boolean>[],
+) {
+  const inlinePolls = inlinePollFrontmatters
+    .map((pollFrontmatter, index) =>
+      createBlogPoll(`${slug}-${index + 1}`, pollFrontmatter),
+    )
+    .filter((poll): poll is BlogPoll => Boolean(poll));
+
+  if (inlinePolls.length > 0) {
+    return inlinePolls;
+  }
+
+  const frontmatterPoll = createBlogPoll(slug, frontmatter);
+  return frontmatterPoll ? [frontmatterPoll] : [];
+}
+
 function normalizeBlogPostStyle(value: unknown): BlogPostStyle {
   return value === "novel" ? "novel" : "normal";
 }
 
-function extractMovablePollBlock(
+function extractMovablePollBlocks(
   content: string,
   frontmatter: Record<string, string | string[] | boolean>,
 ) {
+  const inlinePollFrontmatters: Record<string, string | string[] | boolean>[] =
+    [];
   const pollBlockPattern =
-    /(?:^|\n)(pollId:\s*[^\n]*\n(?:pollQuestion:\s*[^\n]*\n)?pollOptionIds:\s*\n(?:[ \t]+-[ \t]+[^\n]+\n)+pollOptions:\s*\n(?:[ \t]+-[ \t]+[^\n]+(?:\n|$))+)/;
-  const match = content.match(pollBlockPattern);
+    /(^|\n)(pollId:\s*[^\n]*\n(?:pollQuestion:\s*[^\n]*\n)?pollOptionIds:\s*\n(?:[ \t]+-[ \t]+[^\n]+\n)+pollOptions:\s*\n(?:[ \t]+-[ \t]+[^\n]+(?:\n|$))+)/g;
+  const updatedContent = content.replace(
+    pollBlockPattern,
+    (_match, prefix: string, pollBlock: string) => {
+      const { frontmatter: pollFrontmatter } = parseFrontmatter(
+        `---\n${pollBlock.trimEnd()}\n---\n`,
+      );
+      const pollIndex = inlinePollFrontmatters.length;
+      inlinePollFrontmatters.push(pollFrontmatter);
 
-  if (!match) {
-    return { content, frontmatter };
-  }
-
-  const pollBlock = match[1].trimEnd();
-  const { frontmatter: pollFrontmatter } = parseFrontmatter(
-    `---\n${pollBlock}\n---\n`,
+      return `${prefix}${
+        pollIndex === 0 ? BLOG_POLL_MARKER : createBlogPollMarker(pollIndex)
+      }\n`;
+    },
   );
 
   return {
-    content: content.replace(pollBlock, BLOG_POLL_MARKER).trim(),
-    frontmatter: {
-      ...frontmatter,
-      ...pollFrontmatter,
-    },
+    content: updatedContent.trim(),
+    frontmatter,
+    inlinePollFrontmatters,
   };
 }
 
@@ -184,10 +209,9 @@ export function getBlogPost(language: Language, slug: string): BlogPost {
   const filePath = join(getBlogPostDirectory(language), `${slug}.md`);
   const markdown = readFileSync(filePath, "utf8");
   const parsed = parseFrontmatter(markdown);
-  const { frontmatter, content } = extractMovablePollBlock(
-    parsed.content,
-    parsed.frontmatter,
-  );
+  const { frontmatter, content, inlinePollFrontmatters } =
+    extractMovablePollBlocks(parsed.content, parsed.frontmatter);
+  const polls = createBlogPolls(slug, frontmatter, inlinePollFrontmatters);
 
   return {
     slug,
@@ -198,7 +222,8 @@ export function getBlogPost(language: Language, slug: string): BlogPost {
     content,
     draft: frontmatter.draft === true,
     style: normalizeBlogPostStyle(frontmatter.style),
-    poll: createBlogPoll(slug, frontmatter),
+    poll: polls[0] ?? null,
+    polls,
   };
 }
 
