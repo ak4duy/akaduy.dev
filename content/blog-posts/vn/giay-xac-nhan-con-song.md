@@ -77,7 +77,7 @@ Mặt trời lên cao. Hàng người tiến rất chậm. Có lúc anh tưởng
 
 Đến trưa, một nhân viên bước ra và nói:
 
-“Phòng số bảy nghỉ ăn.”
+“Phòng số bảy nghỉ trưa.”
 
 Không ai phản đối.
 
