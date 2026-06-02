@@ -45,8 +45,8 @@ export const en: Translation = {
     ],
     projects: [
       {
-        name: "yud-on.top",
-        href: "https://github.com/ak4duy/yud-on.top",
+        name: "akaduy.dev",
+        href: "https://github.com/ak4duy/akaduy.dev",
         description: [
           "My personal portfolio and blog website.",
           "I write blogs here and share updates about my personal projects.",
@@ -92,10 +92,10 @@ export const en: Translation = {
       external: true,
     },
     {
-      href: "https://matrix.to/#/@akaduy:matrix.yud-on.top",
+      href: "https://matrix.to/#/@rien:akaduy.dev",
       icon: "/contact-icons/matrix-icon-white.png",
       label: "Matrix",
-      value: "@akaduy:matrix.yud-on.top",
+      value: "@rien:akaduy.dev",
       external: true,
     },
     {
@@ -144,8 +144,8 @@ export const en: Translation = {
     pollError: "Could not load poll results.",
   },
   privacy: {
-    metadataTitle: "Privacy | ak4duy",
-    metadataDescription: "Privacy information for ak4duy's personal website.",
+    metadataTitle: "Privacy | akaduy",
+    metadataDescription: "Privacy information for akaduy's personal website.",
     title: "Privacy",
     updated: "Last updated: 28 May, 2026",
     intro:

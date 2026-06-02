@@ -254,7 +254,7 @@ async function fetchGithubRepoUrl(project) {
   const response = await fetch(repoApiUrl, {
     headers: {
       accept: "application/vnd.github+json",
-      "user-agent": "yud-on-top-hackatime-status-worker",
+      "user-agent": "akaduy-dev-hackatime-status-worker",
     },
   });
 

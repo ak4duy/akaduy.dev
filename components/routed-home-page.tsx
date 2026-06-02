@@ -266,7 +266,7 @@ export function RoutedHomePage({
           </div>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-3">
             <h1 className="text-4xl font-bold tracking-tight bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-              ak4duy
+              akaduy
             </h1>
             <CurrentWorkStatus label={t.home.currentlyWorkingOn} />
           </div>

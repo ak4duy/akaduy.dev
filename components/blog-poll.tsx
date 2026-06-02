@@ -24,7 +24,7 @@ type BlogPollProps = {
 };
 
 const pollsEndpoint =
-  process.env.NEXT_PUBLIC_BLOG_POLLS_URL ?? "https://api.yud-on.top/blog-polls";
+  process.env.NEXT_PUBLIC_BLOG_POLLS_URL ?? "https://api.akaduy.dev/blog-polls";
 
 function getVoteStorageKey(pollId: string) {
   return `blog-poll:${pollId}:vote`;

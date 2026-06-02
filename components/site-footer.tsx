@@ -13,7 +13,7 @@ export function SiteFooter({ tagline, privacyHref }: SiteFooterProps) {
       </p>
       <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
         <a
-          href="https://github.com/ak4duy/yud-on.top"
+          href="https://github.com/ak4duy/akaduy.dev"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:text-foreground active:translate-y-0 active:scale-95"
@@ -45,7 +45,7 @@ export function SiteFooter({ tagline, privacyHref }: SiteFooterProps) {
           Privacy
         </a>
       </div>
-      <p className="mt-3 text-xs text-muted-foreground/70">© 2026 ak4duy</p>
+      <p className="mt-3 text-xs text-muted-foreground/70">© 2026 akaduy</p>
       <p className="mt-2 text-[11px] text-muted-foreground/55">
         Writing licensed under{" "}
         <a

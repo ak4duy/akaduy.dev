@@ -1,8 +1,6 @@
-# [yud-on.top](https://yud-on.top)
+# [akaduy.dev](https://akaduy.dev)
 
-[![Website status](https://github.com/ak4duy/yud-on.top/actions/workflows/static.yml/badge.svg)](https://github.com/ak4duy/yud-on.top/actions/workflows/static.yml)
-
-Temporary domain for now (nobrain domain name ngl). I originally bought it for a self-hosted ebook project, but I'm using it for my personal website until next year.
+[![Website status](https://github.com/ak4duy/akaduy.dev/actions/workflows/static.yml/badge.svg)](https://github.com/ak4duy/akaduy.dev/actions/workflows/static.yml)
 
 ## Description
 
@@ -66,4 +64,4 @@ lib/i18n/vn.ts
 
 - Code: [GNU GPLv3 or later](./LICENSE)
 - Blog posts and personal writing: [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-- Images and branding are © ak4duy. All rights reserved unless stated otherwise.
+- Images and branding are © akaduy. All rights reserved unless stated otherwise.

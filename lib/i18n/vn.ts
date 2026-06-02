@@ -45,8 +45,8 @@ export const vn: Translation = {
     ],
     projects: [
       {
-        name: "yud-on.top",
-        href: "https://github.com/ak4duy/yud-on.top",
+        name: "akaduy.dev",
+        href: "https://github.com/ak4duy/akaduy.dev",
         description: [
           "Đây là trang web cá nhân và blog của tôi.",
           "Tôi thường ghi blog ở đây và chia sẻ về dự án cá nhân của mình.",
@@ -92,10 +92,10 @@ export const vn: Translation = {
       external: true,
     },
     {
-      href: "https://matrix.to/#/@akaduy:matrix.yud-on.top",
+      href: "https://matrix.to/#/@rien:akaduy.dev",
       icon: "/contact-icons/matrix-icon-white.png",
       label: "Matrix",
-      value: "@akaduy:matrix.yud-on.top",
+      value: "@rien:akaduy.dev",
       external: true,
     },
     {
@@ -143,9 +143,9 @@ export const vn: Translation = {
     pollError: "Không thể tải kết quả poll.",
   },
   privacy: {
-    metadataTitle: "Quyền riêng tư | ak4duy",
+    metadataTitle: "Quyền riêng tư | akaduy",
     metadataDescription:
-      "Thông tin quyền riêng tư cho website cá nhân của ak4duy.",
+      "Thông tin quyền riêng tư cho website cá nhân của akaduy.",
     title: "Quyền riêng tư",
     updated: "Cập nhật lần cuối: 28 tháng 5, 2026",
     intro:

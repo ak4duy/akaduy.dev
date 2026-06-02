@@ -248,7 +248,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
     <BlogPoll
       key={poll.id}
       poll={poll}
-      privacyHref={`https://yud-on.top${localePrefix}/privacy`}
+      privacyHref={`https://akaduy.dev${localePrefix}/privacy`}
       labels={pollLabels}
     />
   ));

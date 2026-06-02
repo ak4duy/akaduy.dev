@@ -1,4 +1,4 @@
-name: Website status 
+name: Website status
 
 on:
   push:
@@ -36,12 +36,12 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          NEXT_PUBLIC_HACKATIME_STATUS_URL: https://api.yud-on.top/hackatime/current
+          NEXT_PUBLIC_HACKATIME_STATUS_URL: https://api.akaduy.dev/hackatime/current
 
       - name: Prepare static output
         run: |
           touch out/.nojekyll
-          echo "yud-on.top" > out/CNAME
+          echo "akaduy.dev" > out/CNAME
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
