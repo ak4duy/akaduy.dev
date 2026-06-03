@@ -265,8 +265,13 @@ export function RoutedHomePage({
             <LanguageToggle />
           </div>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-3">
-            <h1 className="text-4xl font-bold tracking-tight bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-              akaduy
+            <h1 className="flex items-baseline gap-1.5 text-4xl font-bold tracking-tight">
+              <span className="bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                akaduy
+              </span>
+              <span className="text-base font-semibold text-muted-foreground/70">
+                .dev
+              </span>
             </h1>
             <CurrentWorkStatus label={t.home.currentlyWorkingOn} />
           </div>
