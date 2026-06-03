@@ -102,7 +102,7 @@ export const en: Translation = {
       href: "https://discord.com/users/799965541283528714",
       icon: "/contact-icons/discord.svg",
       label: "Discord",
-      value: "ak4duy",
+      value: "akaduy69420",
       external: true,
     },
     {
