@@ -23,6 +23,8 @@
     --border: oklch(0.922 0 0);
     --input: oklch(0.922 0 0);
     --ring: oklch(0.708 0 0);
+    --selection-background: oklch(0.205 0 0);
+    --selection-foreground: oklch(0.985 0 0);
     --chart-1: oklch(0.646 0.222 41.116);
     --chart-2: oklch(0.6 0.118 184.704);
     --chart-3: oklch(0.398 0.07 227.392);
@@ -59,6 +61,8 @@
     --border: oklch(0.269 0 0);
     --input: oklch(0.269 0 0);
     --ring: oklch(0.439 0 0);
+    --selection-background: oklch(0.985 0 0);
+    --selection-foreground: oklch(0.145 0 0);
     --chart-1: oklch(0.488 0.243 264.376);
     --chart-2: oklch(0.696 0.17 162.48);
     --chart-3: oklch(0.769 0.188 70.08);
@@ -122,6 +126,11 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    ::selection {
+        background-color: var(--selection-background);
+        color: var(--selection-foreground);
+    }
 }
 
 @layer utilities {
@@ -133,6 +142,8 @@
         --reader-card: #292929;
         --reader-border: rgba(239, 239, 239, 0.125);
         --reader-accent: rgba(1, 4, 9, 0.5);
+        --reader-selection-background: #dcdcdc;
+        --reader-selection-foreground: #292929;
     }
 
     .reader-theme-sepia {
@@ -144,6 +155,8 @@
         --reader-card: oklch(0.96 0.026 86);
         --reader-border: oklch(0.78 0.044 76);
         --reader-accent: oklch(0.88 0.04 78);
+        --reader-selection-background: oklch(0.46 0.06 62);
+        --reader-selection-foreground: oklch(0.96 0.026 86);
     }
 
     .reader-theme-light {
@@ -155,6 +168,8 @@
         --reader-card: white;
         --reader-border: rgb(0 0 0 / 13%);
         --reader-accent: rgb(222, 226, 230);
+        --reader-selection-background: black;
+        --reader-selection-foreground: white;
     }
 
     .reader-theme-dark,
@@ -175,6 +190,8 @@
         --border: var(--reader-border);
         --input: var(--reader-border);
         --ring: var(--reader-muted);
+        --selection-background: var(--reader-selection-background);
+        --selection-foreground: var(--reader-selection-foreground);
     }
 
     .reader-bg {
