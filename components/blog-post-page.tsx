@@ -25,7 +25,7 @@ const readerThemes: Array<{ value: ReaderTheme; label: string }> = [
 ];
 
 const READING_POSITION_STORAGE_PREFIX = "blog-reading-position";
-const COMPLETED_READING_THRESHOLD = 0.95;
+const COMPLETED_READING_THRESHOLD = 0.90;
 
 function getReadingPositionStorageKey(language: Language, slug: string) {
   return `${READING_POSITION_STORAGE_PREFIX}:${language.toLowerCase()}:${slug}`;
