@@ -35,6 +35,14 @@ export const en: Translation = {
     contributedToTitle: "Contributed to",
     workingOn: [
       {
+        name: "Inkspace",
+        href: "https://github.com/ak4duy/inkspace",
+        description: [
+          "A cozy corner for friends.",
+        ],
+        tags: ["Typescript", "Docker", "Self-hosted"],
+      },
+      {
         name: "Resonance",
         href: "https://github.com/ak4duy/resonance-flyout",
         description: [

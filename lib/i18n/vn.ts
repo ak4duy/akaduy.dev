@@ -35,6 +35,14 @@ export const vn: Translation = {
     contributedToTitle: "Đã đóng góp",
     workingOn: [
       {
+        name: "Inkspace",
+        href: "https://github.com/ak4duy/inkspace",
+        description: [
+          "Một nơi ấm cúng dành cho bạn bè.",
+        ],
+        tags: ["Typescript", "Docker", "Self-hosted"],
+      },
+      {
         name: "Resonance",
         href: "https://github.com/ak4duy/resonance-flyout",
         description: [
