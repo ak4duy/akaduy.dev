@@ -298,7 +298,6 @@ export function RoutedHomePage({
                 </TabsTrigger>
               ))}
             </TabsList>
-
             <TabsContent value="about" className="space-y-8 tab-enter">
               <section className="group">
                 <h2 className="mb-4 text-lg font-semibold flex items-center gap-2">
