@@ -106,10 +106,10 @@ export const vn: Translation = {
       external: true,
     },
     {
-      href: "mailto:akaduy@yud-on.top",
+      href: "mailto:rien@akaduy.dev",
       icon: "/contact-icons/mail.svg",
       label: "Email",
-      value: "akaduy@yud-on.top",
+      value: "rien@akaduy.dev",
       external: false,
     },
     {
