@@ -42,14 +42,6 @@ export const en: Translation = {
         ],
         tags: ["Typescript", "Docker", "Self-hosted"],
       },
-      {
-        name: "Resonance",
-        href: "https://github.com/ak4duy/resonance-flyout",
-        description: [
-          "A modern Windows media flyout replacement built in Rust.",
-        ],
-        tags: ["Rust", "Typescript", "Tauri", "Svelte"],
-      },
     ],
     projects: [
       {

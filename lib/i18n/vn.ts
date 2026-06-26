@@ -42,14 +42,6 @@ export const vn: Translation = {
         ],
         tags: ["Typescript", "Docker", "Self-hosted"],
       },
-      {
-        name: "Resonance",
-        href: "https://github.com/ak4duy/resonance-flyout",
-        description: [
-          "Một ứng dụng thay thế flyout media hiện đại cho Windows, được ghi bằng Rust.",
-        ],
-        tags: ["Rust", "Typescript", "Tauri", "Svelte"],
-      },
     ],
     projects: [
       {
