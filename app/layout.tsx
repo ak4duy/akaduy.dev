@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark bg-background">
+    <html lang="en" className="dark bg-background mdl-js">
       <body className="font-sans antialiased">
         <LanguageProvider>{children}</LanguageProvider>
       </body>
