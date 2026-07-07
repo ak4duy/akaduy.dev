@@ -63,14 +63,12 @@ function getTodayRange() {
   return { startDate: today, endDate: today };
 }
 
-function getWeekRange() {
+function getLastSevenDaysRange() {
   const now = new Date();
   const start = new Date(
     Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
   );
-  const day = start.getUTCDay();
-  const daysSinceMonday = day === 0 ? 6 : day - 1;
-  start.setUTCDate(start.getUTCDate() - daysSinceMonday);
+  start.setUTCDate(start.getUTCDate() - 6);
 
   return { startDate: getIsoDate(start), endDate: getIsoDate(now) };
 }
@@ -452,43 +450,70 @@ async function fetchHackatimeDailyTotal(apiKey) {
   };
 }
 
-async function fetchHackatimeWeeklyTotal(apiKey) {
-  const { startDate, endDate } = getWeekRange();
-  const url = `${HACKATIME_WAKATIME_API_BASE}/users/current/stats/last_7_days`;
+async function fetchHackatimeStats(apiKey, range) {
   const attemptLog = [];
-  const response = await fetchWithAuthVariants(url, apiKey, attemptLog);
+  const response = await fetchWithAuthVariants(
+    `${HACKATIME_WAKATIME_API_BASE}/users/current/stats/${range}`,
+    apiKey,
+    attemptLog,
+  );
 
   if (!response?.ok) {
     const error = new Error(
-      `Hackatime weekly total responded with ${response?.status ?? "unknown"}`,
+      `Hackatime ${range} stats responded with ${response?.status ?? "unknown"}`,
     );
     error.attemptLog = attemptLog;
     throw error;
   }
 
-  const payload = await response.json();
-  const data = getPayloadData(payload);
-  const totalSeconds = normalizeTotalSeconds(payload);
+  return getPayloadData(await response.json());
+}
+
+function normalizeStatsTotal(data, fallbackRange) {
+  const totalSeconds =
+    typeof data?.total_seconds === "number" &&
+    Number.isFinite(data.total_seconds)
+      ? data.total_seconds
+      : 0;
 
   return {
-    startDate,
-    endDate,
-    totalSeconds: totalSeconds ?? 0,
+    startDate:
+      typeof data?.start === "string" ? data.start : fallbackRange.startDate,
+    endDate: typeof data?.end === "string" ? data.end : fallbackRange.endDate,
+    totalSeconds,
     text:
       typeof data?.human_readable_total === "string"
         ? data.human_readable_total
-        : formatDuration(totalSeconds ?? 0),
+        : formatDuration(totalSeconds),
+  };
+}
+
+async function fetchHackatimeWeeklyTotal(apiKey) {
+  const data = await fetchHackatimeStats(apiKey, "last_7_days");
+
+  return normalizeStatsTotal(data, getLastSevenDaysRange());
+}
+
+async function fetchHackatimeAllTimeStats(apiKey) {
+  const data = await fetchHackatimeStats(apiKey, "all_time");
+  const fallbackRange = {
+    startDate: typeof data?.start === "string" ? data.start : null,
+    endDate: typeof data?.end === "string" ? data.end : null,
+  };
+
+  return {
+    totalTime: normalizeStatsTotal(data, fallbackRange),
     topLanguage: normalizeStatsItem(data?.languages?.[0]),
     topProject: normalizeStatsItem(data?.projects?.[0]),
   };
 }
 
-async function fetchOptionalTotal(fetchTotal) {
+async function fetchOptional(fetchData) {
   try {
-    return { total: await fetchTotal(), error: null };
+    return { data: await fetchData(), error: null };
   } catch (error) {
     return {
-      total: null,
+      data: null,
       error: {
         message: error instanceof Error ? error.message : "Unknown error",
         attempts: error?.attemptLog,
@@ -521,27 +546,19 @@ export default {
     }
 
     try {
-      const [statusResult, dailyTotalResult, weeklyTotalResult] =
+      const [statusResult, dailyTotalResult, weeklyTotalResult, allTimeResult] =
         await Promise.all([
           fetchHackatimeStatus(env.HACKATIME_API_KEY),
-          fetchOptionalTotal(() =>
-            fetchHackatimeDailyTotal(env.HACKATIME_API_KEY),
-          ),
-          fetchOptionalTotal(() =>
-            fetchHackatimeWeeklyTotal(env.HACKATIME_API_KEY),
+          fetchOptional(() => fetchHackatimeDailyTotal(env.HACKATIME_API_KEY)),
+          fetchOptional(() => fetchHackatimeWeeklyTotal(env.HACKATIME_API_KEY)),
+          fetchOptional(() =>
+            fetchHackatimeAllTimeStats(env.HACKATIME_API_KEY),
           ),
         ]);
       const { payload } = statusResult;
-      const { total: dailyTotal } = dailyTotalResult;
-      const { total: weeklyTotal } = weeklyTotalResult;
-      const totalTime = weeklyTotal
-        ? {
-            startDate: weeklyTotal.startDate,
-            endDate: weeklyTotal.endDate,
-            totalSeconds: weeklyTotal.totalSeconds,
-            text: weeklyTotal.text,
-          }
-        : null;
+      const { data: dailyTotal } = dailyTotalResult;
+      const { data: weeklyTotal } = weeklyTotalResult;
+      const { data: allTimeStats } = allTimeResult;
       const heartbeatTime = normalizeHeartbeatTime(payload);
       const active = isActiveHeartbeat(heartbeatTime);
       const project = active ? normalizeProjectName(payload) : null;
@@ -563,14 +580,17 @@ export default {
         lastHeartbeatAt: heartbeatTime?.toISOString() ?? null,
         dailyTotal,
         weeklyTotal,
-        totalTime,
-        topLanguage: weeklyTotal?.topLanguage ?? null,
-        topProject: weeklyTotal?.topProject ?? null,
+        totalTime: allTimeStats?.totalTime ?? null,
+        topLanguage: allTimeStats?.topLanguage ?? null,
+        topProject: allTimeStats?.topProject ?? null,
         totalsError:
-          dailyTotalResult.error || weeklyTotalResult.error
+          dailyTotalResult.error ||
+          weeklyTotalResult.error ||
+          allTimeResult.error
             ? {
                 daily: dailyTotalResult.error,
                 weekly: weeklyTotalResult.error,
+                allTime: allTimeResult.error,
               }
             : null,
       });
