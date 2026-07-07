@@ -488,24 +488,93 @@ function normalizeStatsTotal(data, fallbackRange) {
   };
 }
 
-async function fetchHackatimeWeeklyTotal(apiKey) {
+async function fetchHackatimeWeeklyStats(apiKey) {
   const data = await fetchHackatimeStats(apiKey, "last_7_days");
 
-  return normalizeStatsTotal(data, getLastSevenDaysRange());
-}
-
-async function fetchHackatimeAllTimeStats(apiKey) {
-  const data = await fetchHackatimeStats(apiKey, "all_time");
-  const fallbackRange = {
-    startDate: typeof data?.start === "string" ? data.start : null,
-    endDate: typeof data?.end === "string" ? data.end : null,
-  };
-
   return {
-    totalTime: normalizeStatsTotal(data, fallbackRange),
+    username: typeof data?.username === "string" ? data.username : null,
+    total: normalizeStatsTotal(data, getLastSevenDaysRange()),
     topLanguage: normalizeStatsItem(data?.languages?.[0]),
     topProject: normalizeStatsItem(data?.projects?.[0]),
   };
+}
+
+function normalizeSummaryItem(item, totalSeconds) {
+  if (!item || typeof item.key !== "string" || item.key.trim().length === 0) {
+    return null;
+  }
+
+  const itemSeconds = item.total;
+
+  if (typeof itemSeconds !== "number" || !Number.isFinite(itemSeconds)) {
+    return null;
+  }
+
+  return {
+    name: item.key.trim(),
+    totalSeconds: itemSeconds,
+    text: formatDuration(itemSeconds),
+    percent: totalSeconds > 0 ? (itemSeconds / totalSeconds) * 100 : null,
+  };
+}
+
+async function fetchHackatimeAllTimeSummary(userIds) {
+  const attempts = [];
+
+  for (const userId of userIds) {
+    if (typeof userId !== "string" || userId.trim().length === 0) {
+      continue;
+    }
+
+    const url = new URL("https://hackatime.hackclub.com/api/summary");
+    url.searchParams.set("interval", "all_time");
+    url.searchParams.set("user_id", userId.trim());
+
+    const response = await fetch(url.toString(), {
+      headers: { accept: "application/json" },
+    });
+    attempts.push({
+      url: url.toString(),
+      auth: "none",
+      status: response.status,
+    });
+
+    if (!response.ok) {
+      continue;
+    }
+
+    const payload = await response.json();
+    const projects = Array.isArray(payload?.projects) ? payload.projects : [];
+    const languages = Array.isArray(payload?.languages)
+      ? payload.languages
+      : [];
+    const totalSeconds = projects.reduce((total, project) => {
+      const projectSeconds = project?.total;
+
+      return total + (typeof projectSeconds === "number" ? projectSeconds : 0);
+    }, 0);
+    const topProject = [...projects]
+      .filter((project) => typeof project?.total === "number")
+      .sort((a, b) => b.total - a.total)[0];
+    const topLanguage = [...languages]
+      .filter((language) => typeof language?.total === "number")
+      .sort((a, b) => b.total - a.total)[0];
+
+    return {
+      totalTime: {
+        startDate: typeof payload?.from === "string" ? payload.from : null,
+        endDate: typeof payload?.to === "string" ? payload.to : null,
+        totalSeconds,
+        text: formatDuration(totalSeconds),
+      },
+      topLanguage: normalizeSummaryItem(topLanguage, totalSeconds),
+      topProject: normalizeSummaryItem(topProject, totalSeconds),
+    };
+  }
+
+  const error = new Error("Hackatime all-time summary lookup failed");
+  error.attemptLog = attempts;
+  throw error;
 }
 
 async function fetchOptional(fetchData) {
@@ -546,19 +615,27 @@ export default {
     }
 
     try {
-      const [statusResult, dailyTotalResult, weeklyTotalResult, allTimeResult] =
+      const [statusResult, dailyTotalResult, weeklyStatsResult] =
         await Promise.all([
           fetchHackatimeStatus(env.HACKATIME_API_KEY),
           fetchOptional(() => fetchHackatimeDailyTotal(env.HACKATIME_API_KEY)),
-          fetchOptional(() => fetchHackatimeWeeklyTotal(env.HACKATIME_API_KEY)),
-          fetchOptional(() =>
-            fetchHackatimeAllTimeStats(env.HACKATIME_API_KEY),
-          ),
+          fetchOptional(() => fetchHackatimeWeeklyStats(env.HACKATIME_API_KEY)),
         ]);
       const { payload } = statusResult;
       const { data: dailyTotal } = dailyTotalResult;
-      const { data: weeklyTotal } = weeklyTotalResult;
-      const { data: allTimeStats } = allTimeResult;
+      const weeklyStats = weeklyStatsResult.data;
+      const weeklyTotal = weeklyStats?.total ?? null;
+      const allTimeSummaryResult = await fetchOptional(() =>
+        fetchHackatimeAllTimeSummary([
+          env.HACKATIME_USER_ID,
+          env.HACKATIME_USERNAME,
+          env.HACKATIME_USER,
+          weeklyStats?.username,
+          "akaduy",
+          GITHUB_OWNER,
+        ]),
+      );
+      const { data: allTimeSummary } = allTimeSummaryResult;
       const heartbeatTime = normalizeHeartbeatTime(payload);
       const active = isActiveHeartbeat(heartbeatTime);
       const project = active ? normalizeProjectName(payload) : null;
@@ -578,19 +655,25 @@ export default {
         text: projectLabel ? `currently working on ${projectLabel}` : null,
         active,
         lastHeartbeatAt: heartbeatTime?.toISOString() ?? null,
-        dailyTotal,
-        weeklyTotal,
-        totalTime: allTimeStats?.totalTime ?? null,
-        topLanguage: allTimeStats?.topLanguage ?? null,
-        topProject: allTimeStats?.topProject ?? null,
+        dailyTotal: dailyTotal?.text ?? null,
+        weeklyTotal: weeklyTotal?.text ?? null,
+        totalTime: allTimeSummary?.totalTime?.text ?? null,
+        topLanguage:
+          allTimeSummary?.topLanguage?.name ??
+          weeklyStats?.topLanguage?.name ??
+          null,
+        topProject:
+          allTimeSummary?.topProject?.name ??
+          weeklyStats?.topProject?.name ??
+          null,
         totalsError:
           dailyTotalResult.error ||
-          weeklyTotalResult.error ||
-          allTimeResult.error
+          weeklyStatsResult.error ||
+          allTimeSummaryResult.error
             ? {
                 daily: dailyTotalResult.error,
-                weekly: weeklyTotalResult.error,
-                allTime: allTimeResult.error,
+                weekly: weeklyStatsResult.error,
+                allTime: allTimeSummaryResult.error,
               }
             : null,
       });

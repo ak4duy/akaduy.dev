@@ -5,30 +5,17 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-type HackatimeTotal = {
-  totalSeconds: number;
-  text: string;
-};
-
-type HackatimeTopItem = {
-  name: string;
-  totalSeconds: number;
-  text: string;
-  percent: number | null;
-};
-
 type HackatimeStatus = {
   project: string | null;
   repoUrl: string | null;
   entity: string | null;
   text: string | null;
-  dailyTotal: HackatimeTotal | null;
-  weeklyTotal: HackatimeTotal | null;
-  totalTime: HackatimeTotal | null;
-  topLanguage: HackatimeTopItem | null;
-  topProject: HackatimeTopItem | null;
+  dailyTotal: string | null;
+  weeklyTotal: string | null;
+  totalTime: string | null;
+  topLanguage: string | null;
+  topProject: string | null;
 };
-
 const statusEndpoint =
   process.env.NEXT_PUBLIC_HACKATIME_STATUS_URL ??
   "https://api.akaduy.dev/hackatime/current";
@@ -147,27 +134,27 @@ export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
       )}
       {status.dailyTotal && (
         <span className="font-semibold text-foreground">
-          Today {status.dailyTotal.text}
+          Today {status.dailyTotal}
         </span>
       )}
       {status.weeklyTotal && (
         <span className="font-semibold text-foreground">
-          Week {status.weeklyTotal.text}
+          Week {status.weeklyTotal}
         </span>
       )}
       {status.totalTime && (
         <span className="font-semibold text-foreground">
-          Total {status.totalTime.text}
+          Total {status.totalTime}
         </span>
       )}
       {status.topLanguage && (
         <span className="font-semibold text-foreground">
-          Top lang {status.topLanguage.name}
+          Top lang {status.topLanguage}
         </span>
       )}
       {status.topProject && (
         <span className="font-semibold text-foreground">
-          Top project {status.topProject.name}
+          Top project {status.topProject}
         </span>
       )}
     </span>
