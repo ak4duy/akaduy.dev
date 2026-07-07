@@ -614,6 +614,114 @@ async function fetchOptional(fetchData) {
   }
 }
 
+async function getHackatimeData(env) {
+  const [statusResult, dailyTotalResult, weeklyStatsResult] = await Promise.all(
+    [
+      fetchHackatimeStatus(env.HACKATIME_API_KEY),
+      fetchOptional(() => fetchHackatimeDailyTotal(env.HACKATIME_API_KEY)),
+      fetchOptional(() => fetchHackatimeWeeklyStats(env.HACKATIME_API_KEY)),
+    ],
+  );
+  const { payload } = statusResult;
+  const { data: dailyTotal } = dailyTotalResult;
+  const weeklyStats = weeklyStatsResult.data;
+  const weeklyTotal = weeklyStats?.total ?? null;
+  const allTimeSummaryResult = await fetchOptional(() =>
+    fetchHackatimeAllTimeSummary([
+      env.HACKATIME_USER_ID,
+      env.HACKATIME_USERNAME,
+      env.HACKATIME_USER,
+      weeklyStats?.username,
+      "akaduy",
+      GITHUB_OWNER,
+    ]),
+  );
+  const { data: allTimeSummary } = allTimeSummaryResult;
+  const heartbeatTime = normalizeHeartbeatTime(payload);
+  const active = isActiveHeartbeat(heartbeatTime);
+  const project = active ? normalizeProjectName(payload) : null;
+  const entity = active ? normalizeEntity(payload) : null;
+  const repoUrl = project
+    ? (normalizeRepoUrl(payload) ?? (await fetchGithubRepoUrl(project)))
+    : null;
+  const projectLabel = project
+    ? `${project}${entity ? ` (${entity})` : ""}`
+    : null;
+
+  return {
+    project,
+    repoUrl,
+    entity,
+    projectLabel,
+    text: projectLabel ? `currently working on ${projectLabel}` : null,
+    active,
+    lastHeartbeatAt: heartbeatTime?.toISOString() ?? null,
+    dailyTotal: dailyTotal?.text ?? null,
+    weeklyTotal: weeklyTotal?.text ?? null,
+    totalTime: allTimeSummary?.totalTime?.text ?? null,
+    topLanguage:
+      allTimeSummary?.topLanguage?.name ??
+      weeklyStats?.topLanguage?.name ??
+      null,
+    topProject:
+      allTimeSummary?.topProject?.name ?? weeklyStats?.topProject?.name ?? null,
+    totalsError:
+      dailyTotalResult.error ||
+      weeklyStatsResult.error ||
+      allTimeSummaryResult.error
+        ? {
+            daily: dailyTotalResult.error,
+            weekly: weeklyStatsResult.error,
+            allTime: allTimeSummaryResult.error,
+          }
+        : null,
+  };
+}
+
+function getDiscordProfileUrl(env) {
+  if (!env.DISCORD_APPLICATION_ID || !env.DISCORD_USER_ID) {
+    throw new Error("Missing Discord application or user ID secret");
+  }
+
+  return `https://discord.com/api/v9/applications/${env.DISCORD_APPLICATION_ID}/users/${env.DISCORD_USER_ID}/identities/0/profile`;
+}
+
+async function updateDiscordHackatimeWidget(env) {
+  if (!env.DISCORD_BOT_TOKEN) {
+    throw new Error("Missing DISCORD_BOT_TOKEN secret");
+  }
+
+  const data = await getHackatimeData(env);
+  const body = toDiscordHackatimeWidget(data);
+  const response = await fetch(getDiscordProfileUrl(env), {
+    method: "PATCH",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bot ${env.DISCORD_BOT_TOKEN}`,
+      "user-agent":
+        "DiscordBot (https://github.com/discord/discord-api-docs, 1.0.0)",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const error = new Error(`Discord responded with ${response.status}`);
+    error.responseText = await response.text();
+    throw error;
+  }
+
+  console.log("Discord Hackatime widget updated", {
+    dailyTotal: data.dailyTotal,
+    weeklyTotal: data.weeklyTotal,
+    totalTime: data.totalTime,
+    entity: data.entity,
+    topLanguage: data.topLanguage,
+    topProject: data.topProject,
+  });
+
+  return body;
+}
+
 export default {
   async fetch(request, env) {
     const requestUrl = new URL(request.url);
@@ -642,68 +750,11 @@ export default {
     }
 
     try {
-      const [statusResult, dailyTotalResult, weeklyStatsResult] =
-        await Promise.all([
-          fetchHackatimeStatus(env.HACKATIME_API_KEY),
-          fetchOptional(() => fetchHackatimeDailyTotal(env.HACKATIME_API_KEY)),
-          fetchOptional(() => fetchHackatimeWeeklyStats(env.HACKATIME_API_KEY)),
-        ]);
-      const { payload } = statusResult;
-      const { data: dailyTotal } = dailyTotalResult;
-      const weeklyStats = weeklyStatsResult.data;
-      const weeklyTotal = weeklyStats?.total ?? null;
-      const allTimeSummaryResult = await fetchOptional(() =>
-        fetchHackatimeAllTimeSummary([
-          env.HACKATIME_USER_ID,
-          env.HACKATIME_USERNAME,
-          env.HACKATIME_USER,
-          weeklyStats?.username,
-          "akaduy",
-          GITHUB_OWNER,
-        ]),
-      );
-      const { data: allTimeSummary } = allTimeSummaryResult;
-      const heartbeatTime = normalizeHeartbeatTime(payload);
-      const active = isActiveHeartbeat(heartbeatTime);
-      const project = active ? normalizeProjectName(payload) : null;
-      const entity = active ? normalizeEntity(payload) : null;
-      const repoUrl = project
-        ? (normalizeRepoUrl(payload) ?? (await fetchGithubRepoUrl(project)))
-        : null;
-      const projectLabel = project
-        ? `${project}${entity ? ` (${entity})` : ""}`
-        : null;
+      if (requestUrl.pathname === "/discord/hackatime-widget/update") {
+        return json(await updateDiscordHackatimeWidget(env));
+      }
 
-      const data = {
-        project,
-        repoUrl,
-        entity,
-        projectLabel,
-        text: projectLabel ? `currently working on ${projectLabel}` : null,
-        active,
-        lastHeartbeatAt: heartbeatTime?.toISOString() ?? null,
-        dailyTotal: dailyTotal?.text ?? null,
-        weeklyTotal: weeklyTotal?.text ?? null,
-        totalTime: allTimeSummary?.totalTime?.text ?? null,
-        topLanguage:
-          allTimeSummary?.topLanguage?.name ??
-          weeklyStats?.topLanguage?.name ??
-          null,
-        topProject:
-          allTimeSummary?.topProject?.name ??
-          weeklyStats?.topProject?.name ??
-          null,
-        totalsError:
-          dailyTotalResult.error ||
-          weeklyStatsResult.error ||
-          allTimeSummaryResult.error
-            ? {
-                daily: dailyTotalResult.error,
-                weekly: weeklyStatsResult.error,
-                allTime: allTimeSummaryResult.error,
-              }
-            : null,
-      };
+      const data = await getHackatimeData(env);
 
       return json(wantsDiscordWidget ? toDiscordHackatimeWidget(data) : data);
     } catch (error) {
@@ -728,5 +779,16 @@ export default {
         status: 502,
       });
     }
+  },
+
+  async scheduled(_event, env, ctx) {
+    ctx.waitUntil(
+      updateDiscordHackatimeWidget(env).catch((error) => {
+        console.error("Discord Hackatime widget update failed", {
+          message: error instanceof Error ? error.message : "Unknown error",
+          responseText: error?.responseText,
+        });
+      }),
+    );
   },
 };

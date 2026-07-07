@@ -7,3 +7,6 @@ routes = [
   { pattern = "api.akaduy.dev/hackatime/current", zone_name = "akaduy.dev" },
   { pattern = "api.akaduy.dev/discord/hackatime-widget", zone_name = "akaduy.dev" }
 ]
+
+[triggers]
+crons = ["*/1 * * * *"]
