@@ -5,11 +5,18 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+type HackatimeTotal = {
+  totalSeconds: number;
+  text: string;
+};
+
 type HackatimeStatus = {
   project: string | null;
   repoUrl: string | null;
   entity: string | null;
   text: string | null;
+  dailyTotal: HackatimeTotal | null;
+  weeklyTotal: HackatimeTotal | null;
 };
 
 const statusEndpoint =
@@ -64,7 +71,9 @@ export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
         const data = (await response.json()) as HackatimeStatus;
 
         if (!ignored) {
-          setStatus(data.project ? data : null);
+          setStatus(
+            data.project || data.dailyTotal || data.weeklyTotal ? data : null,
+          );
         }
       } catch {
         if (!ignored) {
@@ -82,11 +91,12 @@ export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
     };
   }, [shouldFetchStatus]);
 
-  if (!status?.project) {
+  if (!status) {
     return null;
   }
 
   const projectUrl = status.repoUrl ?? getFallbackRepoUrl(status.project);
+  const hasProject = Boolean(status.project);
 
   return (
     <span className="relative top-px inline-flex animate-in zoom-in-95 fade-in slide-in-from-bottom-1 duration-300 items-center gap-1.5 rounded-full border border-border/60 bg-muted/30 px-2.5 py-1 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur-sm">
@@ -94,22 +104,38 @@ export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
         className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"
         aria-hidden="true"
       />
-      <span>{label}</span>
-      {projectUrl ? (
-        <a
-          className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
-          href={projectUrl}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {status.project}
-        </a>
-      ) : (
-        <span className="font-semibold text-foreground">{status.project}</span>
+      {hasProject && (
+        <>
+          <span>{label}</span>
+          {projectUrl ? (
+            <a
+              className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+              href={projectUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {status.project}
+            </a>
+          ) : (
+            <span className="font-semibold text-foreground">
+              {status.project}
+            </span>
+          )}
+          {status.entity && (
+            <span className="max-w-40 truncate font-mono text-[0.7rem] text-muted-foreground/80 sm:max-w-56">
+              ({status.entity})
+            </span>
+          )}
+        </>
       )}
-      {status.entity && (
-        <span className="max-w-40 truncate font-mono text-[0.7rem] text-muted-foreground/80 sm:max-w-56">
-          ({status.entity})
+      {status.dailyTotal && (
+        <span className="font-semibold text-foreground">
+          Today {status.dailyTotal.text}
+        </span>
+      )}
+      {status.weeklyTotal && (
+        <span className="font-semibold text-foreground">
+          Week {status.weeklyTotal.text}
         </span>
       )}
     </span>

@@ -1,4 +1,6 @@
 const HACKATIME_API_BASE = "https://hackatime.hackclub.com/api/v1";
+const HACKATIME_WAKATIME_API_BASE =
+  "https://hackatime.hackclub.com/api/hackatime/v1";
 const GITHUB_OWNER = "ak4duy";
 const ACTIVE_HEARTBEAT_WINDOW_MS = 5 * 60 * 1000;
 
@@ -41,6 +43,64 @@ function getAuthHeaders(apiKey, scheme) {
   }
 
   return { Authorization: `Basic ${btoa(normalizedApiKey)}` };
+}
+
+function getUrlWithApiKey(url, apiKey) {
+  const authenticatedUrl = new URL(url);
+  authenticatedUrl.searchParams.set("api_key", normalizeApiKey(apiKey));
+
+  return authenticatedUrl.toString();
+}
+
+function getIsoDate(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function getTodayRange() {
+  const now = new Date();
+  const today = getIsoDate(now);
+
+  return { startDate: today, endDate: today };
+}
+
+function getWeekRange() {
+  const now = new Date();
+  const start = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+  );
+  const day = start.getUTCDay();
+  const daysSinceMonday = day === 0 ? 6 : day - 1;
+  start.setUTCDate(start.getUTCDate() - daysSinceMonday);
+
+  return { startDate: getIsoDate(start), endDate: getIsoDate(now) };
+}
+
+function formatDuration(totalSeconds) {
+  if (!Number.isFinite(totalSeconds) || totalSeconds <= 0) {
+    return "0m";
+  }
+
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.round((totalSeconds % 3600) / 60);
+
+  if (hours <= 0) {
+    return `${minutes}m`;
+  }
+
+  if (minutes <= 0) {
+    return `${hours}h`;
+  }
+
+  return `${hours}h ${minutes}m`;
+}
+
+function normalizeTotalSeconds(payload) {
+  const data = getPayloadData(payload);
+  const totalSeconds = data?.total_seconds;
+
+  return typeof totalSeconds === "number" && Number.isFinite(totalSeconds)
+    ? totalSeconds
+    : null;
 }
 
 function getPayloadData(payload) {
@@ -277,8 +337,7 @@ async function fetchWithAuthVariants(url, apiKey, attemptLog) {
     },
     {
       auth: "query-api-key",
-      fetch: () =>
-        fetch(`${url}?api_key=${encodeURIComponent(normalizedApiKey)}`),
+      fetch: () => fetch(getUrlWithApiKey(url, normalizedApiKey)),
     },
     {
       auth: "basic",
@@ -338,6 +397,80 @@ async function fetchHackatimeStatus(apiKey) {
   throw error;
 }
 
+async function fetchHackatimeDailyTotal(apiKey) {
+  const { startDate, endDate } = getTodayRange();
+  const url = `${HACKATIME_WAKATIME_API_BASE}/users/current/statusbar/today`;
+  const attemptLog = [];
+  const response = await fetchWithAuthVariants(url, apiKey, attemptLog);
+
+  if (!response?.ok) {
+    const error = new Error(
+      `Hackatime daily total responded with ${response?.status ?? "unknown"}`,
+    );
+    error.attemptLog = attemptLog;
+    throw error;
+  }
+
+  const payload = await response.json();
+  const totalSeconds = payload?.data?.grand_total?.total_seconds;
+
+  return {
+    startDate,
+    endDate,
+    totalSeconds:
+      typeof totalSeconds === "number" && Number.isFinite(totalSeconds)
+        ? totalSeconds
+        : 0,
+    text:
+      typeof payload?.data?.grand_total?.text === "string"
+        ? payload.data.grand_total.text
+        : formatDuration(totalSeconds ?? 0),
+  };
+}
+
+async function fetchHackatimeWeeklyTotal(apiKey) {
+  const { startDate, endDate } = getWeekRange();
+  const url = `${HACKATIME_WAKATIME_API_BASE}/users/current/stats/last_7_days`;
+  const attemptLog = [];
+  const response = await fetchWithAuthVariants(url, apiKey, attemptLog);
+
+  if (!response?.ok) {
+    const error = new Error(
+      `Hackatime weekly total responded with ${response?.status ?? "unknown"}`,
+    );
+    error.attemptLog = attemptLog;
+    throw error;
+  }
+
+  const payload = await response.json();
+  const data = getPayloadData(payload);
+  const totalSeconds = normalizeTotalSeconds(payload);
+
+  return {
+    startDate,
+    endDate,
+    totalSeconds: totalSeconds ?? 0,
+    text:
+      typeof data?.human_readable_total === "string"
+        ? data.human_readable_total
+        : formatDuration(totalSeconds ?? 0),
+  };
+}
+
+async function fetchOptionalTotal(fetchTotal) {
+  try {
+    return { total: await fetchTotal(), error: null };
+  } catch (error) {
+    return {
+      total: null,
+      error: {
+        message: error instanceof Error ? error.message : "Unknown error",
+        attempts: error?.attemptLog,
+      },
+    };
+  }
+}
+
 export default {
   async fetch(request, env) {
     if (request.method === "OPTIONS") {
@@ -362,7 +495,19 @@ export default {
     }
 
     try {
-      const { payload } = await fetchHackatimeStatus(env.HACKATIME_API_KEY);
+      const [statusResult, dailyTotalResult, weeklyTotalResult] =
+        await Promise.all([
+          fetchHackatimeStatus(env.HACKATIME_API_KEY),
+          fetchOptionalTotal(() =>
+            fetchHackatimeDailyTotal(env.HACKATIME_API_KEY),
+          ),
+          fetchOptionalTotal(() =>
+            fetchHackatimeWeeklyTotal(env.HACKATIME_API_KEY),
+          ),
+        ]);
+      const { payload } = statusResult;
+      const { total: dailyTotal } = dailyTotalResult;
+      const { total: weeklyTotal } = weeklyTotalResult;
       const heartbeatTime = normalizeHeartbeatTime(payload);
       const active = isActiveHeartbeat(heartbeatTime);
       const project = active ? normalizeProjectName(payload) : null;
@@ -382,6 +527,15 @@ export default {
         text: projectLabel ? `currently working on ${projectLabel}` : null,
         active,
         lastHeartbeatAt: heartbeatTime?.toISOString() ?? null,
+        dailyTotal,
+        weeklyTotal,
+        totalsError:
+          dailyTotalResult.error || weeklyTotalResult.error
+            ? {
+                daily: dailyTotalResult.error,
+                weekly: weeklyTotalResult.error,
+              }
+            : null,
       });
     } catch (error) {
       return json(
@@ -393,6 +547,8 @@ export default {
           text: null,
           active: false,
           lastHeartbeatAt: null,
+          dailyTotal: null,
+          weeklyTotal: null,
           error: error instanceof Error ? error.message : "Unknown error",
           attempts: error?.attemptLog,
         },
