@@ -37,7 +37,7 @@ function toDiscordHackatimeWidget(data) {
         discordDynamic("dailyTotal", data.dailyTotal),
         discordDynamic("weeklyTotal", data.weeklyTotal),
         discordDynamic("totalTime", data.totalTime),
-        discordDynamic("entity", data.entity),
+        discordDynamic("entity", data.entity || "chilling"),
         discordDynamic("topLanguage", data.topLanguage),
         discordDynamic("topProject", data.topProject),
       ],
