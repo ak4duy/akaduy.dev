@@ -22,11 +22,19 @@ function json(data, init = {}) {
   });
 }
 
+function normalizeDiscordDynamicValue(name, value) {
+  if (name === "dailyTotal" && value === "Start coding to track your time") {
+    return "not yet";
+  }
+
+  return value ?? "";
+}
+
 function discordDynamic(name, value) {
   return {
     type: 1,
     name,
-    value: value ?? "",
+    value: normalizeDiscordDynamicValue(name, value),
   };
 }
 
