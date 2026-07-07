@@ -10,6 +10,13 @@ type HackatimeTotal = {
   text: string;
 };
 
+type HackatimeTopItem = {
+  name: string;
+  totalSeconds: number;
+  text: string;
+  percent: number | null;
+};
+
 type HackatimeStatus = {
   project: string | null;
   repoUrl: string | null;
@@ -17,6 +24,9 @@ type HackatimeStatus = {
   text: string | null;
   dailyTotal: HackatimeTotal | null;
   weeklyTotal: HackatimeTotal | null;
+  totalTime: HackatimeTotal | null;
+  topLanguage: HackatimeTopItem | null;
+  topProject: HackatimeTopItem | null;
 };
 
 const statusEndpoint =
@@ -72,7 +82,14 @@ export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
 
         if (!ignored) {
           setStatus(
-            data.project || data.dailyTotal || data.weeklyTotal ? data : null,
+            data.project ||
+              data.dailyTotal ||
+              data.weeklyTotal ||
+              data.totalTime ||
+              data.topLanguage ||
+              data.topProject
+              ? data
+              : null,
           );
         }
       } catch {
@@ -136,6 +153,21 @@ export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
       {status.weeklyTotal && (
         <span className="font-semibold text-foreground">
           Week {status.weeklyTotal.text}
+        </span>
+      )}
+      {status.totalTime && (
+        <span className="font-semibold text-foreground">
+          Total {status.totalTime.text}
+        </span>
+      )}
+      {status.topLanguage && (
+        <span className="font-semibold text-foreground">
+          Top lang {status.topLanguage.name}
+        </span>
+      )}
+      {status.topProject && (
+        <span className="font-semibold text-foreground">
+          Top project {status.topProject.name}
         </span>
       )}
     </span>

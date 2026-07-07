@@ -103,6 +103,30 @@ function normalizeTotalSeconds(payload) {
     : null;
 }
 
+function normalizeStatsItem(item) {
+  if (!item || typeof item.name !== "string" || item.name.trim().length === 0) {
+    return null;
+  }
+
+  const totalSeconds = item.total_seconds;
+
+  return {
+    name: item.name.trim(),
+    totalSeconds:
+      typeof totalSeconds === "number" && Number.isFinite(totalSeconds)
+        ? totalSeconds
+        : 0,
+    text:
+      typeof item.text === "string"
+        ? item.text
+        : formatDuration(totalSeconds ?? 0),
+    percent:
+      typeof item.percent === "number" && Number.isFinite(item.percent)
+        ? item.percent
+        : null,
+  };
+}
+
 function getPayloadData(payload) {
   return payload?.data ?? payload;
 }
@@ -454,6 +478,8 @@ async function fetchHackatimeWeeklyTotal(apiKey) {
       typeof data?.human_readable_total === "string"
         ? data.human_readable_total
         : formatDuration(totalSeconds ?? 0),
+    topLanguage: normalizeStatsItem(data?.languages?.[0]),
+    topProject: normalizeStatsItem(data?.projects?.[0]),
   };
 }
 
@@ -508,6 +534,14 @@ export default {
       const { payload } = statusResult;
       const { total: dailyTotal } = dailyTotalResult;
       const { total: weeklyTotal } = weeklyTotalResult;
+      const totalTime = weeklyTotal
+        ? {
+            startDate: weeklyTotal.startDate,
+            endDate: weeklyTotal.endDate,
+            totalSeconds: weeklyTotal.totalSeconds,
+            text: weeklyTotal.text,
+          }
+        : null;
       const heartbeatTime = normalizeHeartbeatTime(payload);
       const active = isActiveHeartbeat(heartbeatTime);
       const project = active ? normalizeProjectName(payload) : null;
@@ -529,6 +563,9 @@ export default {
         lastHeartbeatAt: heartbeatTime?.toISOString() ?? null,
         dailyTotal,
         weeklyTotal,
+        totalTime,
+        topLanguage: weeklyTotal?.topLanguage ?? null,
+        topProject: weeklyTotal?.topProject ?? null,
         totalsError:
           dailyTotalResult.error || weeklyTotalResult.error
             ? {
@@ -549,6 +586,9 @@ export default {
           lastHeartbeatAt: null,
           dailyTotal: null,
           weeklyTotal: null,
+          totalTime: null,
+          topLanguage: null,
+          topProject: null,
           error: error instanceof Error ? error.message : "Unknown error",
           attempts: error?.attemptLog,
         },
