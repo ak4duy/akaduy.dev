@@ -4,5 +4,6 @@ compatibility_date = "2026-05-26"
 account_id = "15f71e1f90ca817642d2d276d92645c4"
 
 routes = [
-  { pattern = "api.akaduy.dev/hackatime/current", zone_name = "akaduy.dev" }
+  { pattern = "api.akaduy.dev/hackatime/current", zone_name = "akaduy.dev" },
+  { pattern = "api.akaduy.dev/discord/hackatime-widget", zone_name = "akaduy.dev" }
 ]

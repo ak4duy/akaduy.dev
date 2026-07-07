@@ -22,6 +22,29 @@ function json(data, init = {}) {
   });
 }
 
+function discordDynamic(name, value) {
+  return {
+    type: 1,
+    name,
+    value: value ?? "",
+  };
+}
+
+function toDiscordHackatimeWidget(data) {
+  return {
+    data: {
+      dynamic: [
+        discordDynamic("dailyTotal", data.dailyTotal),
+        discordDynamic("weeklyTotal", data.weeklyTotal),
+        discordDynamic("totalTime", data.totalTime),
+        discordDynamic("entity", data.entity),
+        discordDynamic("topLanguage", data.topLanguage),
+        discordDynamic("topProject", data.topProject),
+      ],
+    },
+  };
+}
+
 function normalizeApiKey(apiKey) {
   return apiKey
     .trim()
@@ -593,6 +616,10 @@ async function fetchOptional(fetchData) {
 
 export default {
   async fetch(request, env) {
+    const requestUrl = new URL(request.url);
+    const wantsDiscordWidget =
+      requestUrl.pathname === "/discord/hackatime-widget";
+
     if (request.method === "OPTIONS") {
       return new Response(null, {
         headers: {
@@ -647,7 +674,7 @@ export default {
         ? `${project}${entity ? ` (${entity})` : ""}`
         : null;
 
-      return json({
+      const data = {
         project,
         repoUrl,
         entity,
@@ -676,27 +703,30 @@ export default {
                 allTime: allTimeSummaryResult.error,
               }
             : null,
-      });
+      };
+
+      return json(wantsDiscordWidget ? toDiscordHackatimeWidget(data) : data);
     } catch (error) {
-      return json(
-        {
-          project: null,
-          repoUrl: null,
-          entity: null,
-          projectLabel: null,
-          text: null,
-          active: false,
-          lastHeartbeatAt: null,
-          dailyTotal: null,
-          weeklyTotal: null,
-          totalTime: null,
-          topLanguage: null,
-          topProject: null,
-          error: error instanceof Error ? error.message : "Unknown error",
-          attempts: error?.attemptLog,
-        },
-        { status: 502 },
-      );
+      const data = {
+        project: null,
+        repoUrl: null,
+        entity: null,
+        projectLabel: null,
+        text: null,
+        active: false,
+        lastHeartbeatAt: null,
+        dailyTotal: null,
+        weeklyTotal: null,
+        totalTime: null,
+        topLanguage: null,
+        topProject: null,
+        error: error instanceof Error ? error.message : "Unknown error",
+        attempts: error?.attemptLog,
+      };
+
+      return json(wantsDiscordWidget ? toDiscordHackatimeWidget(data) : data, {
+        status: 502,
+      });
     }
   },
 };
