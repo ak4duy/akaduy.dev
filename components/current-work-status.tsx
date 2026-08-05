@@ -108,53 +108,22 @@ export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
         className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"
         aria-hidden="true"
       />
-      {hasProject && (
-        <>
-          <span>{label}</span>
-          {projectUrl ? (
-            <a
-              className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
-              href={projectUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {status.project}
-            </a>
-          ) : (
-            <span className="font-semibold text-foreground">
-              {status.project}
-            </span>
-          )}
-          {status.entity && (
-            <span className="max-w-40 truncate font-mono text-[0.7rem] text-muted-foreground/80 sm:max-w-56">
-              ({status.entity})
-            </span>
-          )}
-        </>
+      <span>{label}</span>
+      {projectUrl ? (
+        <a
+          className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+          href={projectUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {status.project}
+        </a>
+      ) : (
+        <span className="font-semibold text-foreground">{status.project}</span>
       )}
-      {status.dailyTotal && (
-        <span className="font-semibold text-foreground">
-          Today {status.dailyTotal}
-        </span>
-      )}
-      {status.weeklyTotal && (
-        <span className="font-semibold text-foreground">
-          Week {status.weeklyTotal}
-        </span>
-      )}
-      {status.totalTime && (
-        <span className="font-semibold text-foreground">
-          Total {status.totalTime}
-        </span>
-      )}
-      {status.topLanguage && (
-        <span className="font-semibold text-foreground">
-          Top lang {status.topLanguage}
-        </span>
-      )}
-      {status.topProject && (
-        <span className="font-semibold text-foreground">
-          Top project {status.topProject}
+      {status.entity && (
+        <span className="max-w-40 truncate font-mono text-[0.7rem] text-muted-foreground/80 sm:max-w-56">
+          ({status.entity})
         </span>
       )}
     </span>
