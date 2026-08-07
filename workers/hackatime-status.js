@@ -23,8 +23,12 @@ function json(data, init = {}) {
 }
 
 function normalizeDiscordDynamicValue(name, value) {
-  if (name === "dailyTotal" && value === "Start coding to track your time" && value === "Start coding!") {
-    return "not yet";
+  if (
+    name === "dailyTotal" &&
+    typeof value === "string" &&
+    value.trim().toLowerCase().startsWith("start coding")
+  ) {
+    return "not yet!";
   }
 
   return value ?? "";
