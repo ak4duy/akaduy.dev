@@ -45,15 +45,6 @@ export const en: Translation = {
     ],
     projects: [
       {
-        name: "akaduy.dev",
-        href: "https://github.com/ak4duy/akaduy.dev",
-        description: [
-          "My personal portfolio and blog website.",
-          "I write blogs here and share updates about my personal projects.",
-        ],
-        tags: ["Next.js", "React", "Typescript", "Markdown"],
-      },
-      {
         name: "1 in 10000 chance of Foxy jumpscare per second",
         href: "https://ankiweb.net/shared/info/1601646218",
         description: [
@@ -63,12 +54,29 @@ export const en: Translation = {
         tags: ["Python", "PyQt", "Anki Add-on"],
       },
       {
+        name: "akaduy.dev",
+        href: "https://github.com/ak4duy/akaduy.dev",
+        description: [
+          "My personal portfolio and blog website.",
+          "I write blogs here and share updates about my personal projects.",
+        ],
+        tags: ["Next.js", "React", "Typescript", "Markdown"],
+      },
+      {
         name: "DeskForge",
         href: "https://github.com/ak4duy/DeskForge",
         description: [
           "A simple TUI launcher editor for Linux no one asked for.",
         ],
         tags: ["Rust", "Ratatui"],
+      },
+      {
+        name: "wi-mesh-login",
+        href: "https://github.com/ak4duy/wi-mesh-login",
+        description: [
+          "A quick CLI for logging into Wi-MESH (VN) and claim rewards.",
+        ],
+        tags: ["Rust", "CLI"],
       },
     ],
     contributedTo: [

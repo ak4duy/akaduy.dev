@@ -45,15 +45,6 @@ export const vn: Translation = {
     ],
     projects: [
       {
-        name: "akaduy.dev",
-        href: "https://github.com/ak4duy/akaduy.dev",
-        description: [
-          "Đây là trang web cá nhân và blog của tôi.",
-          "Tôi thường ghi blog ở đây và chia sẻ về dự án cá nhân của mình.",
-        ],
-        tags: ["Next.js", "React", "Typescript", "Markdown"],
-      },
-      {
         name: "1 in 10000 chance of Foxy jumpscare per second",
         href: "https://ankiweb.net/shared/info/1601646218",
         description: [
@@ -63,12 +54,29 @@ export const vn: Translation = {
         tags: ["Python", "PyQt", "Anki Add-on"],
       },
       {
+        name: "akaduy.dev",
+        href: "https://github.com/ak4duy/akaduy.dev",
+        description: [
+          "Đây là trang web cá nhân và blog của tôi.",
+          "Tôi thường ghi blog ở đây và chia sẻ về dự án cá nhân của mình.",
+        ],
+        tags: ["Next.js", "React", "Typescript", "Markdown"],
+      },
+      {
         name: "DeskForge",
         href: "https://github.com/ak4duy/DeskForge",
         description: [
           "Một TUI chỉnh launcher đơn giản cho Linux mà chẳng ai xài.",
         ],
         tags: ["Rust", "Ratatui"],
+      },
+      {
+        name: "wi-mesh-login",
+        href: "https://github.com/ak4duy/wi-mesh-login",
+        description: [
+          "Một CLI nhỏ gọn để đăng nhập vào Wi-MESH và nhận thưởng..",
+        ],
+        tags: ["Rust", "CLI"],
       },
     ],
     contributedTo: [
