@@ -1,0 +1,25 @@
+---
+import type { GetStaticPaths } from "astro";
+import SiteLayout from "@/src/layouts/SiteLayout.astro";
+
+export const getStaticPaths = (() =>
+  [undefined, "blog", "experience", "contact"].map((path) => ({
+    params: { redirect: path },
+    props: { href: path ? `/en/${path}` : "/en" },
+  }))) satisfies GetStaticPaths;
+
+interface Props { href: string }
+const { href } = Astro.props;
+---
+
+<SiteLayout noindex>
+  <meta slot="head" http-equiv="refresh" content={`0;url=${href}`} />
+  <script is:inline define:vars={{ href }}>window.location.replace(href);</script>
+  <main class="min-h-screen bg-background text-foreground">
+    <div class="relative mx-auto flex min-h-screen max-w-2xl items-center justify-center px-6 text-center">
+      <p class="text-sm text-muted-foreground">
+        Redirecting to <a href={href} class="font-medium text-foreground underline underline-offset-4">{href}</a>...
+      </p>
+    </div>
+  </main>
+</SiteLayout>

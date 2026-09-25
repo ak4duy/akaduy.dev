@@ -1,8 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { basename, join } from "node:path";
-import type { Metadata } from "next";
 import { BLOG_POSTS_PER_PAGE } from "@/lib/blog-config";
-import { Language } from "@/lib/i18n/index";
+import type { Language } from "@/lib/i18n/index";
 
 export type BlogPollOption = {
   id: string;
@@ -32,6 +31,12 @@ export type BlogPost = {
   poll: BlogPoll | null;
   polls: BlogPoll[];
 };
+
+export type BlogPostSummary = Pick<BlogPost, "slug" | "title" | "date" | "tags" | "excerpt">;
+
+export function toBlogPostSummary({ slug, title, date, tags, excerpt }: BlogPost): BlogPostSummary {
+  return { slug, title, date, tags, excerpt };
+}
 
 const languageDirectory: Record<Language, string> = {
   EN: "en",
@@ -240,27 +245,4 @@ export function getBlogPageCount(language: Language) {
     1,
     Math.ceil(getBlogPosts(language).length / BLOG_POSTS_PER_PAGE),
   );
-}
-
-export function createBlogPostMetadata(post: BlogPost): Metadata {
-  const title = `Blog: ${post.title} | akaduy`;
-  const description = post.excerpt;
-
-  return {
-    title,
-    description,
-    keywords: post.tags,
-    openGraph: {
-      title,
-      description,
-      siteName: "akaduy blog",
-      type: "article",
-      tags: post.tags,
-    },
-    twitter: {
-      card: "summary",
-      title,
-      description,
-    },
-  };
 }

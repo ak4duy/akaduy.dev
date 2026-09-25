@@ -1,0 +1,52 @@
+---
+import "@fontsource-variable/geist";
+import "@fontsource-variable/geist-mono";
+import "@/styles/globals.css";
+import type { Language } from "@/lib/i18n";
+
+interface Props {
+  language?: Language;
+  title?: string;
+  description?: string;
+  tags?: string[];
+  article?: boolean;
+  noindex?: boolean;
+}
+
+const {
+  language = "EN",
+  title = "akaduy",
+  description = "Self-taught developer. Working with Java, Python, Rust, and whatever breaks next.",
+  tags = [],
+  article = false,
+  noindex = false,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang={language === "VN" ? "vi" : "en"} class="dark bg-background mdl-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon-200x200.jpg" />
+    <link rel="apple-touch-icon" href="/favicon-200x200.jpg" />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    {tags.length > 0 && <meta name="keywords" content={tags.join(", ")} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={article ? "article" : "website"} />
+    <meta property="og:site_name" content={article ? "akaduy blog" : "akaduy"} />
+    <meta property="og:url" content={canonical.href} />
+    {article && tags.map((tag) => <meta property="article:tag" content={tag} />)}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <slot name="head" />
+  </head>
+  <body class="font-sans antialiased">
+    <slot />
+  </body>
+</html>

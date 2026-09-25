@@ -2,7 +2,6 @@
 
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type HackatimeStatus = {
@@ -16,9 +15,7 @@ type HackatimeStatus = {
   topLanguage: string | null;
   topProject: string | null;
 };
-const statusEndpoint =
-  process.env.NEXT_PUBLIC_HACKATIME_STATUS_URL ??
-  "https://api.akaduy.dev/hackatime/current";
+const statusEndpoint = "https://api.akaduy.dev/hackatime/current";
 const refreshIntervalMs = 60_000;
 const githubOwner = "ak4duy";
 
@@ -34,21 +31,10 @@ type CurrentWorkStatusProps = {
   label: string;
 };
 
-function isBlogPostPath(pathname: string) {
-  return /^\/(?:en|vn)\/blog\/[^/]+\/?$/.test(pathname);
-}
-
 export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
-  const pathname = usePathname();
   const [status, setStatus] = useState<HackatimeStatus | null>(null);
-  const shouldFetchStatus = !isBlogPostPath(pathname);
 
   useEffect(() => {
-    if (!shouldFetchStatus) {
-      setStatus(null);
-      return;
-    }
-
     let ignored = false;
 
     async function loadStatus() {
@@ -93,7 +79,7 @@ export function CurrentWorkStatus({ label }: CurrentWorkStatusProps) {
       ignored = true;
       window.clearInterval(intervalId);
     };
-  }, [shouldFetchStatus]);
+  }, []);
 
   if (!status?.project) {
     return null;

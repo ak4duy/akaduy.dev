@@ -17,3 +17,7 @@ out/
 .DS_Store
 next-env.d.ts
 tsconfig.tsbuildinfo
+
+# Astro build output and generated types
+dist/
+.astro/

@@ -1,0 +1,48 @@
+---
+import type { GetStaticPaths } from "astro";
+import SiteLayout from "@/src/layouts/SiteLayout.astro";
+import { BlogPostPage } from "@/components/blog-post-page";
+import { RoutedHomePage } from "@/components/routed-home-page";
+import { getBlogPosts, toBlogPostSummary, type BlogPost, type BlogPostSummary } from "@/lib/blog-posts";
+import { BLOG_POSTS_PER_PAGE } from "@/lib/blog-config";
+import { languages, type Language } from "@/lib/i18n";
+
+interface Props {
+  language: Language;
+  post?: BlogPost;
+  blogPosts?: BlogPostSummary[];
+  page?: number;
+}
+
+export const getStaticPaths = (() => languages.flatMap((language) => {
+  const blogPosts = getBlogPosts(language);
+  const locale = language.toLowerCase();
+  const pageCount = Math.ceil(blogPosts.length / BLOG_POSTS_PER_PAGE);
+  return [
+    ...blogPosts.map((post) => ({
+      params: { locale, entry: post.slug },
+      props: { language, post },
+    })),
+    ...Array.from({ length: Math.max(0, pageCount - 1) }, (_, index) => ({
+      params: { locale, entry: String(index + 2) },
+      props: { language, blogPosts: blogPosts.map(toBlogPostSummary), page: index + 2 },
+    })),
+  ];
+})) satisfies GetStaticPaths;
+
+const { language, post, blogPosts, page } = Astro.props;
+---
+
+<SiteLayout
+  language={language}
+  title={post ? `Blog: ${post.title} | akaduy` : undefined}
+  description={post?.excerpt}
+  tags={post?.tags}
+  article={Boolean(post)}
+>
+  {post ? (
+    <BlogPostPage initialLanguage={language} post={post} client:load />
+  ) : (
+    <RoutedHomePage activeTab="blog" initialLanguage={language} initialBlogPage={page} blogPosts={blogPosts!} client:load />
+  )}
+</SiteLayout>

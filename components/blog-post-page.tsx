@@ -1,15 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowUp } from "lucide-react";
 import { BlogPoll } from "@/components/blog-poll";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
-import { useLanguage } from "@/components/language-provider";
 import { MarkdownContent } from "@/components/markdown-content";
-import { BlogPost } from "@/lib/blog-posts";
-import { Language, translations } from "@/lib/i18n/index";
+import type { BlogPost } from "@/lib/blog-posts";
+import { type Language, translations } from "@/lib/i18n/index";
 
 type BlogPostPageProps = {
   initialLanguage: Language;
@@ -58,18 +56,17 @@ function getReadingTimeMinutes(content: string) {
 
 function BackToBlogLink({ href, label }: { href: string; label: string }) {
   return (
-    <Link
+    <a
       href={href}
       className="group flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
     >
       <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
       {label}
-    </Link>
+    </a>
   );
 }
 
 export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
-  const { language, setLanguage } = useLanguage();
   const t = translations[initialLanguage];
   const localePrefix = `/${initialLanguage.toLowerCase()}`;
   const readingRootRef = useRef<HTMLElement | null>(null);
@@ -81,12 +78,6 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
   const [readerTheme, setReaderTheme] = useState<ReaderTheme>("dark");
   const [isThemeChanging, setIsThemeChanging] = useState(false);
   const [showStickyContents, setShowStickyContents] = useState(false);
-
-  useEffect(() => {
-    if (language !== initialLanguage) {
-      setLanguage(initialLanguage);
-    }
-  }, [initialLanguage, language, setLanguage]);
 
   useEffect(() => {
     const savedReaderTheme = window.localStorage.getItem("reader-theme");
@@ -313,7 +304,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
                   </button>
                 ))}
               </div>
-              <LanguageToggle />
+              <LanguageToggle language={initialLanguage} />
             </div>
           </div>
 

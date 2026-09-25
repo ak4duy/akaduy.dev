@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
   Select,
@@ -14,10 +13,9 @@ import { ExternalLink, Tag, X } from "lucide-react";
 import { CurrentWorkStatus } from "@/components/current-work-status";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
-import { useLanguage } from "@/components/language-provider";
 import { BLOG_POSTS_PER_PAGE } from "@/lib/blog-config";
-import type { BlogPost } from "@/lib/blog-posts";
-import { Language, translations } from "@/lib/i18n/index";
+import type { BlogPostSummary } from "@/lib/blog-posts";
+import { type Language, translations } from "@/lib/i18n/index";
 
 const tools = ["Java", "Rust", "Python", "Linux"];
 const interests = ["TypeScript", "JavaScript", "Kotlin", "Go"];
@@ -89,8 +87,8 @@ export type TabValue = "about" | "experience" | "blog" | "contact";
 
 type RoutedHomePageProps = {
   activeTab: TabValue;
-  blogPosts: BlogPost[];
-  initialLanguage?: Language;
+  blogPosts: BlogPostSummary[];
+  initialLanguage: Language;
   initialBlogPage?: number;
 };
 
@@ -110,8 +108,7 @@ export function RoutedHomePage({
   const [blogPage, setBlogPage] = useState(initialBlogPage);
   const [routeBlogPage, setRouteBlogPage] = useState(initialBlogPage);
   const hasMountedBlogResetRef = useRef(false);
-  const { language, setLanguage } = useLanguage();
-  const activeLanguage = initialLanguage ?? language;
+  const activeLanguage = initialLanguage;
   const t = translations[activeLanguage];
   const localePrefix = `/${activeLanguage.toLowerCase()}`;
   const tabs = [
@@ -197,18 +194,28 @@ export function RoutedHomePage({
   );
 
   useEffect(() => {
-    setCurrentTab(activeTab);
-  }, [activeTab]);
+    const syncTabWithHistory = () => {
+      const path = window.location.pathname.replace(/\/$/, "");
+      const paginatedBlogPath = path.match(
+        new RegExp(`^${localePrefix}/blog/(\\d+)$`),
+      );
 
-  useEffect(() => {
-    setRouteBlogPage(initialBlogPage);
-  }, [initialBlogPage]);
+      if (paginatedBlogPath) {
+        setCurrentTab("blog");
+        setRouteBlogPage(Number(paginatedBlogPath[1]));
+        return;
+      }
 
-  useEffect(() => {
-    if (initialLanguage && initialLanguage !== language) {
-      setLanguage(initialLanguage);
-    }
-  }, [initialLanguage, language, setLanguage]);
+      const tab = tabs.find((item) => item.href === path);
+      if (tab) {
+        setCurrentTab(tab.value);
+        setRouteBlogPage(1);
+      }
+    };
+
+    window.addEventListener("popstate", syncTabWithHistory);
+    return () => window.removeEventListener("popstate", syncTabWithHistory);
+  }, [localePrefix]);
 
   useEffect(() => {
     const query = window.matchMedia("(min-width: 640px)");
@@ -234,25 +241,16 @@ export function RoutedHomePage({
   const getBlogPageHref = (page: number) =>
     page === 1 ? `${localePrefix}/blog` : `${localePrefix}/blog/${page}`;
 
-  const handleBlogRoutePageChange = (page: number) => {
-    setRouteBlogPage(page);
-    setBlogPage(page);
-    window.history.pushState(null, "", getBlogPageHref(page));
-  };
-
   const handleTabChange = (value: string) => {
-    const tab = tabs.find((tab) => tab.value === value);
+    const tab = tabs.find((item) => item.value === value);
+    if (!tab || tab.value === currentTab) return;
 
-    if (tab) {
-      setCurrentTab(tab.value);
-
-      if (tab.value === "blog") {
-        setBlogPage(1);
-        setRouteBlogPage(1);
-      }
-
-      window.history.pushState(null, "", tab.href);
+    setCurrentTab(tab.value);
+    if (tab.value === "blog") {
+      setRouteBlogPage(1);
+      setBlogPage(1);
     }
+    window.history.pushState(null, "", tab.href);
   };
 
   return (
@@ -262,7 +260,7 @@ export function RoutedHomePage({
       <div className="relative mx-auto max-w-2xl px-6 py-16 page-enter">
         <header className="mb-10">
           <div className="flex items-center justify-end mb-4">
-            <LanguageToggle />
+            <LanguageToggle language={initialLanguage} />
           </div>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-3">
             <h1 className="flex items-baseline gap-1.5 text-4xl font-bold tracking-tight">
@@ -282,19 +280,38 @@ export function RoutedHomePage({
         </header>
 
         <div>
-          <Tabs
-            value={currentTab}
-            onValueChange={handleTabChange}
-            className="w-full"
-          >
+          <Tabs value={currentTab} className="w-full">
             <TabsList className="mb-8 w-full justify-start gap-2 bg-transparent p-0 border-b border-border">
               {tabs.map((tab) => (
                 <TabsTrigger
+                  asChild
                   key={tab.value}
                   value={tab.value}
-                  className="relative rounded-none border-b-2 border-transparent px-4 py-3 text-sm font-medium text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:text-foreground active:translate-y-0 active:scale-95 data-[state=active]:border-foreground data-[state=active]:text-foreground data-[state=active]:shadow-none bg-transparent"
+                  className="relative cursor-default rounded-none border-b-2 border-transparent px-4 py-3 text-sm font-medium text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:text-foreground active:translate-y-0 active:scale-95 data-[state=active]:pointer-events-none data-[state=active]:border-foreground data-[state=active]:text-foreground data-[state=active]:shadow-none bg-transparent"
                 >
-                  {tab.label}
+                  {currentTab === tab.value ? (
+                    <span aria-current="page" aria-disabled="true" tabIndex={0}>
+                      {tab.label}
+                    </span>
+                  ) : (
+                    <a
+                      href={tab.href}
+                      onClick={(event) => {
+                        if (
+                          event.button !== 0 ||
+                          event.metaKey ||
+                          event.ctrlKey ||
+                          event.shiftKey ||
+                          event.altKey
+                        ) return;
+
+                        event.preventDefault();
+                        handleTabChange(tab.value);
+                      }}
+                    >
+                      {tab.label}
+                    </a>
+                  )}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -378,14 +395,14 @@ export function RoutedHomePage({
                           <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
                             {item.name}
                           </h3>
-                          <Link
+                          <a
                             href={item.href}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:scale-110 hover:text-foreground active:translate-y-0 active:scale-95"
                           >
                             <ExternalLink className="h-4 w-4" />
-                          </Link>
+                          </a>
                         </div>
                         <div className="mt-2 space-y-0 text-sm text-muted-foreground leading-relaxed">
                           {item.description.map((line) => (
@@ -520,7 +537,7 @@ export function RoutedHomePage({
                 className="space-y-4 animate-in fade-in slide-in-from-bottom-1 duration-300"
               >
                 {paginatedBlogPosts.map((post) => (
-                  <Link
+                  <a
                     key={post.slug}
                     href={`${localePrefix}/blog/${post.slug}`}
                     className="block group rounded-xl border border-border bg-card/50 p-5 transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:border-muted-foreground/30 hover:shadow-lg hover:shadow-foreground/5 active:translate-y-0 active:scale-[0.99] cursor-pointer"
@@ -546,7 +563,7 @@ export function RoutedHomePage({
                         </span>
                       ))}
                     </div>
-                  </Link>
+                  </a>
                 ))}
                 {filteredBlogPosts.length === 0 && (
                   <div className="rounded-xl border border-dashed border-border bg-muted/20 p-6 text-center text-sm text-muted-foreground">
@@ -641,12 +658,6 @@ export function RoutedHomePage({
                   ) : (
                     <a
                       href={getBlogPageHref(Math.max(1, currentBlogPage - 1))}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        handleBlogRoutePageChange(
-                          Math.max(1, currentBlogPage - 1),
-                        );
-                      }}
                       aria-label="Previous page"
                       className={`flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95 ${
                         currentBlogPage === 1
@@ -680,10 +691,6 @@ export function RoutedHomePage({
                       <a
                         key={page}
                         href={getBlogPageHref(page)}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          handleBlogRoutePageChange(page);
-                        }}
                         aria-label={`Page ${page}`}
                         aria-current={isActive ? "page" : undefined}
                         className={className}
@@ -711,12 +718,6 @@ export function RoutedHomePage({
                       href={getBlogPageHref(
                         Math.min(totalBlogPages, currentBlogPage + 1),
                       )}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        handleBlogRoutePageChange(
-                          Math.min(totalBlogPages, currentBlogPage + 1),
-                        );
-                      }}
                       aria-label="Next page"
                       className={`flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95 ${
                         currentBlogPage === totalBlogPages
@@ -744,7 +745,7 @@ export function RoutedHomePage({
               </h2>
               <div className="grid gap-3">
                 {t.contacts.map((contact) => (
-                  <Link
+                  <a
                     key={contact.label}
                     href={contact.href}
                     target={contact.external ? "_blank" : undefined}
@@ -768,7 +769,7 @@ export function RoutedHomePage({
                       </p>
                     </div>
                     <ExternalLink className="h-4 w-4 text-muted-foreground/50 opacity-0 transition-all duration-150 ease-linear group-hover:translate-x-0.5 group-hover:text-muted-foreground group-hover:opacity-100" />
-                  </Link>
+                  </a>
                 ))}
               </div>
             </TabsContent>

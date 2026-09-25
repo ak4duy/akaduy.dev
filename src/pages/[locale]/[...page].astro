@@ -1,0 +1,34 @@
+---
+import type { GetStaticPaths } from "astro";
+import SiteLayout from "@/src/layouts/SiteLayout.astro";
+import { RoutedHomePage, type TabValue } from "@/components/routed-home-page";
+import { PrivacyPage } from "@/components/privacy-page";
+import { getBlogPosts, toBlogPostSummary } from "@/lib/blog-posts";
+import { languages, translations, type Language } from "@/lib/i18n";
+
+export const getStaticPaths = (() =>
+  languages.flatMap((language) =>
+    [undefined, "experience", "blog", "contact", "privacy"].map((page) => ({
+      params: { locale: language.toLowerCase(), page },
+      props: { language },
+    })),
+  )) satisfies GetStaticPaths;
+
+interface Props { language: Language }
+const { language } = Astro.props;
+const isPrivacy = Astro.params.page === "privacy";
+const activeTab = (Astro.params.page ?? "about") as TabValue;
+const privacy = translations[language].privacy;
+---
+
+<SiteLayout
+  language={language}
+  title={isPrivacy ? privacy.metadataTitle : undefined}
+  description={isPrivacy ? privacy.metadataDescription : undefined}
+>
+  {isPrivacy ? (
+    <PrivacyPage initialLanguage={language} client:load />
+  ) : (
+    <RoutedHomePage activeTab={activeTab} initialLanguage={language} blogPosts={getBlogPosts(language).map(toBlogPostSummary)} client:load />
+  )}
+</SiteLayout>

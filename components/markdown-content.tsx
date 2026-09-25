@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 
@@ -360,13 +359,13 @@ function parseMarkdown(content: string): MarkdownBlock[] {
 
 function StickyBackLink({ href, label }: { href: string; label: string }) {
   return (
-    <Link
+    <a
       href={href}
       className="group inline-flex w-fit items-center gap-2 rounded-xl border border-border/80 bg-background/85 px-3 py-2 text-sm text-muted-foreground shadow-xl shadow-black/10 backdrop-blur transition-colors hover:text-foreground"
     >
       <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
       {label}
-    </Link>
+    </a>
   );
 }
 

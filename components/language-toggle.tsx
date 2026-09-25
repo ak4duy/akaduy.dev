@@ -1,26 +1,19 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { languages } from "@/lib/i18n/index";
-import { useLanguage } from "@/components/language-provider";
+import { languages, type Language } from "@/lib/i18n/index";
 
-export function LanguageToggle() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const { language, setLanguage } = useLanguage();
-  const activeLanguage = pathname.startsWith("/vn")
-    ? "VN"
-    : pathname.startsWith("/en")
-      ? "EN"
-      : language;
+export function LanguageToggle({ language }: { language: Language }) {
+  const activeLanguage = language;
 
   const handleLanguageChange = (nextLanguage: typeof language) => {
-    setLanguage(nextLanguage);
+    try {
+      window.localStorage.setItem("language", nextLanguage);
+    } catch {}
 
-    const pathWithoutLocale = pathname.replace(/^\/(en|vn)(?=\/|$)/, "") || "";
+    const pathWithoutLocale = window.location.pathname.replace(/^\/(en|vn)(?=\/|$)/, "") || "";
     const nextPrefix = nextLanguage.toLowerCase();
 
-    router.push(`/${nextPrefix}${pathWithoutLocale}`);
+    window.location.assign(`/${nextPrefix}${pathWithoutLocale}`);
   };
 
   return (

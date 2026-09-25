@@ -12,7 +12,7 @@ Since I also publish blog posts here, many of my GitHub contributions may come f
 
 ## Stack & Tools
 
-- Next.js
+- Astro
 - React
 - TypeScript
 - Tailwind CSS
@@ -33,12 +33,15 @@ The website is hosted using GitHub Pages and Cloudflare. These providers may tem
 ## Structure
 
 ```txt
-app/                 routes
+src/pages/           Astro routes
+src/layouts/         shared document and metadata
 components/          UI and page components
 content/blog-posts/  markdown blog posts
 lib/blog-posts.ts    blog parser/helpers
 lib/i18n/            translations
+styles/globals.css   shared styles
 public/              static assets
+workers/             Cloudflare APIs
 ```
 
 ## Blog posts
@@ -64,4 +67,4 @@ lib/i18n/vn.ts
 
 - Code: [GNU GPLv3 or later](./LICENSE)
 - Blog posts and personal writing: [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-- Images and branding are © akaduy. All rights reserved unless stated otherwise.
+- Images and branding are © Aka Duy. All rights reserved unless stated otherwise.

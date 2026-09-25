@@ -1,28 +1,18 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
-import { useLanguage } from "@/components/language-provider";
-import { Language, translations } from "@/lib/i18n/index";
+import { type Language, translations } from "@/lib/i18n/index";
 
 type PrivacyPageProps = {
   initialLanguage: Language;
 };
 
 export function PrivacyPage({ initialLanguage }: PrivacyPageProps) {
-  const { language, setLanguage } = useLanguage();
   const t = translations[initialLanguage];
   const content = t.privacy;
   const localePrefix = `/${initialLanguage.toLowerCase()}`;
-
-  useEffect(() => {
-    if (language !== initialLanguage) {
-      setLanguage(initialLanguage);
-    }
-  }, [initialLanguage, language, setLanguage]);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -31,14 +21,14 @@ export function PrivacyPage({ initialLanguage }: PrivacyPageProps) {
       <div className="relative mx-auto max-w-2xl px-6 py-16 page-enter">
         <header className="mb-10">
           <div className="mb-4 flex items-center justify-between gap-4">
-            <Link
+            <a
               href={localePrefix}
               className="group flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
               {content.homeLabel}
-            </Link>
-            <LanguageToggle />
+            </a>
+            <LanguageToggle language={initialLanguage} />
           </div>
 
           <h1 className="text-4xl font-bold tracking-tight bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
