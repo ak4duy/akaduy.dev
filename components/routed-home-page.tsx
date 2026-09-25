@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import {
   Select,
   SelectContent,
@@ -240,6 +240,25 @@ export function RoutedHomePage({
 
   const getBlogPageHref = (page: number) =>
     page === 1 ? `${localePrefix}/blog` : `${localePrefix}/blog/${page}`;
+
+  const handleBlogPageClick = (
+    event: MouseEvent<HTMLAnchorElement>,
+    page: number,
+  ) => {
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) return;
+
+    event.preventDefault();
+    if (page === currentBlogPage) return;
+
+    setRouteBlogPage(page);
+    window.history.pushState(null, "", getBlogPageHref(page));
+  };
 
   const handleTabChange = (value: string) => {
     const tab = tabs.find((item) => item.value === value);
@@ -658,6 +677,9 @@ export function RoutedHomePage({
                   ) : (
                     <a
                       href={getBlogPageHref(Math.max(1, currentBlogPage - 1))}
+                      onClick={(event) =>
+                        handleBlogPageClick(event, Math.max(1, currentBlogPage - 1))
+                      }
                       aria-label="Previous page"
                       className={`flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95 ${
                         currentBlogPage === 1
@@ -691,6 +713,7 @@ export function RoutedHomePage({
                       <a
                         key={page}
                         href={getBlogPageHref(page)}
+                        onClick={(event) => handleBlogPageClick(event, page)}
                         aria-label={`Page ${page}`}
                         aria-current={isActive ? "page" : undefined}
                         className={className}
@@ -718,6 +741,12 @@ export function RoutedHomePage({
                       href={getBlogPageHref(
                         Math.min(totalBlogPages, currentBlogPage + 1),
                       )}
+                      onClick={(event) =>
+                        handleBlogPageClick(
+                          event,
+                          Math.min(totalBlogPages, currentBlogPage + 1),
+                        )
+                      }
                       aria-label="Next page"
                       className={`flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/50 text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-md hover:shadow-foreground/5 active:translate-y-0 active:scale-95 ${
                         currentBlogPage === totalBlogPages
