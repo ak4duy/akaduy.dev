@@ -31,6 +31,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 <html
   lang={language === "VN" ? "vi" : "en"}
   class="dark bg-background mdl-js"
+  transition:animate={article ? undefined : "none"}
 >
   <head>
     <ClientRouter fallback="swap" />
