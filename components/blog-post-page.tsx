@@ -8,6 +8,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { MarkdownContent } from "@/components/markdown-content";
 import type { BlogPost } from "@/lib/blog-posts";
 import { type Language, translations } from "@/lib/i18n/index";
+import { localizedPath } from "@/lib/routes";
 
 type BlogPostPageProps = {
   initialLanguage: Language;
@@ -68,7 +69,6 @@ function BackToBlogLink({ href, label }: { href: string; label: string }) {
 
 export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
   const t = translations[initialLanguage];
-  const localePrefix = `/${initialLanguage.toLowerCase()}`;
   const readingRootRef = useRef<HTMLElement | null>(null);
   const themeAnimationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
@@ -239,7 +239,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
     <BlogPoll
       key={poll.id}
       poll={poll}
-      privacyHref={`https://akaduy.dev${localePrefix}/privacy`}
+      privacyHref={`https://akaduy.dev${localizedPath(initialLanguage, "privacy")}`}
       labels={pollLabels}
     />
   ));
@@ -286,7 +286,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
       >
         <header className="mb-10">
           <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
-            <BackToBlogLink href={`${localePrefix}/blog`} label={t.nav.blog} />
+            <BackToBlogLink href={localizedPath(initialLanguage, "blog")} label={t.nav.blog} />
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1 rounded-lg border reader-border bg-[color-mix(in_oklch,var(--reader-card)_65%,transparent)] p-1 text-xs">
                 {readerThemes.map((theme) => (
@@ -345,7 +345,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
           <MarkdownContent
             content={post.content}
             contentsLabel={t.blog.contents}
-            stickyBackHref={`${localePrefix}/blog`}
+            stickyBackHref={localizedPath(initialLanguage, "blog")}
             stickyBackLabel={t.nav.blog}
             poll={pollNode}
             polls={pollNodes}
@@ -357,7 +357,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
 
         <SiteFooter
           tagline={t.home.footer}
-          privacyHref={`${localePrefix}/privacy`}
+          privacyHref={localizedPath(initialLanguage, "privacy")}
         />
       </article>
     </main>

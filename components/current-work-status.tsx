@@ -1,4 +1,3 @@
-// This does not fetch when user reading blog
 
 "use client";
 

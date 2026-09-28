@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
 import { translations, type Language } from "@/lib/i18n";
+import { localizedPath } from "@/lib/routes";
 import styles from "@/styles/portfolio.module.css";
 
 export function PortfolioShell({
@@ -14,12 +15,11 @@ export function PortfolioShell({
   children: ReactNode;
 }) {
   const t = translations[language];
-  const prefix = `/${language.toLowerCase()}`;
   const tabs = [
-    { value: "about", label: t.nav.about, href: prefix },
-    { value: "experience", label: t.nav.experience, href: `${prefix}/experience` },
-    { value: "blog", label: t.nav.blog, href: `${prefix}/blog` },
-    { value: "contact", label: t.nav.contact, href: `${prefix}/contact` },
+    { value: "about", label: t.nav.about, href: localizedPath(language) },
+    { value: "experience", label: t.nav.experience, href: localizedPath(language, "experience") },
+    { value: "blog", label: t.nav.blog, href: localizedPath(language, "blog") },
+    { value: "contact", label: t.nav.contact, href: localizedPath(language, "contact") },
   ];
 
   return (
@@ -29,7 +29,7 @@ export function PortfolioShell({
         <header className={styles.header}>
           <div className={styles.masthead}>
             <span className={styles.archMark} role="img" aria-label="Arch Linux" />
-            <a className={styles.wordmark} href={prefix} aria-label="akaduy.dev">
+            <a className={styles.wordmark} href={localizedPath(language)} aria-label="akaduy.dev">
               <span>akaduy<span className={styles.domain}>.dev</span></span>
             </a>
             <LanguageToggle language={language} />
@@ -43,7 +43,7 @@ export function PortfolioShell({
           </nav>
         </header>
         <main id="main-content" className={styles.content} tabIndex={-1}>{children}</main>
-        <SiteFooter tagline={t.home.footer} privacyHref={`${prefix}/privacy`} showIcon={false} />
+        <SiteFooter tagline={t.home.footer} privacyHref={localizedPath(language, "privacy")} showIcon={false} />
       </div>
     </div>
   );

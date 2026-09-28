@@ -6,6 +6,7 @@ import { PortfolioShell } from "@/components/portfolio-shell";
 import { BLOG_POSTS_PER_PAGE } from "@/lib/blog-config";
 import type { BlogPostSummary } from "@/lib/blog-posts";
 import { type Language, translations } from "@/lib/i18n";
+import { localizedPath } from "@/lib/routes";
 import styles from "@/styles/portfolio.module.css";
 
 export type TabValue = "about" | "experience" | "blog" | "contact";
@@ -57,7 +58,6 @@ function BlogIndexPage({
   initialBlogPage = 1,
 }: RoutedHomePageProps) {
   const t = translations[initialLanguage];
-  const prefix = `/${initialLanguage.toLowerCase()}`;
   const [search, setSearch] = useState("");
   const [tag, setTag] = useState("");
   const [month, setMonth] = useState("");
@@ -90,7 +90,7 @@ function BlogIndexPage({
     currentPage * BLOG_POSTS_PER_PAGE,
   );
   const pageHref = (page: number) =>
-    page === 1 ? `${prefix}/blog` : `${prefix}/blog/${page}`;
+    localizedPath(initialLanguage, page === 1 ? "blog" : `blog/${page}`);
 
   function clearFilters() {
     setSearch("");
@@ -152,7 +152,7 @@ function BlogIndexPage({
 
         <div className={styles.listPanel}>
           {posts.map((post) => (
-            <a className={styles.post} key={post.slug} href={`${prefix}/blog/${post.slug}`}>
+            <a className={styles.post} key={post.slug} href={localizedPath(initialLanguage, `blog/${post.slug}`)}>
               <div className={styles.postMeta}>
                 <span className={styles.date}>{post.date}</span>
               </div>

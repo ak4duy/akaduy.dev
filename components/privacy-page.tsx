@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SiteFooter } from "@/components/site-footer";
 import { type Language, translations } from "@/lib/i18n/index";
+import { localizedPath } from "@/lib/routes";
 
 type PrivacyPageProps = {
   initialLanguage: Language;
@@ -12,7 +13,6 @@ type PrivacyPageProps = {
 export function PrivacyPage({ initialLanguage }: PrivacyPageProps) {
   const t = translations[initialLanguage];
   const content = t.privacy;
-  const localePrefix = `/${initialLanguage.toLowerCase()}`;
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -22,7 +22,7 @@ export function PrivacyPage({ initialLanguage }: PrivacyPageProps) {
         <header className="mb-10">
           <div className="mb-4 flex items-center justify-between gap-4">
             <a
-              href={localePrefix}
+              href={localizedPath(initialLanguage)}
               className="group flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
@@ -60,7 +60,7 @@ export function PrivacyPage({ initialLanguage }: PrivacyPageProps) {
 
         <SiteFooter
           tagline={t.home.footer}
-          privacyHref={`${localePrefix}/privacy`}
+          privacyHref={localizedPath(initialLanguage, "privacy")}
         />
       </div>
     </main>

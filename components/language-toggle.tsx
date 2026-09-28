@@ -1,18 +1,23 @@
 import { navigate } from "astro:transitions/client";
+import { prefetch } from "astro:prefetch";
 import { languages, type Language } from "@/lib/i18n/index";
+import { localizedPath } from "@/lib/routes";
 
 export function LanguageToggle({ language }: { language: Language }) {
+  const getLanguagePath = (nextLanguage: Language) => {
+    const { pathname, search, hash } = window.location;
+    const route = pathname.replace(/^\/(en|vn)(?=\/|$)/, "");
+    return `${localizedPath(nextLanguage, route)}${search}${hash}`;
+  };
+
+  const prefetchLanguage = (nextLanguage: Language) => {
+    if (nextLanguage !== language) prefetch(getLanguagePath(nextLanguage));
+  };
+
   const handleLanguageChange = (nextLanguage: Language) => {
     if (nextLanguage === language) return;
 
-    const pathname = window.location.pathname;
-
-    const nextPath = pathname.replace(
-      /^\/(en|vn)(?=\/|$)/,
-      `/${nextLanguage.toLowerCase()}`
-    );
-
-    navigate(nextPath, {
+    navigate(getLanguagePath(nextLanguage), {
       history: "replace",
     });
   };
@@ -28,6 +33,9 @@ export function LanguageToggle({ language }: { language: Language }) {
           <button
             type="button"
             onClick={() => handleLanguageChange(option)}
+            onMouseEnter={() => prefetchLanguage(option)}
+            onFocus={() => prefetchLanguage(option)}
+            onTouchStart={() => prefetchLanguage(option)}
             className={`rounded-md px-2.5 py-1 font-medium transition-all duration-150 ease-linear hover:-translate-y-0.5 active:translate-y-0 active:scale-95 ${
               language === option
                 ? "bg-foreground text-background"

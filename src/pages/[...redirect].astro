@@ -1,11 +1,12 @@
 ---
 import type { GetStaticPaths } from "astro";
 import SiteLayout from "@/src/layouts/SiteLayout.astro";
+import { localizedPath } from "@/lib/routes";
 
 export const getStaticPaths = (() =>
   [undefined, "blog", "experience", "contact"].map((path) => ({
     params: { redirect: path },
-    props: { href: path ? `/en/${path}` : "/en" },
+    props: { href: localizedPath("EN", path) },
   }))) satisfies GetStaticPaths;
 
 interface Props { href: string }

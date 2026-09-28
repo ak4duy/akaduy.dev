@@ -3,6 +3,7 @@ import { PortfolioShell } from "@/components/portfolio-shell";
 import type { BlogPostSummary } from "@/lib/blog-posts";
 import { translations, type Language, type Translation } from "@/lib/i18n";
 import { featuredProjectHrefs } from "@/lib/portfolio-config";
+import { localizedPath } from "@/lib/routes";
 import styles from "@/styles/portfolio.module.css";
 
 type PortfolioPageProps = {
@@ -44,7 +45,6 @@ export function PortfolioPage({
   blogPosts,
 }: PortfolioPageProps) {
   const t = translations[initialLanguage];
-  const prefix = `/${initialLanguage.toLowerCase()}`;
   const experienceItems = [
     ...t.experience.workingOn,
     ...t.experience.projects,
@@ -76,7 +76,7 @@ export function PortfolioPage({
                     <a className={styles.primaryLink} href="#selected-work">
                       {t.home.projectsTitle}
                     </a>
-                    <a className={styles.textLink} href={`${prefix}/contact`}>
+                    <a className={styles.textLink} href={localizedPath(initialLanguage, "contact")}>
                       {t.home.contactTitle}
                     </a>
                   </div>
@@ -87,7 +87,7 @@ export function PortfolioPage({
                   <div>
                     <h2 id="work-heading">{t.portfolio.selectedWork}</h2>
                   </div>
-                  <a className={styles.textLink} href={`${prefix}/experience`}>
+                  <a className={styles.textLink} href={localizedPath(initialLanguage, "experience")}>
                     {t.portfolio.viewAll}
                   </a>
                 </div>
@@ -102,13 +102,13 @@ export function PortfolioPage({
                   <div>
                     <h2 id="writing-heading">{t.portfolio.recentWriting}</h2>
                   </div>
-                  <a className={styles.textLink} href={`${prefix}/blog`}>
+                  <a className={styles.textLink} href={localizedPath(initialLanguage, "blog")}>
                     {t.portfolio.viewAll}
                   </a>
                 </div>
                 <div>
                   {blogPosts.slice(0, 3).map((post) => (
-                    <a className={styles.writing} key={post.slug} href={`${prefix}/blog/${post.slug}`}>
+                    <a className={styles.writing} key={post.slug} href={localizedPath(initialLanguage, `blog/${post.slug}`)}>
                       <span className={styles.date}>{post.date}</span>
                       <div>
                         <h3>{post.title}</h3>
