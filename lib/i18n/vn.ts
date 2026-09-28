@@ -90,14 +90,6 @@ export const vn: Translation = {
         ],
         tags: ["Rust", "Serenity", "Songbird", "Docker"],
       },
-      {
-        name: "wi-mesh-login",
-        href: "https://github.com/ak4duy/wi-mesh-login",
-        description: [
-          "Một CLI nhỏ gọn để đăng nhập vào Wi-MESH và nhận thưởng..",
-        ],
-        tags: ["Rust", "CLI"],
-      },
     ],
     tools: [
       {
@@ -107,6 +99,14 @@ export const vn: Translation = {
           "Tự nhận diện chuột và đầu thu LAMZU, rồi thiết lập quy tắc udev trên Linux.",
         ],
         tags: ["Shell"],
+      },
+      {
+        name: "wi-mesh-login",
+        href: "https://github.com/ak4duy/wi-mesh-login",
+        description: [
+          "Một CLI nhỏ gọn để đăng nhập vào Wi-MESH và nhận thưởng..",
+        ],
+        tags: ["Rust", "CLI"],
       },
     ],
     contributedTo: [

@@ -90,14 +90,6 @@ export const en: Translation = {
         ],
         tags: ["Rust", "Serenity", "Songbird", "Docker"],
       },
-      {
-        name: "wi-mesh-login",
-        href: "https://github.com/ak4duy/wi-mesh-login",
-        description: [
-          "A quick CLI for logging into Wi-MESH (VN) and claim rewards.",
-        ],
-        tags: ["Rust", "CLI"],
-      },
     ],
     tools: [
       {
@@ -107,6 +99,14 @@ export const en: Translation = {
           "Detects LAMZU mice and receivers and sets up their udev rules on Linux.",
         ],
         tags: ["Shell"],
+      },
+      {
+        name: "wi-mesh-login",
+        href: "https://github.com/ak4duy/wi-mesh-login",
+        description: [
+          "A quick CLI for logging into Wi-MESH (VN) and claim rewards.",
+        ],
+        tags: ["Rust", "CLI"],
       },
     ],
     contributedTo: [
