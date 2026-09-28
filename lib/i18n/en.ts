@@ -1,6 +1,22 @@
 import type { Translation } from "@/lib/i18n/index";
 
 export const en: Translation = {
+  portfolio: {
+    navigation: "Main navigation",
+    skipToContent: "Skip to content",
+    introduction: "A little about me",
+    selectedWork: "Projects",
+    recentWriting: "Recent posts",
+    viewAll: "View all",
+    experienceIntro: "Things I’m building, shipped, and projects I’ve helped along the way.",
+    contactIntro: "A question, an idea, or just a hello. You can find me here.",
+    blogIntro: "Notes, stories, and project updates.",
+    allMonths: "All months",
+    resetFilters: "Clear filters",
+    pagination: "Blog pages",
+    previousPage: "Previous page",
+    nextPage: "Next page",
+  },
   nav: {
     about: "About",
     experience: "Experience",
@@ -14,16 +30,11 @@ export const en: Translation = {
     backgroundTitle: "Background",
     background: [
       "Self-taught developer back in 2017 by learning Lua",
-      "Now learning things properly at university and working with Java, Python, Rust, and whatever breaks next",
+      "Currently working with Java, Python, Rust, and whatever breaks next",
     ],
     languagesTitle: "Languages & Tools",
     interestedTitle: "Interested In",
     projectsTitle: "Projects",
-    educationTitle: "Education",
-    university: "University",
-    universityDescription:
-      "Currently studying and learning things properly (maybe xd).",
-    ongoing: "Ongoing",
     blogPostsTitle: "Posts",
     morePosts: "More posts coming soon...",
     contactTitle: "Get in Touch",
@@ -32,6 +43,7 @@ export const en: Translation = {
   experience: {
     workingOnTitle: "Working on",
     projectsTitle: "Projects",
+    toolsTitle: "Tools",
     contributedToTitle: "Contributed to",
     workingOn: [
       {
@@ -46,7 +58,7 @@ export const en: Translation = {
     projects: [
       {
         name: "1 in 10000 chance of Foxy jumpscare per second",
-        href: "https://ankiweb.net/shared/info/1601646218",
+        href: "https://github.com/ak4duy/1_10000_jumpscare",
         description: [
           "An add-on that makes your study thrilling.",
           "Every second, there is a 1 in 10000 chance that Foxy will randomly jumpscare you.",
@@ -71,12 +83,30 @@ export const en: Translation = {
         tags: ["Rust", "Ratatui"],
       },
       {
+        name: "soundcrate",
+        href: "https://github.com/ak4duy/soundcrate",
+        description: [
+          "A self-hosted Discord music bot for your local music library.",
+        ],
+        tags: ["Rust", "Serenity", "Songbird", "Docker"],
+      },
+      {
         name: "wi-mesh-login",
         href: "https://github.com/ak4duy/wi-mesh-login",
         description: [
           "A quick CLI for logging into Wi-MESH (VN) and claim rewards.",
         ],
         tags: ["Rust", "CLI"],
+      },
+    ],
+    tools: [
+      {
+        name: "lamzu-linux-udev",
+        href: "https://github.com/ak4duy/lamzu-linux-udev",
+        description: [
+          "Detects LAMZU mice and receivers and sets up their udev rules on Linux.",
+        ],
+        tags: ["Shell"],
       },
     ],
     contributedTo: [

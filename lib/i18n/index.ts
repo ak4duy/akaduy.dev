@@ -18,6 +18,22 @@ type PrivacySection = {
 };
 
 export type Translation = {
+  portfolio: {
+    navigation: string;
+    skipToContent: string;
+    introduction: string;
+    selectedWork: string;
+    recentWriting: string;
+    viewAll: string;
+    experienceIntro: string;
+    contactIntro: string;
+    blogIntro: string;
+    allMonths: string;
+    resetFilters: string;
+    pagination: string;
+    previousPage: string;
+    nextPage: string;
+  };
   nav: {
     about: string;
     experience: string;
@@ -32,10 +48,6 @@ export type Translation = {
     languagesTitle: string;
     interestedTitle: string;
     projectsTitle: string;
-    educationTitle: string;
-    university: string;
-    universityDescription: string;
-    ongoing: string;
     blogPostsTitle: string;
     morePosts: string;
     contactTitle: string;
@@ -44,9 +56,11 @@ export type Translation = {
   experience: {
     workingOnTitle: string;
     projectsTitle: string;
+    toolsTitle: string;
     contributedToTitle: string;
     workingOn: ExperienceItem[];
     projects: ExperienceItem[];
+    tools: ExperienceItem[];
     contributedTo: ExperienceItem[];
   };
   contacts: Array<{
