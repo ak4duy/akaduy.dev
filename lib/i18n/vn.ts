@@ -1,6 +1,22 @@
 import type { Translation } from "@/lib/i18n/index";
 
 export const vn: Translation = {
+  portfolio: {
+    navigation: "Điều hướng chính",
+    skipToContent: "Đến nội dung",
+    introduction: "Một chút về mình",
+    selectedWork: "Dự án",
+    recentWriting: "Bài viết gần đây",
+    viewAll: "Xem tất cả",
+    experienceIntro: "Những thứ mình đang làm, đã hoàn thành và các dự án mình đã góp sức.",
+    contactIntro: "Câu hỏi, ý tưởng, hoặc một lời chào. Bạn có thể tìm mình qua đây.",
+    blogIntro: "Ghi chép, truyện và cập nhật dự án.",
+    allMonths: "Tất cả các tháng",
+    resetFilters: "Xóa bộ lọc",
+    pagination: "Các trang blog",
+    previousPage: "Trang trước",
+    nextPage: "Trang sau",
+  },
   nav: {
     about: "Giới thiệu",
     experience: "Kinh nghiệm",
@@ -10,20 +26,15 @@ export const vn: Translation = {
   home: {
     intro:
       "Lập trình viên tự học (đa số).\nHiện đang làm với Java, Python, Rust, và bất cứ thứ gì.",
-    currentlyWorkingOn: "đang code project",
+    currentlyWorkingOn: "đang làm project",
     backgroundTitle: "Nền tảng",
     background: [
       "Tự học lập trình từ năm 2017 bằng Lua",
-      "Hiện đang học bài bản hơn ở đại học và làm với Java, Python, Rust, và bất cứ thứ gì.",
+      "Hiện đang làm với Java, Python, Rust, và bất cứ thứ gì.",
     ],
     languagesTitle: "Ngôn ngữ & Công cụ",
     interestedTitle: "Đang quan tâm",
     projectsTitle: "Dự án",
-    educationTitle: "Học vấn",
-    university: "Đại học",
-    universityDescription:
-      "Đang học và cố gắng học cho đàng hoàng (chắc vậy xd).",
-    ongoing: "Đang học",
     blogPostsTitle: "Bài viết",
     morePosts: "Sẽ có thêm bài viết sau...",
     contactTitle: "Liên hệ",
@@ -32,6 +43,7 @@ export const vn: Translation = {
   experience: {
     workingOnTitle: "Đang làm",
     projectsTitle: "Dự án",
+    toolsTitle: "Công cụ",
     contributedToTitle: "Đã đóng góp",
     workingOn: [
       {
@@ -46,7 +58,7 @@ export const vn: Translation = {
     projects: [
       {
         name: "1 in 10000 chance of Foxy jumpscare per second",
-        href: "https://ankiweb.net/shared/info/1601646218",
+        href: "https://github.com/ak4duy/1_10000_jumpscare",
         description: [
           "Một add-on vui vẻ cho Anki.",
           "Mỗi giây sẽ có 1/10000 cơ hội Foxy jumpscare ngẫu nhiên.",
@@ -57,8 +69,8 @@ export const vn: Translation = {
         name: "akaduy.dev",
         href: "https://github.com/ak4duy/akaduy.dev",
         description: [
-          "Đây là trang web cá nhân và blog của tôi.",
-          "Tôi thường ghi blog ở đây và chia sẻ về dự án cá nhân của mình.",
+          "Đây là trang web cá nhân và blog của mình.",
+          "mình thường ghi blog ở đây và chia sẻ về dự án cá nhân của mình.",
         ],
         tags: ["Next.js", "React", "Typescript", "Markdown"],
       },
@@ -71,12 +83,30 @@ export const vn: Translation = {
         tags: ["Rust", "Ratatui"],
       },
       {
+        name: "soundcrate",
+        href: "https://github.com/ak4duy/soundcrate",
+        description: [
+          "Bot nhạc Discord do bạn tự vận hành, và dụng thư viện nhạc trên máy của bạn.",
+        ],
+        tags: ["Rust", "Serenity", "Songbird", "Docker"],
+      },
+      {
         name: "wi-mesh-login",
         href: "https://github.com/ak4duy/wi-mesh-login",
         description: [
           "Một CLI nhỏ gọn để đăng nhập vào Wi-MESH và nhận thưởng..",
         ],
         tags: ["Rust", "CLI"],
+      },
+    ],
+    tools: [
+      {
+        name: "lamzu-linux-udev",
+        href: "https://github.com/ak4duy/lamzu-linux-udev",
+        description: [
+          "Tự nhận diện chuột và đầu thu LAMZU, rồi thiết lập quy tắc udev trên Linux.",
+        ],
+        tags: ["Shell"],
       },
     ],
     contributedTo: [
@@ -146,7 +176,7 @@ export const vn: Translation = {
     pollUndo: "Hoàn tác bình chọn",
     pollLoading: "Đang tải poll...",
     pollPrivacy:
-      "Mọi bình chọn đều hoàn toàn ẩn danh. Tôi không thu thập bất kỳ thông tin cá nhân nào.",
+      "Mọi bình chọn đều hoàn toàn ẩn danh. mình không thu thập bất kỳ thông tin cá nhân nào.",
     pollPrivacyLink: "Tìm hiểu thêm",
     pollError: "Không thể tải kết quả poll.",
   },
@@ -183,7 +213,7 @@ export const vn: Translation = {
       {
         title: "Liên hệ",
         paragraphs: [
-          "Nếu bạn có câu hỏi về trang quyền riêng tư này, bạn có thể liên hệ với tôi qua các liên kết liên hệ trên website.",
+          "Nếu bạn có câu hỏi về trang quyền riêng tư này, bạn có thể liên hệ với mình qua các liên kết liên hệ trên website.",
         ],
       },
     ],

@@ -1,9 +1,10 @@
 type SiteFooterProps = {
   tagline: string;
   privacyHref: string;
+  showIcon?: boolean;
 };
 
-export function SiteFooter({ tagline, privacyHref }: SiteFooterProps) {
+export function SiteFooter({ tagline, privacyHref, showIcon = true }: SiteFooterProps) {
   const prefix = "|";
   return (
     <footer className="mt-20 text-center">
@@ -18,14 +19,14 @@ export function SiteFooter({ tagline, privacyHref }: SiteFooterProps) {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:text-foreground active:translate-y-0 active:scale-95"
         >
-          <span className="flex h-4 w-4 items-center justify-center overflow-hidden rounded-sm bg-background">
+          {showIcon && <span className="flex h-4 w-4 items-center justify-center overflow-hidden rounded-sm bg-background">
             <img
               src="/contact-icons/github.svg"
               alt=""
               aria-hidden="true"
               className="h-full w-full object-contain"
             />
-          </span>
+          </span>}
           Source
         </a>
         <span className="text-muted-foreground/40">{prefix}</span>
