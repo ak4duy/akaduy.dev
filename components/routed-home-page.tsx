@@ -63,7 +63,6 @@ function BlogIndexPage({
   const [month, setMonth] = useState("");
   const [filteredPage, setFilteredPage] = useState(1);
   const [today, setToday] = useState<Date | null>(null);
-  // Calendar counts depend on the visitor's date, not the static build date.
   useEffect(() => setToday(new Date()), []);
 
   const tags = Array.from(new Set(blogPosts.flatMap((post) => post.tags)))
@@ -153,13 +152,11 @@ function BlogIndexPage({
         <div className={styles.listPanel}>
           {posts.map((post) => (
             <a className={styles.post} key={post.slug} href={localizedPath(initialLanguage, `blog/${post.slug}`)}>
-              <div className={styles.postMeta}>
-                <span className={styles.date}>{post.date}</span>
-              </div>
               <h2>{post.title}</h2>
               <p>{post.excerpt}</p>
-              <div>
+              <div className={styles.postMeta}>
                 <div className={styles.postTags}>{post.tags.map((value) => <span key={value}>{value}</span>)}</div>
+                <span className={styles.date}>{post.date}</span>
               </div>
             </a>
           ))}

@@ -355,13 +355,22 @@
 }
 
 .postMeta {
-  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.postMeta .date {
+  flex-shrink: 0;
 }
 
 .postTags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px 14px;
+  margin-top: 0;
 }
 
 .emptyState {
