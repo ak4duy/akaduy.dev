@@ -79,7 +79,9 @@ export function PortfolioPage({
           {activeTab === "about" ? (
             <>
               <section className={styles.notebook}>
-                  <h1 className={styles.eyebrow}>{t.home.backgroundTitle}</h1>
+                  <div className={styles.sectionHeading}>
+                    <h2>{t.home.backgroundTitle}</h2>
+                  </div>
                   {t.home.background.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                   <div className={styles.toolkit}>
                     <h2>{t.home.languagesTitle}</h2>

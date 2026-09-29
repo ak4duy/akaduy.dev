@@ -68,8 +68,12 @@
 }
 
 @keyframes content-slide-in {
-  from { transform: translateY(6px); }
-  to { transform: translateY(0); }
+  from {
+    transform: translateY(6px);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 .wordmark {
@@ -150,6 +154,10 @@
 .notebook > p {
   color: var(--muted-foreground);
   margin-bottom: 6px;
+}
+
+.notebook > .sectionHeading + p {
+  margin-top: 16px;
 }
 
 .toolkit {
