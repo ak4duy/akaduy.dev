@@ -2,7 +2,7 @@ import { CurrentWorkStatus } from "@/components/current-work-status";
 import { PortfolioShell } from "@/components/portfolio-shell";
 import type { BlogPostSummary } from "@/lib/blog-posts";
 import { translations, type Language, type Translation } from "@/lib/i18n";
-import { featuredProjectHrefs } from "@/lib/portfolio-config";
+import { featuredProjectHrefs, projectCreationDates } from "@/lib/portfolio-config";
 import { localizedPath } from "@/lib/routes";
 import styles from "@/styles/portfolio.module.css";
 
@@ -17,24 +17,39 @@ function ProjectList({
 }: {
   items: Translation["experience"]["projects"];
 }) {
+  const dateFormatter = new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+    timeZone: "Asia/Ho_Chi_Minh",
+  });
+
   return (
     <div>
-      {items.map((item) => (
-        <article className={styles.project} key={item.href}>
-          <a
-            className={styles.projectDetails}
-            href={item.href}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h3>{item.name}</h3>
-            <div className={styles.description}>
-              {item.description.map((line) => <p key={line}>{line}</p>)}
-            </div>
-            <p className={styles.tags}>{item.tags.join(" / ")}</p>
-          </a>
-        </article>
-      ))}
+      {items.map((item) => {
+        const createdOn = projectCreationDates[item.href];
+        return (
+          <article className={styles.project} key={item.href}>
+            <a
+              className={styles.projectDetails}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <h3>{item.name}</h3>
+              <div className={styles.description}>
+                {item.description.map((line) => <p key={line}>{line}</p>)}
+              </div>
+              <p className={styles.tags}>
+                <span>{item.tags.join(" / ")}</span>
+                {createdOn && (
+                  <time dateTime={createdOn}>{dateFormatter.format(new Date(createdOn)).replaceAll("/", "-")}</time>
+                )}
+              </p>
+            </a>
+          </article>
+        );
+      })}
     </div>
   );
 }

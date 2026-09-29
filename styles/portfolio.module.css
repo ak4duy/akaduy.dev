@@ -245,6 +245,16 @@
   font-size: 10px;
 }
 
+.tags {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tags time {
+  flex-shrink: 0;
+}
+
 .writing {
   display: grid;
   grid-template-columns: 100px minmax(0, 1fr);
