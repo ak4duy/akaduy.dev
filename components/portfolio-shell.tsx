@@ -28,7 +28,6 @@ export function PortfolioShell({
       <div className={styles.shell}>
         <header className={styles.header}>
           <div className={styles.masthead}>
-            <span className={styles.archMark} role="img" aria-label="Arch Linux" />
             <a className={styles.wordmark} href={localizedPath(language)} aria-label="akaduy.dev">
               <span>akaduy<span className={styles.domain}>.dev</span></span>
             </a>
