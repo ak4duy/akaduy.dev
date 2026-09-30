@@ -13,6 +13,7 @@ import { localizedPath } from "@/lib/routes";
 type BlogPostPageProps = {
   initialLanguage: Language;
   post: BlogPost;
+  alternateLanguagePath?: string;
 };
 
 type ReaderTheme = "dark" | "sepia" | "light";
@@ -59,6 +60,7 @@ function BackToBlogLink({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
+      data-astro-prefetch="load"
       className="group flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
     >
       <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
@@ -67,7 +69,7 @@ function BackToBlogLink({ href, label }: { href: string; label: string }) {
   );
 }
 
-export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
+export function BlogPostPage({ initialLanguage, post, alternateLanguagePath }: BlogPostPageProps) {
   const t = translations[initialLanguage];
   const readingRootRef = useRef<HTMLElement | null>(null);
   const themeAnimationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
@@ -304,7 +306,7 @@ export function BlogPostPage({ initialLanguage, post }: BlogPostPageProps) {
                   </button>
                 ))}
               </div>
-              <LanguageToggle language={initialLanguage} />
+              <LanguageToggle language={initialLanguage} path={`blog/${post.slug}`} alternatePath={alternateLanguagePath} />
             </div>
           </div>
 

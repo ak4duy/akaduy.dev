@@ -1,27 +1,15 @@
-import { navigate } from "astro:transitions/client";
-import { prefetch } from "astro:prefetch";
 import { languages, type Language } from "@/lib/i18n/index";
 import { localizedPath } from "@/lib/routes";
 
-export function LanguageToggle({ language }: { language: Language }) {
-  const getLanguagePath = (nextLanguage: Language) => {
-    const { pathname, search, hash } = window.location;
-    const route = pathname.replace(/^\/(en|vn)(?=\/|$)/, "");
-    return `${localizedPath(nextLanguage, route)}${search}${hash}`;
-  };
-
-  const prefetchLanguage = (nextLanguage: Language) => {
-    if (nextLanguage !== language) prefetch(getLanguagePath(nextLanguage));
-  };
-
-  const handleLanguageChange = (nextLanguage: Language) => {
-    if (nextLanguage === language) return;
-
-    navigate(getLanguagePath(nextLanguage), {
-      history: "replace",
-    });
-  };
-
+export function LanguageToggle({
+  language,
+  path,
+  alternatePath = path,
+}: {
+  language: Language;
+  path: string;
+  alternatePath?: string;
+}) {
   return (
     <div className="flex items-center gap-1 rounded-lg border border-border bg-muted/50 p-1 text-sm">
       {languages.map((option, index) => (
@@ -30,21 +18,22 @@ export function LanguageToggle({ language }: { language: Language }) {
             <span className="text-muted-foreground/50">|</span>
           )}
 
-          <button
-            type="button"
-            onClick={() => handleLanguageChange(option)}
-            onMouseEnter={() => prefetchLanguage(option)}
-            onFocus={() => prefetchLanguage(option)}
-            onTouchStart={() => prefetchLanguage(option)}
+          <a
+            suppressHydrationWarning
+            href={localizedPath(option, language === option ? path : alternatePath)}
+            hrefLang={option === "VN" ? "vi" : "en"}
+            data-language-path={localizedPath(option, language === option ? path : alternatePath)}
+            data-astro-history="replace"
+            data-astro-prefetch={language === option ? "false" : "load"}
             className={`rounded-md px-2.5 py-1 font-medium transition-all duration-150 ease-linear hover:-translate-y-0.5 active:translate-y-0 active:scale-95 ${
               language === option
                 ? "bg-foreground text-background"
                 : "text-muted-foreground hover:text-foreground"
             }`}
-            aria-pressed={language === option}
+            aria-current={language === option ? "page" : undefined}
           >
             {option}
-          </button>
+          </a>
         </div>
       ))}
     </div>

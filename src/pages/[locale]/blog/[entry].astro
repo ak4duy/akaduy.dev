@@ -31,6 +31,10 @@ export const getStaticPaths = (() => languages.flatMap((language) => {
 })) satisfies GetStaticPaths;
 
 const { language, post, blogPosts, page } = Astro.props;
+const alternatePosts = getBlogPosts(language === "EN" ? "VN" : "EN");
+const alternateLanguagePath = post
+  ? alternatePosts.some((entry) => entry.slug === post.slug) ? `blog/${post.slug}` : "blog"
+  : page && page <= Math.ceil(alternatePosts.length / BLOG_POSTS_PER_PAGE) ? `blog/${page}` : "blog";
 ---
 
 <SiteLayout
@@ -41,8 +45,8 @@ const { language, post, blogPosts, page } = Astro.props;
   article={Boolean(post)}
 >
   {post ? (
-    <BlogPostPage initialLanguage={language} post={post} client:load />
+    <BlogPostPage initialLanguage={language} post={post} alternateLanguagePath={alternateLanguagePath} client:load />
   ) : (
-    <RoutedHomePage activeTab="blog" initialLanguage={language} initialBlogPage={page} blogPosts={blogPosts!} client:load />
+    <RoutedHomePage activeTab="blog" initialLanguage={language} initialBlogPage={page} blogPosts={blogPosts!} alternateLanguagePath={alternateLanguagePath} client:load />
   )}
 </SiteLayout>

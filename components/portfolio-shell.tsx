@@ -9,10 +9,14 @@ export function PortfolioShell({
   activeTab,
   language,
   children,
+  pagePath,
+  alternateLanguagePath,
 }: {
   activeTab: "about" | "experience" | "blog" | "contact";
   language: Language;
   children: ReactNode;
+  pagePath?: string;
+  alternateLanguagePath?: string;
 }) {
   const t = translations[language];
   const tabs = [
@@ -31,11 +35,15 @@ export function PortfolioShell({
             <a className={styles.wordmark} href={localizedPath(language)} aria-label="akaduy.dev">
               <span>akaduy<span className={styles.domain}>.dev</span></span>
             </a>
-            <LanguageToggle language={language} />
+            <LanguageToggle
+              language={language}
+              path={pagePath ?? (activeTab === "about" ? "" : activeTab)}
+              alternatePath={alternateLanguagePath}
+            />
           </div>
           <nav className={styles.navigation} aria-label={t.portfolio.navigation}>
             {tabs.map(({ value, label, href }) => (
-              <a key={value} href={href} aria-current={activeTab === value ? "page" : undefined}>
+              <a key={value} href={href} data-astro-prefetch="load" aria-current={activeTab === value ? "page" : undefined}>
                 {label}
               </a>
             ))}

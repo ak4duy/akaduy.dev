@@ -35,6 +35,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 >
   <head>
     <ClientRouter fallback="swap" />
+    <script>
+      import "@/src/scripts/navigation";
+    </script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

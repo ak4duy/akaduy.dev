@@ -125,7 +125,7 @@ export function PortfolioPage({
                 </div>
                 <div>
                   {blogPosts.slice(0, 3).map((post) => (
-                    <a className={styles.writing} key={post.slug} href={localizedPath(initialLanguage, `blog/${post.slug}`)}>
+                    <a className={styles.writing} key={post.slug} href={localizedPath(initialLanguage, `blog/${post.slug}`)} data-astro-prefetch="viewport" data-reader-link>
                       <span className={styles.date}>{post.date}</span>
                       <div>
                         <h3>{post.title}</h3>

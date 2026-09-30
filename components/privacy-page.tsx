@@ -28,7 +28,7 @@ export function PrivacyPage({ initialLanguage }: PrivacyPageProps) {
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
               {content.homeLabel}
             </a>
-            <LanguageToggle language={initialLanguage} />
+            <LanguageToggle language={initialLanguage} path="privacy" />
           </div>
 
           <h1 className="text-4xl font-bold tracking-tight bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">

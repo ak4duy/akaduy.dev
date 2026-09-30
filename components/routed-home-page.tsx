@@ -16,6 +16,7 @@ type RoutedHomePageProps = {
   blogPosts: BlogPostSummary[];
   initialLanguage: Language;
   initialBlogPage?: number;
+  alternateLanguagePath?: string;
 };
 
 function normalizeSearchText(text: string) {
@@ -56,6 +57,7 @@ function BlogIndexPage({
   blogPosts,
   initialLanguage,
   initialBlogPage = 1,
+  alternateLanguagePath,
 }: RoutedHomePageProps) {
   const t = translations[initialLanguage];
   const [search, setSearch] = useState("");
@@ -99,7 +101,12 @@ function BlogIndexPage({
   }
 
   return (
-    <PortfolioShell activeTab="blog" language={initialLanguage}>
+    <PortfolioShell
+      activeTab="blog"
+      language={initialLanguage}
+      pagePath={initialBlogPage === 1 ? "blog" : `blog/${initialBlogPage}`}
+      alternateLanguagePath={alternateLanguagePath}
+    >
       <div className={styles.blogIntro}>
         <div>
           <h1>{t.nav.blog}</h1>
@@ -151,7 +158,7 @@ function BlogIndexPage({
 
         <div className={styles.listPanel}>
           {posts.map((post) => (
-            <a className={styles.post} key={post.slug} href={localizedPath(initialLanguage, `blog/${post.slug}`)}>
+            <a className={styles.post} key={post.slug} href={localizedPath(initialLanguage, `blog/${post.slug}`)} data-astro-prefetch="viewport" data-reader-link>
               <h2>{post.title}</h2>
               <p>{post.excerpt}</p>
               <div className={styles.postMeta}>
