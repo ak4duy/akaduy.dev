@@ -18,22 +18,26 @@ export function LanguageToggle({
             <span className="text-muted-foreground/50">|</span>
           )}
 
-          <a
-            suppressHydrationWarning
-            href={localizedPath(option, language === option ? path : alternatePath)}
-            hrefLang={option === "VN" ? "vi" : "en"}
-            data-language-path={localizedPath(option, language === option ? path : alternatePath)}
-            data-astro-history="replace"
-            data-astro-prefetch={language === option ? "false" : "load"}
-            className={`rounded-md px-2.5 py-1 font-medium transition-all duration-150 ease-linear hover:-translate-y-0.5 active:translate-y-0 active:scale-95 ${
-              language === option
-                ? "bg-foreground text-background"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-            aria-current={language === option ? "page" : undefined}
-          >
-            {option}
-          </a>
+          {language === option ? (
+            <span
+              className="rounded-md bg-foreground px-2.5 py-1 font-medium text-background"
+              aria-current="page"
+            >
+              {option}
+            </span>
+          ) : (
+            <a
+              suppressHydrationWarning
+              href={localizedPath(option, alternatePath)}
+              hrefLang={option === "VN" ? "vi" : "en"}
+              data-language-path={localizedPath(option, alternatePath)}
+              data-astro-history="replace"
+              data-astro-prefetch="load"
+              className="rounded-md px-2.5 py-1 font-medium text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:text-foreground active:translate-y-0 active:scale-95"
+            >
+              {option}
+            </a>
+          )}
         </div>
       ))}
     </div>
