@@ -75,6 +75,14 @@ export const vn: Translation = {
         tags: ["Next.js", "React", "Typescript", "Markdown"],
       },
       {
+        name: "Discord Parcel",
+        href: "https://github.com/ak4duy/discord-parcel",
+        description: [
+          "Chia nhỏ, gửi và khôi phục tệp qua Discord.",
+        ],
+        tags: ["Rust", "File Transfer", "Discord", "Discord Bot"],
+      },
+      {
         name: "DeskForge",
         href: "https://github.com/ak4duy/DeskForge",
         description: [
