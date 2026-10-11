@@ -1,4 +1,4 @@
-import { CurrentWorkStatus } from "@/components/current-work-status";
+import type { ReactNode } from "react";
 import { PortfolioShell } from "@/components/portfolio-shell";
 import type { BlogPostSummary } from "@/lib/blog-posts";
 import { translations, type Language, type Translation } from "@/lib/i18n";
@@ -10,6 +10,7 @@ type PortfolioPageProps = {
   activeTab: "about" | "experience" | "contact";
   initialLanguage: Language;
   blogPosts: BlogPostSummary[];
+  workStatus?: ReactNode;
 };
 
 function ProjectList({
@@ -58,6 +59,7 @@ export function PortfolioPage({
   activeTab,
   initialLanguage,
   blogPosts,
+  workStatus,
 }: PortfolioPageProps) {
   const t = translations[initialLanguage];
   const experienceItems = [
@@ -80,7 +82,7 @@ export function PortfolioPage({
             <>
               <section className={styles.notebook}>
                   <div className={styles.sectionHeading}>
-                    <h2>{t.home.backgroundTitle}</h2>
+                    <h1>{t.nav.about}</h1>
                   </div>
                   {t.home.background.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                   <div className={styles.toolkit}>
@@ -109,7 +111,7 @@ export function PortfolioPage({
                   </a>
                 </div>
                 <div className={styles.workStatus}>
-                  <CurrentWorkStatus label={t.home.currentlyWorkingOn} />
+                  {workStatus}
                 </div>
                 <ProjectList items={featuredProjects} />
               </section>
@@ -125,7 +127,7 @@ export function PortfolioPage({
                 </div>
                 <div>
                   {blogPosts.slice(0, 3).map((post) => (
-                    <a className={styles.writing} key={post.slug} href={localizedPath(initialLanguage, `blog/${post.slug}`)} data-astro-prefetch="viewport" data-reader-link>
+                    <a className={styles.writing} key={post.slug} href={localizedPath(initialLanguage, `blog/${post.slug}`)}>
                       <span className={styles.date}>{post.date}</span>
                       <div>
                         <h3>{post.title}</h3>
@@ -143,7 +145,7 @@ export function PortfolioPage({
                 <p className={styles.eyebrow}>akaduy / {t.nav.experience}</p>
                 <h1>{t.home.projectsTitle}</h1>
                 <p className={styles.lead}>{t.portfolio.experienceIntro}</p>
-                <CurrentWorkStatus label={t.home.currentlyWorkingOn} />
+                <div className={styles.workStatus}>{workStatus}</div>
               </div>
               {[
                 { title: t.experience.workingOnTitle, items: t.experience.workingOn },

@@ -372,13 +372,11 @@ function StickyBackLink({ href, label }: { href: string; label: string }) {
 function TableOfContents({
   headings,
   variant = "inline",
-  visible = true,
   label = "Contents",
   activeHeadingId,
 }: {
   headings: HeadingBlock[];
   variant?: "inline" | "sticky-note";
-  visible?: boolean;
   label?: string;
   activeHeadingId?: string | null;
 }) {
@@ -393,7 +391,7 @@ function TableOfContents({
           ? "max-h-[calc(100vh-12rem)] overflow-y-auto overflow-x-hidden rounded-2xl border border-border/80 bg-background/85 p-4 text-sm shadow-xl shadow-black/10 backdrop-blur"
           : "overflow-x-hidden rounded-2xl border border-border/80 bg-muted/20 p-4 text-sm"
       }
-      aria-label="Table of contents"
+      aria-label={label}
     >
       <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
         {label}
@@ -406,6 +404,7 @@ function TableOfContents({
           >
             <a
               href={`#${heading.id}`}
+              aria-current={activeHeadingId === heading.id ? "location" : undefined}
               className={`block min-w-0 whitespace-normal wrap-anywhere transition-colors hover:text-foreground ${
                 activeHeadingId === heading.id
                   ? "font-medium text-foreground"

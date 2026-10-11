@@ -2,7 +2,7 @@
 import type { GetStaticPaths } from "astro";
 import SiteLayout from "@/src/layouts/SiteLayout.astro";
 import { BlogPostPage } from "@/components/blog-post-page";
-import { RoutedHomePage } from "@/components/routed-home-page";
+import { BlogIndexPage } from "@/components/blog-index-page";
 import { getBlogPosts, toBlogPostSummary, type BlogPost, type BlogPostSummary } from "@/lib/blog-posts";
 import { BLOG_POSTS_PER_PAGE } from "@/lib/blog-config";
 import { languages, type Language } from "@/lib/i18n";
@@ -39,7 +39,7 @@ const alternateLanguagePath = post
 
 <SiteLayout
   language={language}
-  title={post ? `Blog: ${post.title} | akaduy` : undefined}
+  title={post ? `Blog: ${post.title} | akaduy` : `Blog · ${page} | akaduy`}
   description={post?.excerpt}
   tags={post?.tags}
   article={Boolean(post)}
@@ -47,6 +47,6 @@ const alternateLanguagePath = post
   {post ? (
     <BlogPostPage initialLanguage={language} post={post} alternateLanguagePath={alternateLanguagePath} client:load />
   ) : (
-    <RoutedHomePage activeTab="blog" initialLanguage={language} initialBlogPage={page} blogPosts={blogPosts!} alternateLanguagePath={alternateLanguagePath} client:load />
+    <BlogIndexPage initialLanguage={language} initialBlogPage={page} blogPosts={blogPosts!} alternateLanguagePath={alternateLanguagePath} client:load />
   )}
 </SiteLayout>

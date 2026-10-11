@@ -167,6 +167,9 @@ export const vn: Translation = {
     },
   ],
   blog: {
+    backToTop: "Về đầu trang",
+    readerTheme: "Giao diện đọc",
+    readerThemes: { dark: "Tối", sepia: "Ấm", light: "Sáng" },
     contents: "Nội dung",
     searchPlaceholder: "Tìm bài viết...",
     tagFilterLabel: "Lọc bài viết theo từ khóa",

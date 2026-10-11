@@ -80,6 +80,9 @@ export type Translation = {
     sections: PrivacySection[];
   };
   blog: {
+    backToTop: string;
+    readerTheme: string;
+    readerThemes: { dark: string; sepia: string; light: string };
     contents: string;
     searchPlaceholder: string;
     tagFilterLabel: string;

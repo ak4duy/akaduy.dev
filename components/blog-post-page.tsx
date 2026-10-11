@@ -18,11 +18,7 @@ type BlogPostPageProps = {
 
 type ReaderTheme = "dark" | "sepia" | "light";
 
-const readerThemes: Array<{ value: ReaderTheme; label: string }> = [
-  { value: "dark", label: "Dark" },
-  { value: "sepia", label: "Warm" },
-  { value: "light", label: "Light" },
-];
+const readerThemes: ReaderTheme[] = ["dark", "sepia", "light"];
 
 const READING_POSITION_STORAGE_PREFIX = "blog-reading-position";
 const COMPLETED_READING_THRESHOLD = 0.90;
@@ -60,7 +56,6 @@ function BackToBlogLink({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
-      data-astro-prefetch="load"
       className="group flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
     >
       <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
@@ -253,6 +248,7 @@ export function BlogPostPage({ initialLanguage, post, alternateLanguagePath }: B
         isThemeChanging ? "reader-theme-changing" : ""
       }`}
     >
+      <a className="skip-link" href="#article-content">{t.portfolio.skipToContent}</a>
       <div className="fixed inset-0 z-0 reader-background-layer pointer-events-none" />
       <div className="fixed inset-0 z-0 bg-linear-to-br from-transparent via-transparent to-[color-mix(in_oklch,var(--reader-accent)_55%,transparent)] pointer-events-none" />
       <div className="fixed inset-x-0 top-0 z-50 h-0.5 reader-accent-bg">
@@ -267,8 +263,11 @@ export function BlogPostPage({ initialLanguage, post, alternateLanguagePath }: B
       </div>
       <button
         type="button"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        aria-label="Back to top"
+        onClick={() => {
+          document.getElementById("article-title")?.focus({ preventScroll: true });
+          window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+        }}
+        aria-label={t.blog.backToTop}
         aria-hidden={!showStickyContents}
         tabIndex={showStickyContents ? 0 : -1}
         className={`fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-50 flex h-10 w-10 items-center justify-center rounded-xl border reader-border bg-[color-mix(in_oklch,var(--reader-background)_85%,transparent)] reader-muted shadow-xl shadow-black/10 backdrop-blur transition-all duration-200 ease-out hover:bg-(--reader-card) hover:reader-text active:scale-95 sm:bottom-6 sm:right-6 sm:h-11 sm:w-11 sm:hover:-translate-y-0.5 ${
@@ -290,19 +289,20 @@ export function BlogPostPage({ initialLanguage, post, alternateLanguagePath }: B
           <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
             <BackToBlogLink href={localizedPath(initialLanguage, "blog")} label={t.nav.blog} />
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 rounded-lg border reader-border bg-[color-mix(in_oklch,var(--reader-card)_65%,transparent)] p-1 text-xs">
+              <div role="group" aria-label={t.blog.readerTheme} className="flex items-center gap-1 rounded-lg border reader-border bg-[color-mix(in_oklch,var(--reader-card)_65%,transparent)] p-1 text-xs">
                 {readerThemes.map((theme) => (
                   <button
-                    key={theme.value}
+                    key={theme}
                     type="button"
-                    onClick={() => handleReaderThemeChange(theme.value)}
+                    onClick={() => handleReaderThemeChange(theme)}
+                    aria-pressed={readerTheme === theme}
                     className={`rounded-md px-2 py-1 font-medium transition-colors ${
-                      readerTheme === theme.value
+                      readerTheme === theme
                         ? "bg-(--reader-foreground) text-(--reader-background)"
                         : "reader-muted hover:reader-text"
                     }`}
                   >
-                    {theme.label}
+                    {t.blog.readerThemes[theme]}
                   </button>
                 ))}
               </div>
@@ -311,6 +311,8 @@ export function BlogPostPage({ initialLanguage, post, alternateLanguagePath }: B
           </div>
 
           <h1
+            id="article-title"
+            tabIndex={-1}
             className={`font-bold tracking-tight reader-text ${
               isNovelStyle ? "text-center text-4xl sm:text-5xl" : "text-4xl"
             }`}
@@ -338,6 +340,8 @@ export function BlogPostPage({ initialLanguage, post, alternateLanguagePath }: B
         </header>
 
         <div
+          id="article-content"
+          tabIndex={-1}
           className={
             isNovelStyle
               ? "tab-enter"
