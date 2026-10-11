@@ -52,6 +52,7 @@ export function BlogPoll({ poll, labels, privacyHref }: BlogPollProps) {
 
   useEffect(() => {
     let ignored = false;
+    const controller = new AbortController();
 
     async function loadPoll() {
       setLoading(true);
@@ -63,6 +64,7 @@ export function BlogPoll({ poll, labels, privacyHref }: BlogPollProps) {
           {
             cache: "no-store",
             headers: { accept: "application/json" },
+            signal: controller.signal,
           },
         );
 
@@ -96,6 +98,7 @@ export function BlogPoll({ poll, labels, privacyHref }: BlogPollProps) {
 
     return () => {
       ignored = true;
+      controller.abort();
     };
   }, [labels.error, poll.id]);
 

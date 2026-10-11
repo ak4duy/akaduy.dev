@@ -6,7 +6,7 @@ export default defineConfig({
   site: "https://akaduy.dev",
   output: "static",
   trailingSlash: "always",
-  prefetch: { prefetchAll: true, defaultStrategy: "hover" },
+  prefetch: false,
   integrations: [react()],
   build: { format: "directory" },
   vite: { plugins: [tailwindcss()] },

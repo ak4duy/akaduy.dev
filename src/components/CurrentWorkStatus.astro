@@ -26,6 +26,7 @@ const { label } = Astro.props;
   class CurrentWorkStatus extends HTMLElement {
     private controller: AbortController | null = null;
     private interval: number | undefined;
+    private lastRequestedAt = -Infinity;
 
     connectedCallback() {
       void this.load();
@@ -41,6 +42,9 @@ const { label } = Astro.props;
 
     private load = async () => {
       if (document.hidden || this.controller) return;
+      const now = performance.now();
+      if (now - this.lastRequestedAt < 60_000) return;
+      this.lastRequestedAt = now;
       const controller = new AbortController();
       this.controller = controller;
       // A stalled request must not block future refreshes.
