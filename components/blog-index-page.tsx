@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PortfolioPage } from "@/components/portfolio-page";
 import { PortfolioShell } from "@/components/portfolio-shell";
 import { BLOG_POSTS_PER_PAGE } from "@/lib/blog-config";
 import type { BlogPostSummary } from "@/lib/blog-posts";
@@ -9,10 +8,7 @@ import { type Language, translations } from "@/lib/i18n";
 import { localizedPath } from "@/lib/routes";
 import styles from "@/styles/portfolio.module.css";
 
-export type TabValue = "about" | "experience" | "blog" | "contact";
-
-type RoutedHomePageProps = {
-  activeTab: TabValue;
+type BlogIndexPageProps = {
   blogPosts: BlogPostSummary[];
   initialLanguage: Language;
   initialBlogPage?: number;
@@ -47,18 +43,12 @@ function formatMonth(month: string, language: Language) {
   }).format(new Date(year, number - 1, 1));
 }
 
-export function RoutedHomePage(props: RoutedHomePageProps) {
-  return props.activeTab === "blog"
-    ? <BlogIndexPage {...props} />
-    : <PortfolioPage {...props} activeTab={props.activeTab} />;
-}
-
-function BlogIndexPage({
+export function BlogIndexPage({
   blogPosts,
   initialLanguage,
   initialBlogPage = 1,
   alternateLanguagePath,
-}: RoutedHomePageProps) {
+}: BlogIndexPageProps) {
   const t = translations[initialLanguage];
   const [search, setSearch] = useState("");
   const [tag, setTag] = useState("");
@@ -158,7 +148,7 @@ function BlogIndexPage({
 
         <div className={styles.listPanel}>
           {posts.map((post) => (
-            <a className={styles.post} key={post.slug} href={localizedPath(initialLanguage, `blog/${post.slug}`)} data-astro-prefetch="viewport" data-reader-link>
+            <a className={styles.post} key={post.slug} href={localizedPath(initialLanguage, `blog/${post.slug}`)}>
               <h2>{post.title}</h2>
               <p>{post.excerpt}</p>
               <div className={styles.postMeta}>

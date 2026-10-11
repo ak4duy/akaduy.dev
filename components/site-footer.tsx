@@ -9,7 +9,7 @@ export function SiteFooter({ tagline, privacyHref, showIcon = true }: SiteFooter
   return (
     <footer className="mt-20 text-center">
       <div className="h-px bg-linear-to-r from-transparent via-border to-transparent mb-6" />
-      <p className="mb-4 text-xs italic text-muted-foreground/70 hover:text-muted-foreground transition-colors duration-300">
+      <p className="mb-4 text-xs italic text-muted-foreground hover:text-muted-foreground transition-colors duration-300">
         {tagline}
       </p>
       <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
@@ -29,7 +29,7 @@ export function SiteFooter({ tagline, privacyHref, showIcon = true }: SiteFooter
           </span>}
           Source
         </a>
-        <span className="text-muted-foreground/40">{prefix}</span>
+        <span aria-hidden="true" className="text-muted-foreground/40">{prefix}</span>
         <a
           href="https://buymeacoffee.com/akaduy"
           target="_blank"
@@ -38,7 +38,7 @@ export function SiteFooter({ tagline, privacyHref, showIcon = true }: SiteFooter
         >
           Donate
         </a>
-        <span className="text-muted-foreground/40">{prefix}</span>
+        <span aria-hidden="true" className="text-muted-foreground/40">{prefix}</span>
         <a
           href={privacyHref}
           className="transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:text-foreground active:translate-y-0 active:scale-95"
@@ -46,8 +46,8 @@ export function SiteFooter({ tagline, privacyHref, showIcon = true }: SiteFooter
           Privacy
         </a>
       </div>
-      <p className="mt-3 text-xs text-muted-foreground/70">© 2026 akaduy</p>
-      <p className="mt-2 text-[11px] text-muted-foreground/55">
+      <p className="mt-3 text-xs text-muted-foreground">© 2026 akaduy</p>
+      <p className="mt-2 text-[11px] text-muted-foreground">
         Writing licensed under{" "}
         <a
           href="https://creativecommons.org/licenses/by-nc-nd/4.0/"

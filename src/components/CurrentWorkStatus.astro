@@ -1,0 +1,85 @@
+---
+interface Props { label: string }
+const { label } = Astro.props;
+---
+
+<current-work-status>
+  <span hidden>
+    <span>{label}</span>{" "}
+    <a hidden target="_blank" rel="noopener noreferrer"></a>
+    <strong hidden></strong>
+    <span data-entity></span>
+  </span>
+</current-work-status>
+
+<style>
+  current-work-status { display: block; }
+  current-work-status > span { font-size: 12px; color: var(--muted-foreground); }
+  a, strong { font-weight: 600; color: var(--foreground); overflow-wrap: anywhere; }
+  a:hover { color: var(--primary); text-decoration: underline; text-underline-offset: 4px; }
+  [data-entity] { overflow-wrap: anywhere; }
+</style>
+
+<script>
+  type WorkStatus = { project?: string; repoUrl?: string; entity?: string };
+
+  class CurrentWorkStatus extends HTMLElement {
+    private controller: AbortController | null = null;
+    private interval: number | undefined;
+
+    connectedCallback() {
+      void this.load();
+      this.interval = window.setInterval(this.load, 60_000);
+      document.addEventListener("visibilitychange", this.load);
+    }
+
+    disconnectedCallback() {
+      this.controller?.abort();
+      window.clearInterval(this.interval);
+      document.removeEventListener("visibilitychange", this.load);
+    }
+
+    private load = async () => {
+      if (document.hidden || this.controller) return;
+      const controller = new AbortController();
+      this.controller = controller;
+      // A stalled request must not block future refreshes.
+      const timeout = window.setTimeout(() => controller.abort(), 10_000);
+      try {
+        const response = await fetch("https://api.akaduy.dev/hackatime/current", {
+          cache: "no-store",
+          headers: { accept: "application/json" },
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error("Status unavailable");
+        const status: WorkStatus = await response.json();
+        if (!this.isConnected) return;
+        const row = this.querySelector("span")!;
+        row.hidden = !status.project;
+        if (!status.project) return;
+
+        const link = this.querySelector("a")!;
+        const name = this.querySelector("strong")!;
+        const fallback = /^[A-Za-z0-9._-]+$/.test(status.project)
+          ? `https://github.com/ak4duy/${status.project}` : null;
+        const url = status.repoUrl || fallback;
+        // API-provided links must be web URLs.
+        const safeUrl = url && /^https?:\/\//i.test(url) ? url : null;
+        link.hidden = !safeUrl;
+        name.hidden = Boolean(safeUrl);
+        link.textContent = name.textContent = status.project;
+        if (safeUrl) link.href = safeUrl;
+        this.querySelector("[data-entity]")!.textContent = status.entity ? ` (${status.entity})` : "";
+      } catch {
+        if (this.isConnected) this.querySelector("span")!.hidden = true;
+      } finally {
+        window.clearTimeout(timeout);
+        this.controller = null;
+      }
+    };
+  }
+
+  if (!customElements.get("current-work-status")) {
+    customElements.define("current-work-status", CurrentWorkStatus);
+  }
+</script>

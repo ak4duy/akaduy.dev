@@ -167,6 +167,9 @@ export const en: Translation = {
     },
   ],
   blog: {
+    backToTop: "Back to top",
+    readerTheme: "Reading theme",
+    readerThemes: { dark: "Dark", sepia: "Warm", light: "Light" },
     contents: "Contents",
     searchPlaceholder: "Search posts...",
     tagFilterLabel: "Filter posts by tag",

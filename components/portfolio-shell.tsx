@@ -43,7 +43,7 @@ export function PortfolioShell({
           </div>
           <nav className={styles.navigation} aria-label={t.portfolio.navigation}>
             {tabs.map(({ value, label, href }) => (
-              <a key={value} href={href} data-astro-prefetch="load" aria-current={activeTab === value ? "page" : undefined}>
+              <a key={value} href={href} aria-current={activeTab === value ? "page" : undefined}>
                 {label}
               </a>
             ))}

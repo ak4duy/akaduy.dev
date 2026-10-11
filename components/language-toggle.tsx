@@ -15,7 +15,7 @@ export function LanguageToggle({
       {languages.map((option, index) => (
         <div key={option} className="flex items-center gap-1">
           {index > 0 && (
-            <span className="text-muted-foreground/50">|</span>
+            <span aria-hidden="true" className="text-muted-foreground/50">|</span>
           )}
 
           {language === option ? (
@@ -30,9 +30,10 @@ export function LanguageToggle({
               suppressHydrationWarning
               href={localizedPath(option, alternatePath)}
               hrefLang={option === "VN" ? "vi" : "en"}
+              lang={option === "VN" ? "vi" : "en"}
+              aria-label={option === "VN" ? "Tiếng Việt" : "English"}
               data-language-path={localizedPath(option, alternatePath)}
               data-astro-history="replace"
-              data-astro-prefetch="load"
               className="rounded-md px-2.5 py-1 font-medium text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:text-foreground active:translate-y-0 active:scale-95"
             >
               {option}
