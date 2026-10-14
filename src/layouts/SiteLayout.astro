@@ -34,6 +34,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   transition:animate={article ? undefined : "none"}
 >
   <head>
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="eac4f9b0-6242-4c87-bd4a-765e35e3db75"
+    ></script>
     <ClientRouter fallback="swap" />
     <script>
       import "@/src/scripts/navigation";
