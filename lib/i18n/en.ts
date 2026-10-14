@@ -8,7 +8,8 @@ export const en: Translation = {
     selectedWork: "Projects",
     recentWriting: "Recent posts",
     viewAll: "View all",
-    experienceIntro: "Things I’m building, shipped, and projects I’ve helped along the way.",
+    experienceIntro:
+      "Things I’m building, shipped, and projects I’ve helped along the way.",
     contactIntro: "A question, an idea, or just a hello. You can find me here.",
     blogIntro: "Notes, stories, and project updates.",
     allMonths: "All months",
@@ -49,9 +50,7 @@ export const en: Translation = {
       {
         name: "Inkspace",
         href: "https://github.com/ak4duy/inkspace",
-        description: [
-          "A cozy corner for friends.",
-        ],
+        description: ["A cozy corner for friends."],
         tags: ["Typescript", "Docker", "Self-hosted"],
       },
     ],
@@ -77,9 +76,7 @@ export const en: Translation = {
       {
         name: "Discord Parcel",
         href: "https://github.com/ak4duy/discord-parcel",
-        description: [
-          "Split, send, and restore files through Discord.",
-        ],
+        description: ["Split, send, and restore files through Discord."],
         tags: ["Rust", "File Transfer", "Discord", "Discord Bot"],
       },
       {
@@ -196,7 +193,7 @@ export const en: Translation = {
     metadataTitle: "Privacy | akaduy",
     metadataDescription: "Privacy information for akaduy's personal website.",
     title: "Privacy",
-    updated: "Last updated: 28 May, 2026",
+    updated: "Last updated: 14 October, 2026",
     intro:
       "This page explains what data is, and is not, intentionally collected when you visit this website.",
     homeLabel: "Home",
@@ -213,6 +210,13 @@ export const en: Translation = {
         paragraphs: [
           "If you vote in a blog poll, the vote choice is stored with the poll ID so the poll results can be counted.",
           "To reduce vote spam, the API creates a salted hash from technical request data such as IP address, User-Agent, and poll ID. The raw IP address is not stored in the poll database.",
+        ],
+      },
+      {
+        title: "Website analytics",
+        paragraphs: [
+          "This website uses Umami Cloud to measure visits and understand how the site is used. Umami may process information such as viewed pages, referrer, browser/device details, and approximate location derived from network information.",
+          "The analytics script uses this website's public Umami website ID to associate visits with this site. It is not an authentication secret. Analytics data is used to improve the website and is not used for advertising.",
         ],
       },
       {

@@ -8,8 +8,10 @@ export const vn: Translation = {
     selectedWork: "Dự án",
     recentWriting: "Bài viết gần đây",
     viewAll: "Xem tất cả",
-    experienceIntro: "Những thứ mình đang làm, đã hoàn thành và các dự án mình đã góp sức.",
-    contactIntro: "Câu hỏi, ý tưởng, hoặc một lời chào. Bạn có thể tìm mình qua đây.",
+    experienceIntro:
+      "Những thứ mình đang làm, đã hoàn thành và các dự án mình đã góp sức.",
+    contactIntro:
+      "Câu hỏi, ý tưởng, hoặc một lời chào. Bạn có thể tìm mình qua đây.",
     blogIntro: "Ghi chép, truyện và cập nhật dự án.",
     allMonths: "Tất cả các tháng",
     resetFilters: "Xóa bộ lọc",
@@ -49,9 +51,7 @@ export const vn: Translation = {
       {
         name: "Inkspace",
         href: "https://github.com/ak4duy/inkspace",
-        description: [
-          "Một nơi ấm cúng dành cho bạn bè.",
-        ],
+        description: ["Một nơi ấm cúng dành cho bạn bè."],
         tags: ["Typescript", "Docker", "Self-hosted"],
       },
     ],
@@ -77,9 +77,7 @@ export const vn: Translation = {
       {
         name: "Discord Parcel",
         href: "https://github.com/ak4duy/discord-parcel",
-        description: [
-          "Chia nhỏ, gửi và khôi phục tệp qua Discord.",
-        ],
+        description: ["Chia nhỏ, gửi và khôi phục tệp qua Discord."],
         tags: ["Rust", "File Transfer", "Discord", "Discord Bot"],
       },
       {
@@ -196,7 +194,7 @@ export const vn: Translation = {
     metadataDescription:
       "Thông tin quyền riêng tư cho website cá nhân của akaduy.",
     title: "Quyền riêng tư",
-    updated: "Cập nhật lần cuối: 28 tháng 5, 2026",
+    updated: "Cập nhật lần cuối: 14 tháng 10, 2026",
     intro:
       "Trang này giải thích dữ liệu nào được, và không được, chủ động thu thập khi bạn truy cập website này.",
     homeLabel: "Trang chủ",
@@ -213,6 +211,13 @@ export const vn: Translation = {
         paragraphs: [
           "Nếu bạn bình chọn trong poll của bài viết, lựa chọn bình chọn sẽ được lưu cùng ID của poll để tính kết quả.",
           "Để giảm spam bình chọn, API tạo một hash có salt từ dữ liệu kỹ thuật của request như địa chỉ IP, User-Agent và ID của poll. Địa chỉ IP gốc không được lưu trong database của poll.",
+        ],
+      },
+      {
+        title: "Phân tích lượt truy cập",
+        paragraphs: [
+          "Website này sử dụng Umami Cloud để thống kê lượt truy cập và tìm hiểu cách mọi người sử dụng website. Umami có thể xử lý các thông tin như trang đã xem, nguồn giới thiệu, thông tin trình duyệt/thiết bị và vị trí gần đúng được suy ra từ thông tin mạng.",
+          "Mã theo dõi sử dụng website ID Umami công khai để liên kết lượt truy cập với website này. ID này không phải thông tin bí mật dùng để xác thực. Dữ liệu phân tích chỉ được dùng để cải thiện website, không dùng cho quảng cáo.",
         ],
       },
       {
