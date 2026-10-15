@@ -32,5 +32,8 @@ jobs:
       - name: Check types
         run: npm run check
 
+      - name: Test analytics proxy
+        run: npm run worker:umami:test
+
       - name: Build
         run: npm run build

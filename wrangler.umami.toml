@@ -1,0 +1,11 @@
+name = "ak4duy-umami-proxy"
+main = "workers/umami-proxy.js"
+compatibility_date = "2026-05-26"
+account_id = "15f71e1f90ca817642d2d276d92645c4"
+workers_dev = false
+preview_urls = false
+
+routes = [
+  { pattern = "akaduy.dev/s.js*", zone_name = "akaduy.dev" },
+  { pattern = "akaduy.dev/api/send*", zone_name = "akaduy.dev" }
+]

@@ -12,7 +12,10 @@
     "worker:hackatime:deploy": "npx wrangler deploy --config wrangler.toml",
     "worker:polls:dev": "npx wrangler dev --config wrangler.blog-polls.toml",
     "worker:polls:deploy": "npx wrangler deploy --config wrangler.blog-polls.toml",
-    "worker:deploy": "npm run worker:hackatime:deploy && npm run worker:polls:deploy",
+    "worker:umami:dev": "npx wrangler dev --config wrangler.umami.toml",
+    "worker:umami:deploy": "npx wrangler deploy --config wrangler.umami.toml",
+    "worker:umami:test": "node --test workers/umami-proxy.test.js",
+    "worker:deploy": "npm run worker:hackatime:deploy && npm run worker:polls:deploy && npm run worker:umami:deploy",
     "d1:migrate:polls": "npx wrangler d1 migrations apply blog-polls --remote --config wrangler.blog-polls.toml",
     "preview": "astro preview",
     "check": "astro check"

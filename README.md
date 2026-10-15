@@ -44,6 +44,36 @@ public/              static assets
 workers/             Cloudflare APIs
 ```
 
+## Analytics proxy
+
+Umami Cloud is served through a Cloudflare Worker following the
+[Umami proxy guide](https://docs.umami.is/docs/bypass-ad-blockers):
+
+- `/s.js` serves the current Umami tracker, cached in the browser for one hour.
+- `/api/send` forwards tracking requests to Umami Cloud without caching responses.
+- The proxy preserves Umami session headers and forwards the visitor IP and browser
+  user agent to Umami. It does not log or store request bodies or IP addresses.
+
+Before deploying the website change, ensure the `akaduy.dev` DNS record is
+**Proxied** (orange cloud) in Cloudflare, then deploy the Worker:
+
+```sh
+npm run worker:umami:test
+npm run worker:umami:deploy
+```
+
+Wrangler requires a Cloudflare login (`npx wrangler login`) or a
+`CLOUDFLARE_API_TOKEN` with Workers Scripts and zone Workers Routes permissions.
+The Worker routes only the two paths above; GitHub Pages continues serving the site.
+Deploying GitHub Pages alone does not deploy this Worker.
+
+After the Worker is deployed, deploy the website through the existing GitHub Pages
+workflow. Check that `/s.js` returns JavaScript and that browser requests to
+`https://akaduy.dev/api/send` return HTTP 200 when visiting and navigating the site.
+Tracking is restricted to `akaduy.dev`, so local development does not record visits.
+This reduces blocking by domain-based lists; it cannot guarantee every blocker
+will allow tracking.
+
 ## Blog posts
 
 Posts live in:
