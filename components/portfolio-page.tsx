@@ -2,16 +2,15 @@ import type { ReactNode } from "react";
 import { PortfolioShell } from "@/components/portfolio-shell";
 import type { BlogPostSummary } from "@/lib/blog-posts";
 import { translations, type Language, type Translation } from "@/lib/i18n";
-import { featuredProjectHrefs, interestedLanguages, nowUpdatedOn, projectCreationDates } from "@/lib/portfolio-config";
+import { featuredProjectHrefs, projectCreationDates } from "@/lib/portfolio-config";
 import { localizedPath } from "@/lib/routes";
 import styles from "@/styles/portfolio.module.css";
 
 type PortfolioPageProps = {
-  activeTab: "about" | "experience" | "now" | "contact";
+  activeTab: "about" | "experience" | "contact";
   initialLanguage: Language;
   blogPosts: BlogPostSummary[];
   workStatus?: ReactNode;
-  codingStats?: ReactNode;
 };
 
 function ProjectList({
@@ -61,7 +60,6 @@ export function PortfolioPage({
   initialLanguage,
   blogPosts,
   workStatus,
-  codingStats,
 }: PortfolioPageProps) {
   const t = translations[initialLanguage];
   const experienceItems = [
@@ -91,7 +89,7 @@ export function PortfolioPage({
                     <h2>{t.home.languagesTitle}</h2>
                     <p>Java / Rust / Python / Linux</p>
                     <h2>{t.home.interestedTitle}</h2>
-                    <p>{interestedLanguages}</p>
+                    <p>TypeScript / JavaScript / Kotlin / Go</p>
                   </div>
                   <div className={styles.heroLinks}>
                     <a className={styles.primaryLink} href="#selected-work">
@@ -162,51 +160,6 @@ export function PortfolioPage({
                   <ProjectList items={section.items} />
                 </section>
               ))}
-            </>
-          ) : activeTab === "now" ? (
-            <>
-              <div className={styles.pageIntro}>
-                <p className={styles.eyebrow}>akaduy / {t.nav.now}</p>
-                <h1>{t.nav.now}</h1>
-                <p className={styles.lead}>{t.now.intro}</p>
-                <div className={styles.workStatus}>{workStatus}</div>
-                <p className={styles.date}>{t.now.updated}: <time dateTime={nowUpdatedOn.split("-").reverse().join("-")}>{nowUpdatedOn}</time></p>
-              </div>
-              <section className={`${styles.section} ${styles.codingStats}`} aria-labelledby="coding-heading">
-                <div className={styles.sectionHeading}>
-                  <h2 id="coding-heading">{t.now.codingTitle}</h2>
-                </div>
-                {codingStats}
-              </section>
-              <section className={styles.section} aria-labelledby="building-heading">
-                <div className={styles.sectionHeading}>
-                  <h2 id="building-heading">{t.now.building}</h2>
-                </div>
-                <ProjectList items={t.experience.workingOn} />
-              </section>
-              <section className={styles.section} aria-labelledby="now-writing-heading">
-                <div className={styles.sectionHeading}>
-                  <h2 id="now-writing-heading">{t.now.writing}</h2>
-                  <a className={styles.textLink} href={localizedPath(initialLanguage, "blog")}>
-                    {t.portfolio.viewAll}
-                  </a>
-                </div>
-                {blogPosts.slice(0, 1).map((post) => (
-                  <a className={styles.writing} key={post.slug} href={localizedPath(initialLanguage, `blog/${post.slug}`)}>
-                    <span className={styles.date}>{post.date}</span>
-                    <div>
-                      <h3>{post.title}</h3>
-                      <p>{post.excerpt}</p>
-                    </div>
-                  </a>
-                ))}
-              </section>
-              <section className={styles.section} aria-labelledby="learning-heading">
-                <div className={styles.sectionHeading}>
-                  <h2 id="learning-heading">{t.now.learning}</h2>
-                </div>
-                <p className={styles.lead}>{interestedLanguages}</p>
-              </section>
             </>
           ) : (
             <>

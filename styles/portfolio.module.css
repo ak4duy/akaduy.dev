@@ -212,10 +212,6 @@
   margin: 12px 0;
 }
 
-.codingStats:has(coding-stats[hidden]) {
-  display: none;
-}
-
 .project {
   display: block;
   padding: 16px 0;

@@ -4,14 +4,13 @@ import SiteLayout from "@/src/layouts/SiteLayout.astro";
 import { BlogIndexPage } from "@/components/blog-index-page";
 import { PrivacyPage } from "@/components/privacy-page";
 import { PortfolioPage } from "@/components/portfolio-page";
-import CodingStats from "@/src/components/CodingStats.astro";
 import CurrentWorkStatus from "@/src/components/CurrentWorkStatus.astro";
 import { getBlogPosts, toBlogPostSummary } from "@/lib/blog-posts";
 import { languages, translations, type Language } from "@/lib/i18n";
 
 export const getStaticPaths = (() =>
   languages.flatMap((language) =>
-    [undefined, "experience", "blog", "now", "contact", "privacy"].map((page) => ({
+    [undefined, "experience", "blog", "contact", "privacy"].map((page) => ({
       params: { locale: language.toLowerCase(), page },
       props: { language },
     })),
@@ -20,7 +19,7 @@ export const getStaticPaths = (() =>
 interface Props { language: Language }
 const { language } = Astro.props;
 const isPrivacy = Astro.params.page === "privacy";
-const activeTab = (Astro.params.page ?? "about") as "about" | "experience" | "blog" | "now" | "contact";
+const activeTab = (Astro.params.page ?? "about") as "about" | "experience" | "blog" | "contact";
 const privacy = translations[language].privacy;
 ---
 
@@ -34,11 +33,10 @@ const privacy = translations[language].privacy;
   ) : activeTab === "blog" ? (
     <BlogIndexPage initialLanguage={language} blogPosts={getBlogPosts(language).map(toBlogPostSummary)} client:load />
   ) : (
-    <PortfolioPage activeTab={activeTab} initialLanguage={language} blogPosts={activeTab === "about" || activeTab === "now" ? getBlogPosts(language).slice(0, 3).map(toBlogPostSummary) : []}>
+    <PortfolioPage activeTab={activeTab} initialLanguage={language} blogPosts={activeTab === "about" ? getBlogPosts(language).slice(0, 3).map(toBlogPostSummary) : []}>
       {activeTab !== "contact" && (
         <CurrentWorkStatus slot="work-status" label={translations[language].home.currentlyWorkingOn} />
       )}
-      {activeTab === "now" && <CodingStats slot="coding-stats" language={language} />}
     </PortfolioPage>
   )}
 </SiteLayout>

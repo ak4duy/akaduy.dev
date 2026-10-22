@@ -39,21 +39,6 @@ export type Translation = {
     experience: string;
     blog: string;
     contact: string;
-    now: string;
-  };
-  now: {
-    intro: string;
-    updated: string;
-    building: string;
-    writing: string;
-    learning: string;
-    codingTitle: string;
-    today: string;
-    week: string;
-    allTime: string;
-    topLanguage: string;
-    lastActive: string;
-    source: string;
   };
   commandPalette: {
     label: string;
