@@ -33,7 +33,11 @@
 }
 
 .notebook,
-.filterPanel {
+.section,
+.pageIntro,
+.blogIntro,
+.filterPanel,
+.listPanel {
   padding: 20px;
   border: 1px solid var(--border);
   border-radius: 2px;
@@ -168,7 +172,7 @@
 }
 
 .section {
-  margin-top: 40px;
+  margin-top: 24px;
   scroll-margin-top: 20px;
 }
 
@@ -415,7 +419,11 @@
   }
 
   .notebook,
-  .filterPanel {
+  .section,
+  .pageIntro,
+  .blogIntro,
+  .filterPanel,
+  .listPanel {
     padding: 14px;
   }
 
