@@ -9,6 +9,7 @@
     "start": "astro dev",
     "lint": "astro check",
     "worker:hackatime:dev": "npx wrangler dev --config wrangler.toml",
+    "worker:hackatime:test": "node --test workers/hackatime-status.test.js",
     "worker:hackatime:deploy": "npx wrangler deploy --config wrangler.toml",
     "worker:polls:dev": "npx wrangler dev --config wrangler.blog-polls.toml",
     "worker:polls:deploy": "npx wrangler deploy --config wrangler.blog-polls.toml",

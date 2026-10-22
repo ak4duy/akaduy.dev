@@ -3,6 +3,8 @@ const HACKATIME_WAKATIME_API_BASE =
   "https://hackatime.hackclub.com/api/hackatime/v1";
 const GITHUB_OWNER = "ak4duy";
 const ACTIVE_HEARTBEAT_WINDOW_MS = 5 * 60 * 1000;
+const CACHE_FRESH_MS = 60 * 1000;
+const CACHE_STALE_MS = 10 * 60 * 1000;
 
 function getAllowedRequestHeaders(request) {
   return (
@@ -686,6 +688,39 @@ async function getHackatimeData(env) {
   };
 }
 
+// Hackatime takes seconds to answer, so serve the cached copy and refresh it in the background.
+async function getCachedHackatimeData(requestUrl, env, ctx) {
+  const cache = caches.default;
+  const key = new Request(`${requestUrl.origin}/hackatime/current`);
+  const refresh = async () => {
+    const data = await getHackatimeData(env);
+    await cache.put(
+      key,
+      new Response(JSON.stringify({ data, cachedAt: Date.now() }), {
+        headers: { "cache-control": "max-age=3600" },
+      }),
+    );
+    return data;
+  };
+  const cached = await cache.match(key);
+
+  if (cached) {
+    const { data, cachedAt } = await cached.json();
+    const age = Date.now() - cachedAt;
+
+    if (age <= CACHE_FRESH_MS) {
+      return data;
+    }
+
+    if (age <= CACHE_STALE_MS) {
+      ctx.waitUntil(refresh().catch(() => {}));
+      return data;
+    }
+  }
+
+  return refresh();
+}
+
 function getDiscordProfileUrl(env) {
   if (!env.DISCORD_APPLICATION_ID || !env.DISCORD_USER_ID) {
     throw new Error("Missing Discord application or user ID secret");
@@ -731,7 +766,7 @@ async function updateDiscordHackatimeWidget(env) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const requestUrl = new URL(request.url);
     const wantsDiscordWidget =
       requestUrl.pathname === "/discord/hackatime-widget";
@@ -762,7 +797,7 @@ export default {
         return json(await updateDiscordHackatimeWidget(env));
       }
 
-      const data = await getHackatimeData(env);
+      const data = await getCachedHackatimeData(requestUrl, env, ctx);
 
       return json(wantsDiscordWidget ? toDiscordHackatimeWidget(data) : data);
     } catch (error) {
