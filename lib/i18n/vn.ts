@@ -33,6 +33,15 @@ export const vn: Translation = {
     writing: "Bài viết mới nhất",
     learning: "Đang học",
   },
+  commandPalette: {
+    label: "Bảng lệnh",
+    open: "Tìm kiếm",
+    placeholder: "Đi tới trang hoặc bài viết...",
+    empty: "Không có kết quả.",
+    pages: "Trang",
+    posts: "Bài viết",
+    language: "Đổi ngôn ngữ",
+  },
   home: {
     intro:
       "Lập trình viên tự học (đa số).\nHiện đang làm với Java, Python, Rust, và bất cứ thứ gì.",

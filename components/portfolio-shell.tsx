@@ -36,6 +36,14 @@ export function PortfolioShell({
             <a className={styles.wordmark} href={localizedPath(language)} aria-label="akaduy.dev">
               <span>akaduy<span className={styles.domain}>.dev</span></span>
             </a>
+            <button
+              type="button"
+              className={styles.paletteButton}
+              data-command-palette-open
+              aria-keyshortcuts="Control+K Meta+K /"
+            >
+              {t.commandPalette.open} <kbd>Ctrl K</kbd>
+            </button>
             <LanguageToggle
               language={language}
               path={pagePath ?? (activeTab === "about" ? "" : activeTab)}

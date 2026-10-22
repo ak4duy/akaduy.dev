@@ -4,6 +4,7 @@ import "@fontsource-variable/geist-mono";
 import "@/styles/globals.css";
 
 import { ClientRouter } from "astro:transitions";
+import CommandPalette from "@/src/components/CommandPalette.astro";
 import { languages, type Language } from "@/lib/i18n";
 import { localizedPath } from "@/lib/routes";
 
@@ -95,5 +96,6 @@ const image = new URL("/favicon-200x200.jpg", Astro.site).href;
 
   <body class="font-sans antialiased">
     <slot />
+    <CommandPalette language={language} />
   </body>
 </html>

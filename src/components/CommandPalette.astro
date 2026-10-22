@@ -1,0 +1,249 @@
+---
+import { getBlogPosts } from "@/lib/blog-posts";
+import { translations, type Language } from "@/lib/i18n";
+import { localizedPath } from "@/lib/routes";
+
+interface Props { language: Language }
+type PaletteItem = { label: string; href: string; meta?: string; keywords?: string; switchLanguage?: boolean };
+const { language } = Astro.props;
+const t = translations[language];
+const otherLanguage = language === "EN" ? "VN" : "EN";
+
+const groups: { label: string; items: PaletteItem[] }[] = [
+  {
+    label: t.commandPalette.pages,
+    items: [
+      { label: t.nav.about, href: localizedPath(language) },
+      { label: t.nav.experience, href: localizedPath(language, "experience") },
+      { label: t.nav.blog, href: localizedPath(language, "blog") },
+      { label: t.nav.now, href: localizedPath(language, "now") },
+      { label: t.nav.contact, href: localizedPath(language, "contact") },
+      { label: t.privacy.title, href: localizedPath(language, "privacy") },
+      {
+        label: otherLanguage === "VN" ? "Tiếng Việt" : "English",
+        meta: t.commandPalette.language,
+        href: localizedPath(otherLanguage),
+        switchLanguage: true,
+      },
+    ],
+  },
+  {
+    label: t.commandPalette.posts,
+    items: getBlogPosts(language).map((post) => ({
+      label: post.title,
+      meta: post.date,
+      href: localizedPath(language, `blog/${post.slug}`),
+      keywords: post.tags.join(" "),
+    })),
+  },
+];
+---
+
+<dialog id="command-palette" class="command-palette" aria-label={t.commandPalette.label}>
+  <input
+    type="text"
+    role="combobox"
+    aria-expanded="true"
+    aria-controls="command-palette-list"
+    aria-autocomplete="list"
+    aria-label={t.commandPalette.placeholder}
+    placeholder={t.commandPalette.placeholder}
+    autocomplete="off"
+    spellcheck="false"
+  />
+  <div id="command-palette-list" role="listbox" aria-label={t.commandPalette.label}>
+    {groups.map((group, groupIndex) => (
+      <div role="group" aria-label={group.label}>
+        <p aria-hidden="true">{group.label}</p>
+        {group.items.map((item, index) => (
+          <div
+            role="option"
+            id={`command-palette-option-${groupIndex}-${index}`}
+            aria-selected="false"
+            data-href={item.href}
+            data-search={[item.label, item.meta, item.keywords].filter(Boolean).join(" ")}
+            data-switch-language={item.switchLanguage ? "" : undefined}
+          >
+            <span>{item.label}</span>
+            {item.meta && <span>{item.meta}</span>}
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+  <p data-empty hidden>{t.commandPalette.empty}</p>
+</dialog>
+
+<style is:global>
+  .command-palette {
+    width: min(560px, calc(100vw - 32px));
+    max-height: min(480px, calc(100vh - 32px));
+    margin: 12vh auto auto;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: var(--card);
+    color: var(--foreground);
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+
+  .command-palette[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .command-palette::backdrop {
+    background: rgb(0 0 0 / 50%);
+  }
+
+  .command-palette input {
+    width: 100%;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    background: transparent;
+    font: inherit;
+    font-size: 16px;
+    outline: none;
+  }
+
+  .command-palette [role="listbox"] {
+    overflow-y: auto;
+    padding: 8px;
+  }
+
+  .command-palette [role="group"] > p {
+    padding: 8px 8px 4px;
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+
+  .command-palette [role="option"] {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+
+  .command-palette [role="option"] > span:last-child:not(:first-child) {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+
+  .command-palette [role="option"]:hover,
+  .command-palette [aria-selected="true"] {
+    background: var(--muted);
+    color: var(--primary);
+  }
+
+  .command-palette [hidden] {
+    display: none;
+  }
+
+  .command-palette [data-empty] {
+    padding: 16px;
+    color: var(--muted-foreground);
+  }
+</style>
+
+<script>
+  import { navigate } from "astro:transitions/client";
+  import { normalizeSearchText } from "@/lib/search";
+
+  const getPalette = () => document.querySelector<HTMLDialogElement>("#command-palette");
+  const getOptions = (palette: HTMLDialogElement) =>
+    [...palette.querySelectorAll<HTMLElement>("[role=option]")];
+  const getVisibleOptions = (palette: HTMLDialogElement) =>
+    getOptions(palette).filter((option) => !option.hidden);
+
+  function setActive(palette: HTMLDialogElement, active: HTMLElement | undefined) {
+    for (const option of getOptions(palette)) {
+      option.setAttribute("aria-selected", String(option === active));
+    }
+    palette.querySelector("input")!.setAttribute("aria-activedescendant", active?.id ?? "");
+    active?.scrollIntoView({ block: "nearest" });
+  }
+
+  function filter(palette: HTMLDialogElement) {
+    const query = normalizeSearchText(palette.querySelector("input")!.value);
+    for (const option of getOptions(palette)) {
+      option.hidden = !normalizeSearchText(option.dataset.search!).includes(query);
+    }
+    for (const group of palette.querySelectorAll<HTMLElement>("[role=group]")) {
+      group.hidden = !group.querySelector("[role=option]:not([hidden])");
+    }
+    const visible = getVisibleOptions(palette);
+    palette.querySelector<HTMLElement>("[data-empty]")!.hidden = visible.length > 0;
+    setActive(palette, visible[0]);
+  }
+
+  function open() {
+    const palette = getPalette();
+    if (!palette || palette.open) return;
+    palette.querySelector("input")!.value = "";
+    filter(palette);
+    palette.showModal();
+  }
+
+  function go(palette: HTMLDialogElement, option: HTMLElement) {
+    palette.close();
+    // The language toggle knows the translated version of the current page.
+    const href = option.hasAttribute("data-switch-language")
+      ? document.querySelector<HTMLAnchorElement>("a[data-language-path]")?.href ?? option.dataset.href!
+      : option.dataset.href!;
+    void navigate(href);
+  }
+
+  const isTyping = (target: EventTarget | null) =>
+    target instanceof HTMLElement && Boolean(target.closest("input, textarea, select, [contenteditable]"));
+
+  document.addEventListener("keydown", (event) => {
+    const palette = getPalette();
+    if (!palette) return;
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+      event.preventDefault();
+      if (palette.open) palette.close();
+      else open();
+      return;
+    }
+    if (event.key === "/" && !palette.open && !event.ctrlKey && !event.metaKey && !event.altKey && !isTyping(event.target)) {
+      event.preventDefault();
+      open();
+      return;
+    }
+    if (!palette.open || event.isComposing) return;
+    const visible = getVisibleOptions(palette);
+    const index = visible.findIndex((option) => option.getAttribute("aria-selected") === "true");
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      setActive(palette, visible[(index + step + visible.length) % visible.length]);
+    } else if (event.key === "Enter" && visible[index]) {
+      event.preventDefault();
+      go(palette, visible[index]);
+    }
+  });
+
+  document.addEventListener("input", (event) => {
+    const palette = getPalette();
+    if (palette && event.target === palette.querySelector("input")) filter(palette);
+  });
+
+  document.addEventListener("click", (event) => {
+    const palette = getPalette();
+    if (!palette || !(event.target instanceof Element)) return;
+    if (event.target.closest("[data-command-palette-open]")) {
+      open();
+      return;
+    }
+    if (event.target === palette) {
+      palette.close();
+      return;
+    }
+    const option = event.target.closest<HTMLElement>("#command-palette [role=option]");
+    if (option) go(palette, option);
+  });
+</script>

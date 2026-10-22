@@ -51,8 +51,26 @@
   margin-bottom: 18px;
 }
 
-.masthead > :last-child {
+.paletteButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
   margin-left: auto;
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+
+.paletteButton:hover {
+  color: var(--primary);
+}
+
+.paletteButton kbd {
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font: inherit;
+  font-size: 12px;
 }
 
 .content {
@@ -431,6 +449,10 @@
     justify-content: space-between;
     gap: 8px;
     font-size: 12px;
+  }
+
+  .paletteButton kbd {
+    display: none;
   }
 
   .toolkit,

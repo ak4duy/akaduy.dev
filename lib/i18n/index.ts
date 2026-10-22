@@ -48,6 +48,15 @@ export type Translation = {
     writing: string;
     learning: string;
   };
+  commandPalette: {
+    label: string;
+    open: string;
+    placeholder: string;
+    empty: string;
+    pages: string;
+    posts: string;
+    language: string;
+  };
   home: {
     intro: string;
     currentlyWorkingOn: string;

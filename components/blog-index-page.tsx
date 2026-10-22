@@ -6,6 +6,7 @@ import { BLOG_POSTS_PER_PAGE } from "@/lib/blog-config";
 import type { BlogPostSummary } from "@/lib/blog-posts";
 import { type Language, translations } from "@/lib/i18n";
 import { localizedPath } from "@/lib/routes";
+import { normalizeSearchText } from "@/lib/search";
 import styles from "@/styles/portfolio.module.css";
 
 type BlogIndexPageProps = {
@@ -14,17 +15,6 @@ type BlogIndexPageProps = {
   initialBlogPage?: number;
   alternateLanguagePath?: string;
 };
-
-function normalizeSearchText(text: string) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/đ/g, "d")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, " ")
-    .trim()
-    .replace(/[\s-]+/g, " ");
-}
 
 function getBlogMonthKey(date: string) {
   const match = date.match(/^\d{2}-(\d{2})-(\d{4})$/);

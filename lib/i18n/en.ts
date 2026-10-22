@@ -32,6 +32,15 @@ export const en: Translation = {
     writing: "Latest writing",
     learning: "Learning",
   },
+  commandPalette: {
+    label: "Command palette",
+    open: "Search",
+    placeholder: "Jump to a page or post...",
+    empty: "No results.",
+    pages: "Pages",
+    posts: "Posts",
+    language: "Switch language",
+  },
   home: {
     intro:
       "Self-taught developer.\nCurrently working with Java, Python, Rust, and whatever breaks next.",
