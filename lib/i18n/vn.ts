@@ -32,6 +32,13 @@ export const vn: Translation = {
     building: "Đang làm",
     writing: "Bài viết mới nhất",
     learning: "Đang học",
+    codingTitle: "Thời gian code",
+    today: "Hôm nay",
+    week: "7 ngày qua",
+    allTime: "Tổng cộng",
+    topLanguage: "Ngôn ngữ chính",
+    lastActive: "Hoạt động gần nhất",
+    source: "Theo dõi bằng Hackatime",
   },
   commandPalette: {
     label: "Bảng lệnh",

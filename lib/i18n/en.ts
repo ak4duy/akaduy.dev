@@ -31,6 +31,13 @@ export const en: Translation = {
     building: "Building",
     writing: "Latest writing",
     learning: "Learning",
+    codingTitle: "Coding time",
+    today: "Today",
+    week: "Last 7 days",
+    allTime: "All time",
+    topLanguage: "Top language",
+    lastActive: "Last active",
+    source: "Tracked with Hackatime",
   },
   commandPalette: {
     label: "Command palette",

@@ -47,6 +47,13 @@ export type Translation = {
     building: string;
     writing: string;
     learning: string;
+    codingTitle: string;
+    today: string;
+    week: string;
+    allTime: string;
+    topLanguage: string;
+    lastActive: string;
+    source: string;
   };
   commandPalette: {
     label: string;

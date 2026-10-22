@@ -4,6 +4,7 @@ import SiteLayout from "@/src/layouts/SiteLayout.astro";
 import { BlogIndexPage } from "@/components/blog-index-page";
 import { PrivacyPage } from "@/components/privacy-page";
 import { PortfolioPage } from "@/components/portfolio-page";
+import CodingStats from "@/src/components/CodingStats.astro";
 import CurrentWorkStatus from "@/src/components/CurrentWorkStatus.astro";
 import { getBlogPosts, toBlogPostSummary } from "@/lib/blog-posts";
 import { languages, translations, type Language } from "@/lib/i18n";
@@ -37,6 +38,7 @@ const privacy = translations[language].privacy;
       {activeTab !== "contact" && (
         <CurrentWorkStatus slot="work-status" label={translations[language].home.currentlyWorkingOn} />
       )}
+      {activeTab === "now" && <CodingStats slot="coding-stats" language={language} />}
     </PortfolioPage>
   )}
 </SiteLayout>

@@ -11,6 +11,7 @@ type PortfolioPageProps = {
   initialLanguage: Language;
   blogPosts: BlogPostSummary[];
   workStatus?: ReactNode;
+  codingStats?: ReactNode;
 };
 
 function ProjectList({
@@ -60,6 +61,7 @@ export function PortfolioPage({
   initialLanguage,
   blogPosts,
   workStatus,
+  codingStats,
 }: PortfolioPageProps) {
   const t = translations[initialLanguage];
   const experienceItems = [
@@ -170,6 +172,12 @@ export function PortfolioPage({
                 <div className={styles.workStatus}>{workStatus}</div>
                 <p className={styles.date}>{t.now.updated}: <time dateTime={nowUpdatedOn.split("-").reverse().join("-")}>{nowUpdatedOn}</time></p>
               </div>
+              <section className={`${styles.section} ${styles.codingStats}`} aria-labelledby="coding-heading">
+                <div className={styles.sectionHeading}>
+                  <h2 id="coding-heading">{t.now.codingTitle}</h2>
+                </div>
+                {codingStats}
+              </section>
               <section className={styles.section} aria-labelledby="building-heading">
                 <div className={styles.sectionHeading}>
                   <h2 id="building-heading">{t.now.building}</h2>
