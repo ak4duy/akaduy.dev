@@ -198,7 +198,7 @@ function createExcerpt(content: string) {
   );
 }
 
-function getBlogPostDateTime(date: string) {
+export function getBlogPostDateTime(date: string) {
   const match = date.match(/^(\d{2})-(\d{2})-(\d{4})$/);
 
   if (!match) {

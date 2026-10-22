@@ -43,6 +43,7 @@ const alternateLanguagePath = post
   description={post?.excerpt}
   tags={post?.tags}
   article={Boolean(post)}
+  alternatePath={alternateLanguagePath}
 >
   {post ? (
     <BlogPostPage initialLanguage={language} post={post} alternateLanguagePath={alternateLanguagePath} client:load />

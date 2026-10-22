@@ -4,7 +4,8 @@ import "@fontsource-variable/geist-mono";
 import "@/styles/globals.css";
 
 import { ClientRouter } from "astro:transitions";
-import type { Language } from "@/lib/i18n";
+import { languages, type Language } from "@/lib/i18n";
+import { localizedPath } from "@/lib/routes";
 
 interface Props {
   language?: Language;
@@ -13,6 +14,7 @@ interface Props {
   tags?: string[];
   article?: boolean;
   noindex?: boolean;
+  alternatePath?: string;
 }
 
 const {
@@ -22,9 +24,15 @@ const {
   tags = [],
   article = false,
   noindex = false,
+  alternatePath,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const pagePath = Astro.url.pathname.replace(/^\/(en|vn)\/?|\/$/g, "");
+const hasTranslation = !noindex && (alternatePath ?? pagePath) === pagePath;
+const languageHref = (option: Language) =>
+  new URL(localizedPath(option, pagePath), Astro.site).href;
+const image = new URL("/favicon-200x200.jpg", Astro.site).href;
 ---
 
 <!doctype html>
@@ -60,6 +68,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         ? <meta name="robots" content="noindex" />
         : <link rel="canonical" href={canonical} />
     }
+    {hasTranslation && languages.map((option) => (
+      <link rel="alternate" hreflang={option === "VN" ? "vi" : "en"} href={languageHref(option)} />
+    ))}
+    {hasTranslation && <link rel="alternate" hreflang="x-default" href={languageHref("EN")} />}
+    <link rel="alternate" type="application/rss+xml" title="akaduy blog" href={`/${language.toLowerCase()}/rss.xml`} />
 
     {tags.length > 0 && <meta name="keywords" content={tags.join(", ")} />}
 
@@ -68,12 +81,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:type" content={article ? "article" : "website"} />
     <meta property="og:site_name" content={article ? "akaduy blog" : "akaduy"} />
     <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={image} />
 
     {article && tags.map((tag) => <meta property="article:tag" content={tag} />)}
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
 
     <slot name="head" />
   </head>
