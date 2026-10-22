@@ -12,7 +12,7 @@ export function PortfolioShell({
   pagePath,
   alternateLanguagePath,
 }: {
-  activeTab: "about" | "experience" | "blog" | "contact";
+  activeTab: "about" | "experience" | "blog" | "now" | "contact";
   language: Language;
   children: ReactNode;
   pagePath?: string;
@@ -23,6 +23,7 @@ export function PortfolioShell({
     { value: "about", label: t.nav.about, href: localizedPath(language) },
     { value: "experience", label: t.nav.experience, href: localizedPath(language, "experience") },
     { value: "blog", label: t.nav.blog, href: localizedPath(language, "blog") },
+    { value: "now", label: t.nav.now, href: localizedPath(language, "now") },
     { value: "contact", label: t.nav.contact, href: localizedPath(language, "contact") },
   ];
 

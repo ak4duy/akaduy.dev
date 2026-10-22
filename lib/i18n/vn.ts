@@ -24,6 +24,14 @@ export const vn: Translation = {
     experience: "Kinh nghiệm",
     blog: "Blog",
     contact: "Liên hệ",
+    now: "Bây giờ",
+  },
+  now: {
+    intro: "Những gì mình đang tập trung lúc này.",
+    updated: "Cập nhật lần cuối",
+    building: "Đang làm",
+    writing: "Bài viết mới nhất",
+    learning: "Đang học",
   },
   home: {
     intro:

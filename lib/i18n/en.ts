@@ -23,6 +23,14 @@ export const en: Translation = {
     experience: "Experience",
     blog: "Blog",
     contact: "Contact",
+    now: "Now",
+  },
+  now: {
+    intro: "What I’m focused on at the moment.",
+    updated: "Last updated",
+    building: "Building",
+    writing: "Latest writing",
+    learning: "Learning",
   },
   home: {
     intro:

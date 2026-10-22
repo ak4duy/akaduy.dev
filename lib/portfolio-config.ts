@@ -4,6 +4,10 @@ export const featuredProjectHrefs = [
   "https://github.com/ak4duy/discord-parcel",
 ] as const;
 
+export const nowUpdatedOn = "22-10-2026";
+
+export const interestedLanguages = "TypeScript / JavaScript / Kotlin / Go";
+
 export const projectCreationDates: Partial<Record<string, string>> = {
   "https://github.com/ak4duy/1_10000_jumpscare": "2025-09-23T08:17:12Z",
   "https://github.com/ak4duy/akaduy.dev": "2026-05-23T17:00:33Z",
