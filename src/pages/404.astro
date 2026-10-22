@@ -13,13 +13,22 @@ import SiteLayout from "@/src/layouts/SiteLayout.astro";
         onerror="this.onerror=null;this.src='/placeholder-logo.png'"
       />
       <p class="mt-8 text-sm font-medium uppercase tracking-wider text-muted-foreground">404</p>
-      <h1 class="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Page not found</h1>
+      <h1 id="not-found-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Page not found</h1>
       <p class="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground italic">
         “You will never be happy if you continue to search for what happiness consists of.
         You will never live if you are looking for the meaning of life.”
         <span class="mt-3 block text-xs not-italic text-muted-foreground/70">- Albert Camus</span>
       </p>
-      <a href="/en/" class="mt-8 rounded-xl border border-border bg-card/50 px-5 py-3 text-sm font-medium text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-lg hover:shadow-foreground/5 active:translate-y-0 active:scale-95">Home</a>
+      <a id="not-found-home" href="/en/" class="mt-8 rounded-xl border border-border bg-card/50 px-5 py-3 text-sm font-medium text-muted-foreground transition-all duration-150 ease-linear hover:-translate-y-0.5 hover:bg-card hover:text-foreground hover:shadow-lg hover:shadow-foreground/5 active:translate-y-0 active:scale-95">Home</a>
     </div>
   </main>
+  <script is:inline>
+    if (location.pathname.startsWith("/vn/")) {
+      document.documentElement.lang = "vi";
+      document.getElementById("not-found-title").textContent = "Không tìm thấy trang";
+      const home = document.getElementById("not-found-home");
+      home.href = "/vn/";
+      home.textContent = "Trang chủ";
+    }
+  </script>
 </SiteLayout>
