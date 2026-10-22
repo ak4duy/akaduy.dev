@@ -40,6 +40,8 @@ const rows = [
 </style>
 
 <script>
+  import { fetchHackatimeStatus } from "@/lib/hackatime";
+
   type Stats = Partial<Record<"dailyTotal" | "weeklyTotal" | "totalTime" | "topLanguage" | "lastHeartbeatAt", string | null>>;
 
   // shortcut: the worker mixes "1h 38m" and "23 hrs 9 mins"; normalize here until the worker formats both alike.
@@ -77,13 +79,7 @@ const rows = [
     private load = async () => {
       if (document.hidden) return;
       try {
-        const response = await fetch("https://api.akaduy.dev/hackatime/current", {
-          cache: "no-store",
-          headers: { accept: "application/json" },
-          signal: AbortSignal.timeout(10_000),
-        });
-        if (!response.ok) throw new Error("Stats unavailable");
-        const stats: Stats = await response.json();
+        const stats = await fetchHackatimeStatus<Stats>();
         if (!this.isConnected) return;
         let shown = 0;
         for (const row of this.querySelectorAll<HTMLElement>("[data-field]")) {
