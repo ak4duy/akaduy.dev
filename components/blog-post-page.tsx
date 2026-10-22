@@ -320,7 +320,7 @@ export function BlogPostPage({ initialLanguage, post, alternateLanguagePath }: B
             {post.title}
           </h1>
           <div className="mt-4 flex flex-wrap items-center gap-3 text-xs reader-muted">
-            <time>{post.date}</time>
+            <time dateTime={post.date.split("-").reverse().join("-")}>{post.date}</time>
             <span aria-hidden="true">|</span>
             <span>
               {readingTimeMinutes} {t.blog.minuteRead}

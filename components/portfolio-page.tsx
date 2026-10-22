@@ -21,7 +21,7 @@ function ProjectList({
   const dateFormatter = new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "2-digit",
-    year: "2-digit",
+    year: "numeric",
     timeZone: "Asia/Ho_Chi_Minh",
   });
 

@@ -46,7 +46,7 @@ export function SiteFooter({ tagline, privacyHref, showIcon = true }: SiteFooter
           Privacy
         </a>
       </div>
-      <p className="mt-3 text-xs text-muted-foreground">© 2026 akaduy</p>
+      <p className="mt-3 text-xs text-muted-foreground">© {new Date().getFullYear()} akaduy</p>
       <p className="mt-2 text-[11px] text-muted-foreground">
         Writing licensed under{" "}
         <a
