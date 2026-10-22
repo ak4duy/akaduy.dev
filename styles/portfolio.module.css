@@ -3,7 +3,7 @@
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.8;
 }
 
@@ -33,11 +33,7 @@
 }
 
 .notebook,
-.section,
-.pageIntro,
-.blogIntro,
-.filterPanel,
-.listPanel {
+.filterPanel {
   padding: 20px;
   border: 1px solid var(--border);
   border-radius: 2px;
@@ -164,7 +160,7 @@
 
 .toolkit h2,
 .toolkit p {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .toolkit p {
@@ -172,7 +168,7 @@
 }
 
 .section {
-  margin-top: 24px;
+  margin-top: 40px;
   scroll-margin-top: 20px;
 }
 
@@ -186,7 +182,7 @@
 }
 
 .sectionHeading > a {
-  font-size: 11px;
+  font-size: 12px;
   flex-shrink: 0;
 }
 
@@ -216,14 +212,14 @@
 .post > p {
   margin-top: 6px;
   color: var(--muted-foreground);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .tags,
 .postTags {
   margin-top: 10px;
   color: var(--muted-foreground);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .tags {
@@ -246,7 +242,7 @@
 
 .date {
   color: var(--muted-foreground);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .pageIntro,
@@ -311,7 +307,7 @@
   display: block;
   margin-bottom: 5px;
   color: var(--muted-foreground);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .archiveSummary {
@@ -321,7 +317,7 @@
   gap: 8px;
   margin-top: 12px;
   color: var(--muted-foreground);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .archiveSummary button,
@@ -376,7 +372,7 @@
   min-height: 44px;
   padding: 6px 10px;
   color: var(--muted-foreground);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .pagination [aria-current="page"] {
@@ -419,18 +415,14 @@
   }
 
   .notebook,
-  .section,
-  .pageIntro,
-  .blogIntro,
-  .filterPanel,
-  .listPanel {
+  .filterPanel {
     padding: 14px;
   }
 
   .navigation {
     justify-content: space-between;
     gap: 8px;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .toolkit,
