@@ -7,7 +7,6 @@ export default defineConfig({
   site: "https://akaduy.dev",
   output: "static",
   trailingSlash: "always",
-  prefetch: false,
   integrations: [
     react(),
     sitemap({ filter: (page) => /\/(en|vn)\//.test(page) }),
