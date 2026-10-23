@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import worker from "./umami-proxy.js";
 
-const website = "eac4f9b0-6242-4c87-bd4a-765e35e3db75";
+const website = "16f2fd33-3d87-4be2-9532-18d84416ddef";
 const payload = { type: "event", payload: { website, url: "https://akaduy.dev/en/" } };
 const post = (body = payload, headers = {}) => new Request("https://akaduy.dev/api/send", {
   method: "POST",
@@ -12,7 +12,7 @@ const post = (body = payload, headers = {}) => new Request("https://akaduy.dev/a
 
 test("serves the tracker on the local path, including cache-busting queries", async (t) => {
   t.mock.method(globalThis, "fetch", async (url) => {
-    assert.equal(url, "https://cloud.umami.is/script.js");
+    assert.equal(url, "https://umami.akaduy.dev/script.js");
     return new Response("window.umami = {};", { headers: { "set-cookie": "unwanted=value" } });
   });
   const response = await worker.fetch(new Request("https://akaduy.dev/s.js?v=1"));
@@ -27,7 +27,7 @@ test("serves the tracker on the local path, including cache-busting queries", as
 
 test("preserves events and sessions, forwards the trusted visitor IP, and excludes cookies", async (t) => {
   t.mock.method(globalThis, "fetch", async (url, init) => {
-    assert.equal(url, "https://gateway.umami.is/api/send");
+    assert.equal(url, "https://umami.akaduy.dev/api/send");
     assert.equal(init.method, "POST");
     assert.deepEqual(JSON.parse(init.body), payload);
     assert.equal(init.headers.get("x-forwarded-for"), "203.0.113.10");

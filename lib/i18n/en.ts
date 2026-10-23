@@ -224,7 +224,7 @@ export const en: Translation = {
       {
         title: "Website analytics",
         paragraphs: [
-          "This website uses Umami Cloud to measure visits and understand how the site is used. Umami may process information such as viewed pages, referrer, browser/device details, and approximate location derived from network information.",
+          "This website uses a self-hosted Umami instance to measure visits and understand how the site is used. Umami may process information such as viewed pages, referrer, browser/device details, and approximate location derived from network information.",
           "The analytics script uses this website's public Umami website ID to associate visits with this site. It is not an authentication secret. Analytics data is used to improve the website and is not used for advertising.",
         ],
       },

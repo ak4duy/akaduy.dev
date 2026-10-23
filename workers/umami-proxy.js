@@ -1,5 +1,6 @@
-const WEBSITE_ID = "eac4f9b0-6242-4c87-bd4a-765e35e3db75";
+const WEBSITE_ID = "16f2fd33-3d87-4be2-9532-18d84416ddef";
 const SITE_ORIGIN = "https://akaduy.dev";
+const UMAMI_ORIGIN = "https://umami.akaduy.dev";
 
 function error(message, status, headers = {}) {
   return Response.json({ error: message }, {
@@ -23,7 +24,7 @@ export default {
 
     try {
       if (isScript) {
-        const upstream = await fetch("https://cloud.umami.is/script.js");
+        const upstream = await fetch(`${UMAMI_ORIGIN}/script.js`);
         if (!upstream.ok) return error("Tracker unavailable", 502);
 
         return new Response(request.method === "HEAD" ? null : upstream.body, {
@@ -59,7 +60,7 @@ export default {
       const ip = request.headers.get("cf-connecting-ip");
       if (ip) headers.set("x-forwarded-for", ip);
 
-      const upstream = await fetch("https://gateway.umami.is/api/send", {
+      const upstream = await fetch(`${UMAMI_ORIGIN}/api/send`, {
         method: "POST",
         headers,
         body: JSON.stringify(body),

@@ -46,11 +46,11 @@ workers/             Cloudflare APIs
 
 ## Analytics proxy
 
-Umami Cloud is served through a Cloudflare Worker following the
+Self-hosted Umami (`https://umami.akaduy.dev`) is served through a Cloudflare Worker following the
 [Umami proxy guide](https://docs.umami.is/docs/bypass-ad-blockers):
 
 - `/s.js` serves the current Umami tracker, cached in the browser for one hour.
-- `/api/send` forwards tracking requests to Umami Cloud without caching responses.
+- `/api/send` forwards tracking requests to Umami without caching responses.
 - The proxy preserves Umami session headers and forwards the visitor IP and browser
   user agent to Umami. It does not log or store request bodies or IP addresses.
 

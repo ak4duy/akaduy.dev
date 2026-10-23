@@ -225,7 +225,7 @@ export const vn: Translation = {
       {
         title: "Phân tích lượt truy cập",
         paragraphs: [
-          "Website này sử dụng Umami Cloud để thống kê lượt truy cập và tìm hiểu cách mọi người sử dụng website. Umami có thể xử lý các thông tin như trang đã xem, nguồn giới thiệu, thông tin trình duyệt/thiết bị và vị trí gần đúng được suy ra từ thông tin mạng.",
+          "Website này sử dụng Umami tự host để thống kê lượt truy cập và tìm hiểu cách mọi người sử dụng website. Umami có thể xử lý các thông tin như trang đã xem, nguồn giới thiệu, thông tin trình duyệt/thiết bị và vị trí gần đúng được suy ra từ thông tin mạng.",
           "Mã theo dõi sử dụng website ID Umami công khai để liên kết lượt truy cập với website này. ID này không phải thông tin bí mật dùng để xác thực. Dữ liệu phân tích chỉ được dùng để cải thiện website, không dùng cho quảng cáo.",
         ],
       },
