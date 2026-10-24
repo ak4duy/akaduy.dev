@@ -123,6 +123,14 @@ export const vn: Translation = {
         ],
         tags: ["Rust", "CLI"],
       },
+      {
+        name: "tunnelcheck",
+        href: "https://github.com/ak4duy/tunnelcheck",
+        description: [
+          "Một công cụ dòng lệnh nhỏ gọn để theo dõi uptime, cấu hình bằng một tệp TOML.",
+        ],
+        tags: ["Rust", "CLI", "Monitoring"],
+      },
     ],
     contributedTo: [
       {

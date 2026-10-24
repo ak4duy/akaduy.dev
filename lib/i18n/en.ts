@@ -122,6 +122,14 @@ export const en: Translation = {
         ],
         tags: ["Rust", "CLI"],
       },
+      {
+        name: "tunnelcheck",
+        href: "https://github.com/ak4duy/tunnelcheck",
+        description: [
+          "A small command-line uptime monitor configured with one TOML file.",
+        ],
+        tags: ["Rust", "CLI", "Monitoring"],
+      },
     ],
     contributedTo: [
       {

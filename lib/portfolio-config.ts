@@ -12,4 +12,5 @@ export const projectCreationDates: Partial<Record<string, string>> = {
   "https://github.com/ak4duy/soundcrate": "2026-09-20T07:15:35Z",
   "https://github.com/ak4duy/lamzu-linux-udev": "2026-09-11T10:51:35Z",
   "https://github.com/ak4duy/wi-mesh-login": "2026-06-01T13:38:44Z",
+  "https://github.com/ak4duy/tunnelcheck": "2026-10-20T06:31:30Z",
 };
