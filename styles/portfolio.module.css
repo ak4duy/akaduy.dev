@@ -1,4 +1,5 @@
 .portfolio {
+  position: relative;
   min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
@@ -21,7 +22,16 @@
   transform: none;
 }
 
+.liveHouse {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 .shell {
+  position: relative;
   max-width: 780px;
   margin: 0 auto;
   padding: 40px 28px;
@@ -73,19 +83,6 @@
   font-size: 12px;
 }
 
-.content {
-  animation: content-slide-in 160ms ease-out;
-}
-
-@keyframes content-slide-in {
-  from {
-    transform: translateY(6px);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
 .wordmark {
   font-size: 16px;
   font-weight: 600;
@@ -108,6 +105,60 @@
   min-height: 44px;
   padding: 8px 0;
   color: var(--muted-foreground);
+}
+
+.headerButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.headerButton:hover {
+  color: var(--primary);
+}
+
+.batteryCell {
+  position: relative;
+  width: 20px;
+  height: 10px;
+  padding: 1px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+}
+
+.batteryCell::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: -3px;
+  width: 2px;
+  height: 4px;
+  background: currentColor;
+}
+
+.batteryCell > span {
+  display: block;
+  width: var(--level, 100%);
+  height: 100%;
+  background: currentColor;
+  transition: width 400ms ease;
+}
+
+.headerButton[data-low] {
+  color: var(--kita);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .navigation a[aria-current="page"] {
@@ -164,13 +215,73 @@
   margin-bottom: 8px;
 }
 
-.notebook > p {
+.notebook > div > p {
   color: var(--muted-foreground);
   margin-bottom: 6px;
 }
 
-.notebook > .sectionHeading + p {
+.notebook .sectionHeading + p {
   margin-top: 16px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  align-items: center;
+  gap: 28px;
+}
+
+.band {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.band i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bocchi);
+}
+
+.band i:nth-child(2) { background: var(--nijika); }
+.band i:nth-child(3) { background: var(--ryo); }
+.band i:nth-child(4) { background: var(--kita); }
+
+.guitar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.guitar button {
+  height: 300px;
+  cursor: pointer;
+}
+
+.guitar canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.rig {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 160px;
+  align-items: center;
+  gap: 28px;
+}
+
+.amp canvas {
+  display: block;
+  width: 100%;
+  height: 170px;
+}
+
+.guitar figcaption {
+  color: var(--muted-foreground);
+  font-size: 11px;
+  text-align: center;
+  opacity: 0.7;
 }
 
 .toolkit {
@@ -269,7 +380,17 @@
 
 .pageIntro,
 .blogIntro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  align-items: center;
+  gap: 28px;
   margin-bottom: 24px;
+}
+
+.pedalboard canvas {
+  display: block;
+  width: 100%;
+  height: 200px;
 }
 
 .contact {
@@ -431,7 +552,30 @@
   transform: translateY(0) !important;
 }
 
+@media (max-width: 640px) {
+  .rig,
+  .hero,
+  .blogIntro {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+
+}
+
 @media (max-width: 480px) {
+  .masthead {
+    gap: 8px;
+  }
+
+  .paletteButton {
+    white-space: nowrap;
+  }
+
+  .headerButton [data-battery-value] {
+    display: none;
+  }
+
   .shell {
     padding: 24px 20px;
   }

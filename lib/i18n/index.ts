@@ -49,6 +49,11 @@ export type Translation = {
     posts: string;
     language: string;
   };
+  stage: {
+    guitar: string;
+    battery: string;
+    batteryEmpty: string;
+  };
   home: {
     intro: string;
     currentlyWorkingOn: string;

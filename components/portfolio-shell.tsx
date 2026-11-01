@@ -28,6 +28,7 @@ export function PortfolioShell({
 
   return (
     <div className={styles.portfolio}>
+      <canvas className={styles.liveHouse} data-live-house aria-hidden="true" />
       <a className={styles.skipLink} href="#main-content">{t.portfolio.skipToContent}</a>
       <div className={styles.shell}>
         <header className={styles.header}>
@@ -35,6 +36,18 @@ export function PortfolioShell({
             <a className={styles.wordmark} href={localizedPath(language)} aria-label="akaduy.dev">
               <span>akaduy<span className={styles.domain}>.dev</span></span>
             </a>
+            <button
+              type="button"
+              className={styles.headerButton}
+              data-battery
+              data-empty-label={t.stage.batteryEmpty}
+              title={t.stage.battery}
+            >
+              <span className={styles.batteryCell} aria-hidden="true"><span /></span>
+              <span className={styles.srOnly}>{t.stage.battery}</span>
+              <span data-battery-value>100%</span>
+              <span data-battery-label hidden>{t.stage.batteryEmpty}</span>
+            </button>
             <button
               type="button"
               className={styles.paletteButton}
@@ -57,7 +70,7 @@ export function PortfolioShell({
             ))}
           </nav>
         </header>
-        <main id="main-content" className={styles.content} tabIndex={-1}>{children}</main>
+        <main id="main-content" tabIndex={-1}>{children}</main>
         <SiteFooter tagline={t.home.footer} privacyHref={localizedPath(language, "privacy")} showIcon={false} />
       </div>
     </div>
