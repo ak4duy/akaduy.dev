@@ -34,6 +34,11 @@ export const vn: Translation = {
     posts: "Bài viết",
     language: "Đổi ngôn ngữ",
   },
+  stage: {
+    guitar: "Gảy đàn",
+    battery: "Pin",
+    batteryEmpty: "...",
+  },
   home: {
     intro:
       "Lập trình viên tự học (đa số).\nHiện đang làm với Java, Python, Rust, và bất cứ thứ gì.",

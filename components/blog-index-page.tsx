@@ -92,6 +92,9 @@ export function BlogIndexPage({
           <h1>{t.nav.blog}</h1>
           <p className={styles.lead}>{t.portfolio.blogIntro}</p>
         </div>
+        <figure className={styles.pedalboard} data-pedalboard aria-hidden="true">
+          <canvas />
+        </figure>
       </div>
 
       <section aria-label={t.home.blogPostsTitle}>

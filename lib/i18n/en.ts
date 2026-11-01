@@ -33,6 +33,11 @@ export const en: Translation = {
     posts: "Posts",
     language: "Switch language",
   },
+  stage: {
+    guitar: "Strum the guitar",
+    battery: "Social battery",
+    batteryEmpty: "so lonely...",
+  },
   home: {
     intro:
       "Self-taught developer.\nCurrently working with Java, Python, Rust, and whatever breaks next.",

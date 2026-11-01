@@ -37,7 +37,9 @@ function ProjectList({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <h3>{item.name}</h3>
+              <h3>
+                {item.name}
+              </h3>
               <div className={styles.description}>
                 {item.description.map((line) => <p key={line}>{line}</p>)}
               </div>
@@ -52,6 +54,24 @@ function ProjectList({
         );
       })}
     </div>
+  );
+}
+
+function Guitar({ t }: { t: Translation }) {
+  return (
+    <figure className={styles.guitar}>
+      <button type="button" data-guitar aria-label={t.stage.guitar}>
+        <canvas aria-hidden="true" />
+      </button>
+    </figure>
+  );
+}
+
+function Amp() {
+  return (
+    <figure className={styles.amp} data-amp aria-hidden="true">
+      <canvas />
+    </figure>
   );
 }
 
@@ -80,9 +100,11 @@ export function PortfolioPage({
     <PortfolioShell activeTab={activeTab} language={initialLanguage}>
           {activeTab === "about" ? (
             <>
-              <section className={styles.notebook}>
+              <section className={`${styles.notebook} ${styles.hero}`}>
+                <div>
                   <div className={styles.sectionHeading}>
                     <h1>{t.nav.about}</h1>
+                    <span className={styles.band} aria-hidden="true"><i /><i /><i /><i /></span>
                   </div>
                   {t.home.background.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                   <div className={styles.toolkit}>
@@ -99,6 +121,8 @@ export function PortfolioPage({
                       {t.home.contactTitle}
                     </a>
                   </div>
+                </div>
+                <Guitar t={t} />
               </section>
 
               <section className={styles.section} id="selected-work" aria-labelledby="work-heading">
@@ -142,13 +166,15 @@ export function PortfolioPage({
           ) : activeTab === "experience" ? (
             <>
               <div className={styles.pageIntro}>
-                <p className={styles.eyebrow}>akaduy / {t.nav.experience}</p>
-                <h1>{t.home.projectsTitle}</h1>
-                <p className={styles.lead}>{t.portfolio.experienceIntro}</p>
+                <div>
+                  <p className={styles.eyebrow}>akaduy / {t.nav.experience}</p>
+                  <h1>{t.nav.experience}</h1>
+                  <p className={styles.lead}>{t.portfolio.experienceIntro}</p>
+                </div>
                 <div className={styles.workStatus}>{workStatus}</div>
               </div>
               {[
-                { title: t.experience.workingOnTitle, items: t.experience.workingOn },
+                { title: t.experience.workingOnTitle, items: t.experience.workingOn, amp: true },
                 { title: t.experience.projectsTitle, items: t.experience.projects },
                 { title: t.experience.toolsTitle, items: t.experience.tools },
                 { title: t.experience.contributedToTitle, items: t.experience.contributedTo },
@@ -157,16 +183,25 @@ export function PortfolioPage({
                   <div className={styles.sectionHeading}>
                     <h2>{section.title}</h2>
                   </div>
-                  <ProjectList items={section.items} />
+                  {"amp" in section ? (
+                    <div className={styles.rig}>
+                      <ProjectList items={section.items} />
+                      <Amp />
+                    </div>
+                  ) : (
+                    <ProjectList items={section.items} />
+                  )}
                 </section>
               ))}
             </>
           ) : (
             <>
               <div className={styles.pageIntro}>
-                <p className={styles.eyebrow}>akaduy / {t.nav.contact}</p>
-                <h1>{t.home.contactTitle}</h1>
-                <p className={styles.lead}>{t.portfolio.contactIntro}</p>
+                <div>
+                  <p className={styles.eyebrow}>akaduy / {t.nav.contact}</p>
+                  <h1>{t.nav.contact}</h1>
+                  <p className={styles.lead}>{t.portfolio.contactIntro}</p>
+                </div>
               </div>
               <div className={styles.listPanel}>
                 {t.contacts.map((contact) => (
