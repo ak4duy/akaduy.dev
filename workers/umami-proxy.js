@@ -9,8 +9,17 @@ function error(message, status, headers = {}) {
   });
 }
 
+function accessHeaders(env) {
+  const headers = new Headers();
+  if (env.CF_ACCESS_CLIENT_ID && env.CF_ACCESS_CLIENT_SECRET) {
+    headers.set("cf-access-client-id", env.CF_ACCESS_CLIENT_ID);
+    headers.set("cf-access-client-secret", env.CF_ACCESS_CLIENT_SECRET);
+  }
+  return headers;
+}
+
 export default {
-  async fetch(request) {
+  async fetch(request, env = {}) {
     const { pathname } = new URL(request.url);
     const isScript = pathname === "/s.js";
     if (!isScript && pathname !== "/api/send") {
@@ -24,7 +33,10 @@ export default {
 
     try {
       if (isScript) {
-        const upstream = await fetch(`${UMAMI_ORIGIN}/script.js`);
+        const upstream = await fetch(`${UMAMI_ORIGIN}/script.js`, {
+          headers: accessHeaders(env),
+          redirect: "manual",
+        });
         if (!upstream.ok) return error("Tracker unavailable", 502);
 
         return new Response(request.method === "HEAD" ? null : upstream.body, {
@@ -51,7 +63,8 @@ export default {
         return error("Invalid website", 400);
       }
 
-      const headers = new Headers({ "content-type": "application/json" });
+      const headers = accessHeaders(env);
+      headers.set("content-type", "application/json");
       for (const name of ["user-agent", "x-umami-cache", "x-umami-website-id", "x-umami-hostname"]) {
         const value = request.headers.get(name);
         if (value) headers.set(name, value);

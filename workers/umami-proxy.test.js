@@ -96,3 +96,17 @@ test("never caches an upstream script error as JavaScript", async (t) => {
   assert.equal(response.status, 502);
   assert.equal(response.headers.get("cache-control"), "no-store");
 });
+
+test("authenticates upstream requests with the Access service token and never follows login redirects", async (t) => {
+  const env = { CF_ACCESS_CLIENT_ID: "id", CF_ACCESS_CLIENT_SECRET: "secret" };
+  const fetch = t.mock.method(globalThis, "fetch", async (url, init) => {
+    assert.equal(init.headers.get("cf-access-client-id"), "id");
+    assert.equal(init.headers.get("cf-access-client-secret"), "secret");
+    return url.endsWith("/script.js")
+      ? new Response(null, { status: 302, headers: { location: "https://login.example" } })
+      : Response.json({});
+  });
+  assert.equal((await worker.fetch(new Request("https://akaduy.dev/s.js"), env)).status, 502);
+  assert.equal((await worker.fetch(post(), env)).status, 200);
+  assert.equal(fetch.mock.calls[0].arguments[1].redirect, "manual");
+});
