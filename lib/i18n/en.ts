@@ -135,6 +135,14 @@ export const en: Translation = {
         ],
         tags: ["Rust", "CLI", "Monitoring"],
       },
+      {
+        name: "steam-playtime-dashboard",
+        href: "https://github.com/ak4duy/steam-playtime-dashboard",
+        description: [
+          "Track your Steam play sessions and see them on a dashboard.",
+        ],
+        tags: ["TypeScript", "Dashboard"],
+      },
     ],
     contributedTo: [
       {

@@ -136,6 +136,14 @@ export const vn: Translation = {
         ],
         tags: ["Rust", "CLI", "Monitoring"],
       },
+      {
+        name: "steam-playtime-dashboard",
+        href: "https://github.com/ak4duy/steam-playtime-dashboard",
+        description: [
+          "Theo dõi các phiên chơi Steam và xem chúng trên một bảng điều khiển.",
+        ],
+        tags: ["TypeScript", "Dashboard"],
+      },
     ],
     contributedTo: [
       {
