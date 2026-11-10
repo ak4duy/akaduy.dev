@@ -63,7 +63,7 @@ export const en: Translation = {
     workingOn: [
       {
         name: "Inkspace",
-        href: "https://github.com/ak4duy/inkspace",
+        href: "https://inkspace.akaduy.dev/",
         description: ["A cozy corner for friends."],
         tags: ["Typescript", "Docker", "Self-hosted"],
       },

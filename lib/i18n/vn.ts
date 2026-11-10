@@ -64,7 +64,7 @@ export const vn: Translation = {
     workingOn: [
       {
         name: "Inkspace",
-        href: "https://github.com/ak4duy/inkspace",
+        href: "https://inkspace.akaduy.dev/",
         description: ["Một nơi ấm cúng dành cho bạn bè."],
         tags: ["Typescript", "Docker", "Self-hosted"],
       },
