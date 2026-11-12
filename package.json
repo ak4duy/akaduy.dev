@@ -22,19 +22,19 @@
     "check": "astro check"
   },
   "dependencies": {
-    "@astrojs/react": "^7.1.1",
+    "@astrojs/react": "^7.1.4",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/geist-mono": "^5.3.0",
-    "astro": "^7.4.2",
-    "lucide-react": "^1.61.0",
+    "astro": "^7.4.7",
+    "lucide-react": "^1.70.0",
     "react": "^19",
     "react-dom": "^19"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
-    "@tailwindcss/vite": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.4",
     "@types/node": "^26",
     "@types/react": "^19",
     "@types/react-dom": "^19",
